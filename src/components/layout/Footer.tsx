@@ -64,9 +64,12 @@ export function Footer() {
         </div>
         
         {/* Texto de Copyright */}
-        <div className="border-t pt-8 text-center">
-          <p className="text-sm text-muted-foreground">
+        <div className="border-t pt-8 text-center text-sm text-muted-foreground">
+          <p>
             {`© ${currentYear} TiendaExpress. Todos los derechos reservados.`}
+            <Link href="/terms" className="ml-4 hover:underline">
+              Términos y Condiciones
+            </Link>
           </p>
         </div>
       </div>
