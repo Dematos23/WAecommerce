@@ -1,3 +1,4 @@
+
 import { NextRequest, NextResponse } from 'next/server';
 import { getSession, updateSession } from './lib/auth';
 
@@ -32,5 +33,5 @@ export const config = {
    * - _next/image (image optimization files)
    * - favicon.ico (favicon file)
    */
-  matcher: ['/admin/:path*'],
+  matcher: [],
 };
