@@ -6,15 +6,22 @@ import path from "path";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import type { Product } from "@/types";
+import type { Product, Reclamacion } from "@/types";
 
 const productsFilePath = path.join(process.cwd(), "src/data/products.json");
+const reclamacionesFilePath = path.join(process.cwd(), "src/data/reclamaciones.json");
+
+// --- Product Functions ---
 
 async function readProducts(): Promise<Product[]> {
   try {
     const data = await fs.readFile(productsFilePath, "utf8");
     return JSON.parse(data);
   } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+        await fs.writeFile(productsFilePath, '[]', 'utf8');
+        return [];
+    }
     console.error("Error reading products file:", error);
     return [];
   }
@@ -111,4 +118,79 @@ export async function deleteProduct(productId: string) {
     revalidatePath('/products');
     revalidatePath('/');
     redirect("/admin/products");
+}
+
+
+// --- Reclamaciones Functions ---
+
+async function readReclamaciones(): Promise<Reclamacion[]> {
+  try {
+    const data = await fs.readFile(reclamacionesFilePath, "utf8");
+    return JSON.parse(data);
+  } catch (error) {
+     if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+        await fs.writeFile(reclamacionesFilePath, '[]', 'utf8');
+        return [];
+    }
+    console.error("Error reading reclamaciones file:", error);
+    return [];
+  }
+}
+
+async function writeReclamaciones(reclamaciones: Reclamacion[]): Promise<void> {
+  try {
+    const data = JSON.stringify(reclamaciones, null, 2);
+    await fs.writeFile(reclamacionesFilePath, data, "utf8");
+  } catch (error) {
+    console.error("Error writing reclamaciones file:", error);
+  }
+}
+
+const reclamacionSchema = z.object({
+  fechaReclamo: z.string(),
+  nombreCompleto: z.string(),
+  domicilio: z.string().optional(),
+  tipoDocumento: z.string(),
+  numeroDocumento: z.string(),
+  email: z.string(),
+  telefono: z.string().optional(),
+  nombreApoderado: z.string().optional(),
+  tipoBien: z.string(),
+  montoReclamado: z.string().optional(),
+  descripcionBien: z.string().optional(),
+  tipoReclamacion: z.string(),
+  detalleReclamacion: z.string(),
+  pedido: z.string().optional(),
+});
+
+
+export async function addReclamacion(formData: FormData) {
+    const data = Object.fromEntries(formData.entries());
+    const validatedFields = reclamacionSchema.safeParse(data);
+    
+    if (!validatedFields.success) {
+        console.error("Validation errors:", validatedFields.error.flatten().fieldErrors);
+        // Here you might want to return the errors to the form
+        return { errors: validatedFields.error.flatten().fieldErrors };
+    }
+    
+    const reclamaciones = await readReclamaciones();
+    const newId = (reclamaciones.length + 1).toString().padStart(5, '0');
+
+    const newReclamacion: Reclamacion = {
+        id: `REC-${new Date().getFullYear()}-${newId}`,
+        ...validatedFields.data,
+        fechaRegistro: new Date().toISOString(),
+        estado: 'pendiente'
+    };
+
+    reclamaciones.push(newReclamacion);
+    await writeReclamaciones(reclamaciones);
+    
+    // TODO: Implement email sending logic here
+    // sendEmailToClient(newReclamacion);
+    // sendEmailToBusiness(newReclamacion);
+
+    revalidatePath('/reclamaciones');
+    redirect('/reclamaciones/confirmacion');
 }

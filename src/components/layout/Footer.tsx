@@ -74,6 +74,9 @@ export function Footer() {
             <Link href="/cookies" className="ml-4 hover:underline">
               Política de Cookies
             </Link>
+             <Link href="/reclamaciones" className="ml-4 hover:underline">
+              Libro de Reclamaciones
+            </Link>
           </p>
         </div>
       </div>
