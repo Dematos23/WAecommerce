@@ -14,7 +14,7 @@ const publicImagesPath = path.join(process.cwd(), "public/images");
 
 // --- Product Functions ---
 
-async function readProducts(): Promise<Product[]> {
+export async function readProducts(): Promise<Product[]> {
   try {
     const data = await fs.readFile(productsFilePath, "utf8");
     return JSON.parse(data);
@@ -281,3 +281,5 @@ export async function addReclamacion(formData: FormData) {
     revalidatePath('/reclamaciones');
     redirect('/reclamaciones/confirmacion');
 }
+
+    

@@ -1,16 +1,14 @@
 
 import { ProductImageGallery } from "./ProductImageGallery";
-import productsData from "@/data/products.json";
 import type { Product } from "@/types";
 import { notFound } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { useCart } from "@/hooks/useCart";
 import { AddToCartButton } from "./AddToCartButton";
-import { config } from "@/lib/config";
+import { readProducts } from "@/actions/aiActions";
 
-export default function ProductDetailPage({ params }: { params: { id: string } }) {
+export default async function ProductDetailPage({ params }: { params: { id: string } }) {
   const { id } = params;
-  const product = (productsData as Product[]).find((p) => p.id === id);
+  const products = await readProducts();
+  const product = products.find((p) => p.id === id);
 
   if (!product) {
     notFound();
@@ -41,3 +39,5 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
     </div>
   );
 }
+
+    

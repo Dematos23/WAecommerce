@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { PlusCircle, MoreHorizontal, Trash2, Edit } from "lucide-react";
 import Link from "next/link";
-import productsData from "@/data/products.json";
 import type { Product } from "@/types";
 import Image from "next/image";
 import {
@@ -20,11 +19,11 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { deleteProduct } from "@/actions/aiActions";
+import { deleteProduct, readProducts } from "@/actions/aiActions";
 
 
-export default function AdminProductsPage() {
-    const products = productsData as Product[];
+export default async function AdminProductsPage() {
+    const products = await readProducts();
 
     return (
         <div className="container mx-auto p-4 md:p-8">
@@ -113,3 +112,5 @@ function ProductActions({ id }: { id: string }) {
         </DropdownMenu>
     )
 }
+
+    

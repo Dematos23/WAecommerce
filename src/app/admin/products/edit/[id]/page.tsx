@@ -1,11 +1,12 @@
 
 import { ProductForm } from "../../product-form";
-import productsData from "@/data/products.json";
 import type { Product } from "@/types";
+import { readProducts } from "@/actions/aiActions";
 
-export default function EditProductPage({ params }: { params: { id: string } }) {
+export default async function EditProductPage({ params }: { params: { id: string } }) {
     const { id } = params;
-    const product = (productsData as Product[]).find(p => p.id === id);
+    const products = await readProducts();
+    const product = products.find(p => p.id === id);
 
     if (!product) {
         return (
@@ -24,3 +25,5 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
         </div>
     )
 }
+
+    

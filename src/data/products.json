@@ -72,6 +72,9 @@
     "precio": 25.99,
     "categoria": "Ropa",
     "destacado": false,
-    "imagenes": []
+    "imagenes": [
+      "/images/prod_1753913204491/1753913872591_0.webp",
+      "/images/prod_1753913204491/1753913900445_0.webp"
+    ]
   }
 ]

@@ -2,13 +2,14 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { config } from "@/lib/config";
-import products from '@/data/products.json';
 import { ProductGrid } from "@/components/products/ProductGrid";
 import type { Product } from "@/types";
 import { ArrowRight } from "lucide-react";
+import { readProducts } from "@/actions/aiActions";
 
-export default function Home() {
-  const featuredProducts = (products as Product[]).filter(p => p.destacado);
+export default async function Home() {
+  const products = await readProducts();
+  const featuredProducts = products.filter(p => p.destacado);
 
   return (
     <div className="flex flex-col">
@@ -56,3 +57,5 @@ export default function Home() {
     </div>
   );
 }
+
+    
