@@ -10,7 +10,7 @@ import type { Product, Reclamacion } from "@/types";
 
 const productsFilePath = path.join(process.cwd(), "src/data/products.json");
 const reclamacionesFilePath = path.join(process.cwd(), "src/data/reclamaciones.json");
-const imagesPath = path.join(process.cwd(), "public/images");
+const publicImagesPath = path.join(process.cwd(), "public/images");
 
 // --- Product Functions ---
 
@@ -51,18 +51,20 @@ async function saveImages(images: File[], productId: string): Promise<string[]> 
     if (!images || images.length === 0) return [];
     
     const imagePaths: string[] = [];
+    const productImagesPath = path.join(publicImagesPath, productId);
+
     try {
-        await fs.mkdir(imagesPath, { recursive: true });
+        await fs.mkdir(productImagesPath, { recursive: true });
         for (let i = 0; i < images.length; i++) {
             const image = images[i];
             if (image.size === 0) continue;
             
             const imageExtension = image.name.split('.').pop();
-            const imageName = `${productId}_${Date.now()}_${i}.${imageExtension}`;
-            const imageFullPath = path.join(imagesPath, imageName);
+            const imageName = `${Date.now()}_${i}.${imageExtension}`;
+            const imageFullPath = path.join(productImagesPath, imageName);
             const imageBuffer = Buffer.from(await image.arrayBuffer());
             await fs.writeFile(imageFullPath, imageBuffer);
-            imagePaths.push(`/images/${imageName}`);
+            imagePaths.push(`/images/${productId}/${imageName}`);
         }
     } catch (error) {
         console.error("Error saving images:", error);
@@ -169,20 +171,18 @@ export async function deleteProduct(productId: string) {
 
     let products = await readProducts();
     const productToDelete = products.find(p => p.id === productId);
-
-    if (productToDelete && productToDelete.imagenes && productToDelete.imagenes.length > 0) {
-        for (const imageUrl of productToDelete.imagenes) {
-            try {
-                const imagePath = path.join(process.cwd(), "public", imageUrl);
-                await fs.unlink(imagePath);
-            } catch (error) {
-                console.error(`Error deleting product image ${imageUrl}:`, error);
-            }
-        }
-    }
     
     products = products.filter(p => p.id !== productId);
     await writeProducts(products);
+    
+    if (productToDelete) {
+      const productImagesPath = path.join(publicImagesPath, productId);
+      try {
+        await fs.rm(productImagesPath, { recursive: true, force: true });
+      } catch (error) {
+        console.error(`Error deleting product image folder ${productImagesPath}:`, error);
+      }
+    }
 
     revalidatePath('/admin/products');
     revalidatePath('/products');
