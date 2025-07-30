@@ -1,3 +1,4 @@
+
 import { config } from '@/lib/config';
 import { Logo } from '@/components/ui/Logo';
 import { Mail, Phone, Clock, MapPin } from 'lucide-react';
@@ -69,6 +70,9 @@ export function Footer() {
             {`© ${currentYear} TiendaExpress. Todos los derechos reservados.`}
             <Link href="/terms" className="ml-4 hover:underline">
               Términos y Condiciones
+            </Link>
+            <Link href="/cookies" className="ml-4 hover:underline">
+              Política de Cookies
             </Link>
           </p>
         </div>
