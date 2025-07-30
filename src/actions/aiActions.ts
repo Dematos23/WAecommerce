@@ -10,6 +10,7 @@ import type { Product, Reclamacion } from "@/types";
 
 const productsFilePath = path.join(process.cwd(), "src/data/products.json");
 const reclamacionesFilePath = path.join(process.cwd(), "src/data/reclamaciones.json");
+const imagesPath = path.join(process.cwd(), "public/images");
 
 // --- Product Functions ---
 
@@ -42,9 +43,27 @@ const productSchema = z.object({
   descripcion: z.string().nullable(),
   precio: z.coerce.number().min(0, "El precio debe ser un número positivo."),
   categoria: z.string().min(1, "La categoría es requerida."),
-  imagen: z.string().min(1, "La URL de la imagen es requerida."),
+  imagen: z.any().optional(),
   destacado: z.boolean().optional(),
 });
+
+async function saveImage(image: File, productId: string): Promise<string | undefined> {
+    if (!image || image.size === 0) return undefined;
+    
+    try {
+        await fs.mkdir(imagesPath, { recursive: true });
+        const imageExtension = image.name.split('.').pop();
+        const imageName = `${productId}.${imageExtension}`;
+        const imageFullPath = path.join(imagesPath, imageName);
+        const imageBuffer = Buffer.from(await image.arrayBuffer());
+        await fs.writeFile(imageFullPath, imageBuffer);
+        return `/images/${imageName}`;
+    } catch (error) {
+        console.error("Error saving image:", error);
+        return undefined;
+    }
+}
+
 
 export async function addProduct(formData: FormData) {
   const validatedFields = productSchema.safeParse({
@@ -64,10 +83,21 @@ export async function addProduct(formData: FormData) {
   }
 
   const products = await readProducts();
+  const productId = `prod_${new Date().getTime()}`;
+  const { imagen, ...productData } = validatedFields.data;
+  
   const newProduct: Product = {
-    id: `prod_${new Date().getTime()}`,
-    ...validatedFields.data,
+    id: productId,
+    ...productData,
+    imagen: '', // Default empty
   };
+
+  if (imagen && imagen.size > 0) {
+      const imagePath = await saveImage(imagen, productId);
+      if (imagePath) {
+          newProduct.imagen = imagePath;
+      }
+  }
 
   products.push(newProduct);
   await writeProducts(products);
@@ -85,7 +115,7 @@ export async function updateProduct(formData: FormData) {
         descripcion: formData.get('descripcion'),
         precio: formData.get('precio'),
         categoria: formData.get('categoria'),
-        imagen: formData.get('imagen'),
+        imagen: formData.get("imagen"),
         destacado: formData.get("destacado") === "on",
     });
 
@@ -96,11 +126,28 @@ export async function updateProduct(formData: FormData) {
         };
     }
 
-    const { id, ...updatedData } = validatedFields.data;
+    const { id, imagen, ...updatedData } = validatedFields.data;
     let products = await readProducts();
-    
-    products = products.map(p => p.id === id ? { ...p, ...updatedData } : p);
+    const productIndex = products.findIndex(p => p.id === id);
 
+    if (productIndex === -1) {
+        return { errors: { form: ['Product not found'] } };
+    }
+    
+    const existingProduct = products[productIndex];
+    let imagePath = existingProduct.imagen;
+
+    if (imagen && imagen.size > 0) {
+        imagePath = await saveImage(imagen, id) || existingProduct.imagen;
+    }
+
+    const updatedProduct = {
+        ...existingProduct,
+        ...updatedData,
+        imagen: imagePath,
+    };
+
+    products[productIndex] = updatedProduct;
     await writeProducts(products);
 
     revalidatePath("/admin/products");
@@ -114,6 +161,17 @@ export async function deleteProduct(productId: string) {
     if(!productId) return;
 
     let products = await readProducts();
+    const productToDelete = products.find(p => p.id === productId);
+
+    if (productToDelete && productToDelete.imagen) {
+        try {
+            const imagePath = path.join(process.cwd(), "public", productToDelete.imagen);
+            await fs.unlink(imagePath);
+        } catch (error) {
+            console.error("Error deleting product image:", error);
+        }
+    }
+    
     products = products.filter(p => p.id !== productId);
     await writeProducts(products);
 

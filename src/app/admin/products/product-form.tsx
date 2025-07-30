@@ -11,6 +11,7 @@ import type { Product } from "@/types";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import Image from "next/image";
 
 
 export function ProductForm({ product }: { product?: Product }) {
@@ -66,16 +67,21 @@ export function ProductForm({ product }: { product?: Product }) {
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="imagen">URL de la Imagen</Label>
+              <Label htmlFor="imagen">Imagen del Producto</Label>
+               {product?.imagen && (
+                <div className="my-4">
+                  <p className="text-sm text-muted-foreground mb-2">Imagen Actual:</p>
+                  <Image src={product.imagen} alt={product.nombre} width={100} height={100} className="rounded-md" />
+                </div>
+              )}
               <Input
                 id="imagen"
                 name="imagen"
-                placeholder="Ej: /images/nombre-del-producto.jpg"
-                defaultValue={product?.imagen}
-                required
+                type="file"
+                accept="image/*"
               />
                <p className="text-sm text-muted-foreground">
-                La imagen debe estar en la carpeta `public/images/`.
+                {product ? "Sube una nueva imagen para reemplazar la actual." : "Sube una imagen para el producto."}
               </p>
             </div>
              <div className="flex items-center space-x-2">

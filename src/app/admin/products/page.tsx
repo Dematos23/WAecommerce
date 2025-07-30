@@ -63,7 +63,7 @@ export default function AdminProductsPage() {
                                             alt={product.nombre}
                                             className="aspect-square rounded-md object-cover"
                                             height="64"
-                                            src={product.imagen || "/placeholder.svg"}
+                                            src={product.imagen || "https://placehold.co/64x64.png"}
                                             width="64"
                                         />
                                     </TableCell>
@@ -113,4 +113,3 @@ function ProductActions({ id }: { id: string }) {
         </DropdownMenu>
     )
 }
-
