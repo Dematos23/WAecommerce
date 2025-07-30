@@ -31,12 +31,12 @@ export default function RootLayout({
       </head>
       <body
         className={cn(
-          'min-h-screen bg-background font-body antialiased',
+          'bg-background font-body antialiased',
           inter.variable
         )}
       >
         <CartProvider>
-          <div className="relative flex min-h-dvh flex-col bg-background">
+          <div className="relative flex flex-col bg-background min-h-screen">
             <Header />
             <main className="flex-1">{children}</main>
             <Footer />
