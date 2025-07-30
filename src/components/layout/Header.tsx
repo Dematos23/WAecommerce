@@ -23,11 +23,13 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 max-w-7xl items-center justify-between px-4">
         {/* Desktop Header */}
-        <div className="hidden md:flex flex-1 items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <Logo />
-          </Link>
-          <nav className="flex items-center gap-6 text-sm font-medium">
+        <div className="hidden md:flex w-full items-center justify-between">
+          <div className="flex-1">
+            <Link href="/" className="flex items-center gap-2">
+              <Logo />
+            </Link>
+          </div>
+          <nav className="flex flex-1 justify-center items-center gap-6 text-sm font-medium">
             {config.menus.map((item) => (
               <Link
                 key={item.enlace}
@@ -43,7 +45,7 @@ export function Header() {
               </Link>
             ))}
           </nav>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-1 justify-end items-center gap-4">
              <CartIcon />
           </div>
         </div>
@@ -60,7 +62,7 @@ export function Header() {
                 </Button>
               </SheetTrigger>
               <SheetContent side="left">
-                <SheetTitle className="sr-only">Menú de Navegación</SheetTitle>
+                 <SheetTitle className="sr-only">Menú de Navegación</SheetTitle>
                 <div className="flex flex-col gap-4 py-8 px-6">
                   <div className="flex items-center space-x-2 mb-4">
                     <Logo />
