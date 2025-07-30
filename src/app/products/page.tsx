@@ -29,7 +29,7 @@ export default function ProductsPage() {
         filtered.sort((a, b) => a.precio - b.precio);
         break;
       case "precio-desc":
-        filtered.sort((a, b) => b.precio - a.precio);
+        filtered.sort((a, b) => b.precio - b.precio);
         break;
       case "nombre-asc":
         filtered.sort((a, b) => a.nombre.localeCompare(b.nombre));
@@ -52,6 +52,10 @@ export default function ProductsPage() {
           Explora nuestra colección completa de productos.
         </p>
       </div>
+      
+      <div className="flex justify-end mb-6 md:hidden">
+          <ProductSort value={sortOrder} onValueChange={setSortOrder} />
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
         <aside className="md:col-span-1">
@@ -62,7 +66,7 @@ export default function ProductsPage() {
           />
         </aside>
         <main className="md:col-span-3">
-          <div className="flex justify-end mb-6">
+           <div className="hidden md:flex justify-end mb-6">
             <ProductSort value={sortOrder} onValueChange={setSortOrder} />
           </div>
           {sortedAndFilteredProducts.length > 0 ? (
