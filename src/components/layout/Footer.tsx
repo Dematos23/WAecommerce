@@ -1,6 +1,6 @@
 import { config } from '@/lib/config';
 import { Logo } from '@/components/ui/Logo';
-import { Mail, Phone, Clock } from 'lucide-react';
+import { Mail, Phone, Clock, MapPin } from 'lucide-react';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -22,6 +22,10 @@ export function Footer() {
           {/* Columna Central: Mapa */}
           <div>
             <h3 className="text-lg font-semibold mb-4">Ubicación</h3>
+             <div className="flex items-center justify-center md:justify-start gap-3 mb-2 text-muted-foreground">
+                <MapPin className="h-5 w-5 text-primary flex-shrink-0" />
+                <span>{config.contacto.direccion}</span>
+            </div>
             <div className="overflow-hidden rounded-lg h-48 w-full">
               <iframe
                 src={mapUrl}
