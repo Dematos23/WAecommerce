@@ -36,6 +36,7 @@ export default function AdminProductsPage() {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("all");
     const [priceRange, setPriceRange] = useState([0, 500]);
+    const [maxPrice, setMaxPrice] = useState(500);
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -44,8 +45,10 @@ export default function AdminProductsPage() {
             setProducts(productsData);
             
             if (productsData.length > 0) {
-                const maxPrice = Math.max(...productsData.map(p => p.precio));
-                setPriceRange([0, Math.ceil(maxPrice)]);
+                const maxProductPrice = Math.max(...productsData.map(p => p.precio));
+                const ceiledMaxPrice = Math.ceil(maxProductPrice);
+                setMaxPrice(ceiledMaxPrice);
+                setPriceRange([0, ceiledMaxPrice]);
             }
             setLoading(false);
         };
@@ -117,9 +120,10 @@ export default function AdminProductsPage() {
                             Precio: ${priceRange[0]} - ${priceRange[1]}
                         </label>
                         <Slider
-                            value={[priceRange[1]]}
-                            onValueChange={(value) => setPriceRange([priceRange[0], value[0]])}
-                            max={Math.max(500, ...products.map(p => p.precio))}
+                            value={priceRange}
+                            onValueChange={setPriceRange}
+                            min={0}
+                            max={maxPrice}
                             step={1}
                         />
                     </div>
