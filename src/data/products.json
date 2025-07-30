@@ -1,4 +1,3 @@
-
 [
   {
     "id": "prod_001",
@@ -53,5 +52,14 @@
     "categoria": "Accesorios",
     "imagen": "/images/prod_006.png",
     "destacado": false
+  },
+  {
+    "id": "prod_1753913204491",
+    "nombre": "Vedi",
+    "descripcion": "descripción",
+    "precio": 25.99,
+    "categoria": "Ropa",
+    "destacado": false,
+    "imagen": "/images/prod_1753913204491.png"
   }
 ]

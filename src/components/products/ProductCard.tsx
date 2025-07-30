@@ -1,3 +1,4 @@
+
 "use client";
 
 import type { Product } from "@/types";
@@ -13,7 +14,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/useCart";
 import { useToast } from "@/hooks/use-toast";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, Eye } from "lucide-react";
+import Link from "next/link";
 
 interface ProductCardProps {
   product: Product;
@@ -39,16 +41,21 @@ export function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <Card className="flex h-full flex-col overflow-hidden transition-shadow duration-300 hover:shadow-lg">
+    <Card className="flex h-full flex-col overflow-hidden transition-shadow duration-300 hover:shadow-lg group">
       <CardHeader className="p-0">
         <div className="relative aspect-square w-full">
-          <Image
-            src={product.imagen}
-            alt={product.nombre}
-            fill
-            className="object-cover"
-            data-ai-hint={`${product.categoria} product`}
-          />
+          <Link href={`/products/${product.id}`}>
+            <Image
+              src={product.imagen}
+              alt={product.nombre}
+              fill
+              className="object-cover"
+              data-ai-hint={`${product.categoria} product`}
+            />
+             <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <Eye className="h-8 w-8 text-white" />
+            </div>
+          </Link>
         </div>
       </CardHeader>
       <CardContent className="flex-1 p-6">
