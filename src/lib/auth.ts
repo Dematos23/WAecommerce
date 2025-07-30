@@ -44,7 +44,7 @@ export async function login(prevState: { success: boolean; error?: string }, for
     cookies().set('session', session, { expires, httpOnly: true });
     redirect('/admin');
   }
-  return { success: false, error: 'Invalid username or password' };
+  return { success: false, error: 'Usuario o contraseña inválidos' };
 }
 
 export async function logout() {

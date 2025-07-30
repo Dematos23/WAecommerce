@@ -18,12 +18,12 @@ export function LoginForm() {
       {state?.error && (
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Login Failed</AlertTitle>
+          <AlertTitle>Error de Autenticación</AlertTitle>
           <AlertDescription>{state.error}</AlertDescription>
         </Alert>
       )}
       <div className="space-y-2">
-        <Label htmlFor="username">Username</Label>
+        <Label htmlFor="username">Usuario</Label>
         <Input
           id="username"
           name="username"
@@ -32,7 +32,7 @@ export function LoginForm() {
         />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
+        <Label htmlFor="password">Contraseña</Label>
         <Input
           id="password"
           name="password"
@@ -50,7 +50,7 @@ function LoginButton() {
 
   return (
     <Button type="submit" className="w-full" disabled={pending}>
-       {pending ? 'Logging in...' : 'Login'}
+       {pending ? 'Iniciando sesión...' : 'Iniciar Sesión'}
        <LogIn className='ml-2' />
     </Button>
   );

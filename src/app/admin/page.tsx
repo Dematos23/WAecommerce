@@ -18,23 +18,23 @@ export default async function AdminPage() {
     <div className="min-h-screen bg-secondary/30">
         <AdminHeader />
         <main className="container mx-auto p-4 md:p-8">
-            <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
+            <h1 className="text-3xl font-bold mb-6">Panel de Administración</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <ManagementCard
-                    title="Manage Products"
-                    description="Add, edit, or delete products in your store."
+                    title="Gestionar Productos"
+                    description="Añade, edita o elimina productos de tu tienda."
                     icon={<ShoppingBag className="h-8 w-8 text-primary" />}
                     link="/admin/products"
                 />
                 <ManagementCard
-                    title="Site Configuration"
-                    description="Edit site titles, texts, and contact info."
+                    title="Configuración del Sitio"
+                    description="Edita los títulos, textos e información de contacto."
                     icon={<FileJson className="h-8 w-8 text-primary" />}
                     link="/admin/config"
                 />
                 <ManagementCard
-                    title="Theme Settings"
-                    description="Customize the look and feel of your website."
+                    title="Ajustes del Tema"
+                    description="Personaliza la apariencia de tu sitio web."
                     icon={<Settings className="h-8 w-8 text-primary" />}
                     link="/admin/theme"
                 />
@@ -48,14 +48,14 @@ function AdminHeader() {
     return (
         <header className="bg-card shadow-sm">
             <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-                <h1 className="text-xl font-bold">Admin Panel</h1>
+                <h1 className="text-xl font-bold">Panel de Admin</h1>
                 <form action={async () => {
                     'use server';
                     await logout();
                     redirect('/');
                 }}>
                     <Button type="submit" variant="ghost">
-                        Logout <LogOut className="ml-2 h-4 w-4" />
+                        Cerrar Sesión <LogOut className="ml-2 h-4 w-4" />
                     </Button>
                 </form>
             </div>

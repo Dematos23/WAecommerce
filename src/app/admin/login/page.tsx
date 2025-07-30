@@ -11,8 +11,8 @@ export default function LoginPage() {
             <div className="flex justify-center mb-4">
                  <Logo />
             </div>
-          <CardTitle>Admin Login</CardTitle>
-          <CardDescription>Please enter your credentials to access the dashboard.</CardDescription>
+          <CardTitle>Acceso de Administrador</CardTitle>
+          <CardDescription>Por favor, ingresa tus credenciales para acceder al panel.</CardDescription>
         </CardHeader>
         <CardContent>
           <LoginForm />
