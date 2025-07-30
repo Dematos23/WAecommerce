@@ -27,7 +27,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
     <div className="container mx-auto py-12 px-4">
       <div className="grid md:grid-cols-2 gap-12">
         <div>
-          <ProductImageGallery images={[product.imagen]} productName={product.nombre} />
+          <ProductImageGallery images={product.imagenes} productName={product.nombre} />
         </div>
         <div>
           <h1 className="text-3xl font-bold tracking-tight font-headline mb-2">{product.nombre}</h1>

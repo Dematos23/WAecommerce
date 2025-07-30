@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useCart } from "@/hooks/useCart";
@@ -163,7 +164,7 @@ export function CheckoutForm() {
             {cartItems.map(item => (
                 <div key={item.id} className="flex justify-between items-center">
                     <div className="flex items-center gap-4">
-                        <Image src={item.imagen} alt={item.nombre} width={48} height={48} className="rounded-md" />
+                        <Image src={item.imagenes?.[0] || 'https://placehold.co/48x48.png'} alt={item.nombre} width={48} height={48} className="rounded-md" />
                         <div>
                             <p className="font-medium">{item.nombre}</p>
                             <p className="text-sm text-muted-foreground">Cantidad: {item.quantity}</p>

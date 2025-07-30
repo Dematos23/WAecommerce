@@ -67,21 +67,26 @@ export function ProductForm({ product }: { product?: Product }) {
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="imagen">Imagen del Producto</Label>
-               {product?.imagen && (
+              <Label htmlFor="imagenes">Imágenes del Producto</Label>
+               {product?.imagenes && product.imagenes.length > 0 && (
                 <div className="my-4">
-                  <p className="text-sm text-muted-foreground mb-2">Imagen Actual:</p>
-                  <Image src={product.imagen} alt={product.nombre} width={100} height={100} className="rounded-md" />
+                  <p className="text-sm text-muted-foreground mb-2">Imágenes Actuales:</p>
+                  <div className="flex flex-wrap gap-2">
+                    {product.imagenes.map((img, index) => (
+                      <Image key={index} src={img} alt={`${product.nombre} - imagen ${index+1}`} width={100} height={100} className="rounded-md object-cover" />
+                    ))}
+                  </div>
                 </div>
               )}
               <Input
-                id="imagen"
-                name="imagen"
+                id="imagenes"
+                name="imagenes"
                 type="file"
                 accept="image/*"
+                multiple
               />
                <p className="text-sm text-muted-foreground">
-                {product ? "Sube una nueva imagen para reemplazar la actual." : "Sube una imagen para el producto."}
+                {product ? "Sube una o más imágenes para añadir al producto." : "Sube una o más imágenes para el producto."}
               </p>
             </div>
              <div className="flex items-center space-x-2">

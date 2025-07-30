@@ -46,7 +46,7 @@ export function ProductCard({ product }: ProductCardProps) {
         <div className="relative aspect-square w-full">
           <Link href={`/products/${product.id}`}>
             <Image
-              src={product.imagen}
+              src={product.imagenes?.[0] || 'https://placehold.co/400x400.png'}
               alt={product.nombre}
               fill
               className="object-cover"

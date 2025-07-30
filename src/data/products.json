@@ -1,3 +1,4 @@
+
 [
   {
     "id": "prod_001",
@@ -5,7 +6,9 @@
     "descripcion": "Prepara el café perfecto cada mañana. Capacidad para 12 tazas y función de pausa para servir.",
     "precio": 49.99,
     "categoria": "Hogar",
-    "imagen": "/images/prod_001.png",
+    "imagenes": [
+      "/images/prod_001.png"
+    ],
     "destacado": true
   },
   {
@@ -14,7 +17,9 @@
     "descripcion": "Sonido inmersivo y cancelación de ruido. Hasta 20 horas de batería con una sola carga.",
     "precio": 89.9,
     "categoria": "Tecnología",
-    "imagen": "/images/prod_002.png",
+    "imagenes": [
+      "/images/prod_002.png"
+    ],
     "destacado": true
   },
   {
@@ -23,7 +28,9 @@
     "descripcion": "Diseño moderno y funcional. Compartimento para laptop de 15\" y múltiples bolsillos.",
     "precio": 35.5,
     "categoria": "Accesorios",
-    "imagen": "/images/prod_003.png",
+    "imagenes": [
+      "/images/prod_003.png"
+    ],
     "destacado": true
   },
   {
@@ -32,7 +39,9 @@
     "descripcion": "Iluminación ajustable y diseño minimalista. Perfecta para estudiar o trabajar.",
     "precio": 25,
     "categoria": "Hogar",
-    "imagen": "/images/prod_004.png",
+    "imagenes": [
+      "/images/prod_004.png"
+    ],
     "destacado": true
   },
   {
@@ -41,7 +50,9 @@
     "descripcion": null,
     "precio": 120,
     "categoria": "Tecnología",
-    "imagen": "/images/prod_005.png",
+    "imagenes": [
+      "/images/prod_005.png"
+    ],
     "destacado": false
   },
   {
@@ -50,7 +61,9 @@
     "descripcion": "Mantente hidratado con estilo. Acero inoxidable, libre de BPA y mantiene la temperatura.",
     "precio": 19.99,
     "categoria": "Accesorios",
-    "imagen": "/images/prod_006.png",
+    "imagenes": [
+      "/images/prod_006.png"
+    ],
     "destacado": false
   },
   {
@@ -60,6 +73,8 @@
     "precio": 25.99,
     "categoria": "Ropa",
     "destacado": false,
-    "imagen": "/images/prod_1753913204491.png"
+    "imagenes": [
+      "/images/prod_1753913204491.png"
+    ]
   }
 ]

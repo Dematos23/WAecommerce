@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -48,7 +49,7 @@ export function CartSheet({ open, onOpenChange, children }: CartSheetProps) {
                   <div key={item.id} className="flex items-center gap-4">
                     <div className="relative h-20 w-20 overflow-hidden rounded-md">
                       <Image
-                        src={item.imagen}
+                        src={item.imagenes?.[0] || 'https://placehold.co/80x80.png'}
                         alt={item.nombre}
                         fill
                         className="object-cover"

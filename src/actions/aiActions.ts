@@ -43,25 +43,31 @@ const productSchema = z.object({
   descripcion: z.string().nullable(),
   precio: z.coerce.number().min(0, "El precio debe ser un número positivo."),
   categoria: z.string().min(1, "La categoría es requerida."),
-  imagen: z.any().optional(),
+  imagenes: z.array(z.any()).optional(),
   destacado: z.boolean().optional(),
 });
 
-async function saveImage(image: File, productId: string): Promise<string | undefined> {
-    if (!image || image.size === 0) return undefined;
+async function saveImages(images: File[], productId: string): Promise<string[]> {
+    if (!images || images.length === 0) return [];
     
+    const imagePaths: string[] = [];
     try {
         await fs.mkdir(imagesPath, { recursive: true });
-        const imageExtension = image.name.split('.').pop();
-        const imageName = `${productId}.${imageExtension}`;
-        const imageFullPath = path.join(imagesPath, imageName);
-        const imageBuffer = Buffer.from(await image.arrayBuffer());
-        await fs.writeFile(imageFullPath, imageBuffer);
-        return `/images/${imageName}`;
+        for (let i = 0; i < images.length; i++) {
+            const image = images[i];
+            if (image.size === 0) continue;
+            
+            const imageExtension = image.name.split('.').pop();
+            const imageName = `${productId}_${Date.now()}_${i}.${imageExtension}`;
+            const imageFullPath = path.join(imagesPath, imageName);
+            const imageBuffer = Buffer.from(await image.arrayBuffer());
+            await fs.writeFile(imageFullPath, imageBuffer);
+            imagePaths.push(`/images/${imageName}`);
+        }
     } catch (error) {
-        console.error("Error saving image:", error);
-        return undefined;
+        console.error("Error saving images:", error);
     }
+    return imagePaths;
 }
 
 
@@ -71,7 +77,7 @@ export async function addProduct(formData: FormData) {
     descripcion: formData.get("descripcion"),
     precio: formData.get("precio"),
     categoria: formData.get("categoria"),
-    imagen: formData.get("imagen"),
+    imagenes: formData.getAll("imagenes"),
     destacado: formData.get("destacado") === "on",
   });
 
@@ -84,19 +90,18 @@ export async function addProduct(formData: FormData) {
 
   const products = await readProducts();
   const productId = `prod_${new Date().getTime()}`;
-  const { imagen, ...productData } = validatedFields.data;
+  const { imagenes, ...productData } = validatedFields.data;
   
   const newProduct: Product = {
     id: productId,
     ...productData,
-    imagen: '', // Default empty
+    imagenes: [], // Default empty
   };
 
-  if (imagen && imagen.size > 0) {
-      const imagePath = await saveImage(imagen, productId);
-      if (imagePath) {
-          newProduct.imagen = imagePath;
-      }
+  if (imagenes && imagenes.length > 0) {
+      const imageFiles = imagenes.filter(img => img instanceof File && img.size > 0) as File[];
+      const savedImagePaths = await saveImages(imageFiles, productId);
+      newProduct.imagenes = savedImagePaths;
   }
 
   products.push(newProduct);
@@ -115,7 +120,7 @@ export async function updateProduct(formData: FormData) {
         descripcion: formData.get('descripcion'),
         precio: formData.get('precio'),
         categoria: formData.get('categoria'),
-        imagen: formData.get("imagen"),
+        imagenes: formData.getAll("imagenes"),
         destacado: formData.get("destacado") === "on",
     });
 
@@ -126,7 +131,7 @@ export async function updateProduct(formData: FormData) {
         };
     }
 
-    const { id, imagen, ...updatedData } = validatedFields.data;
+    const { id, imagenes, ...updatedData } = validatedFields.data;
     let products = await readProducts();
     const productIndex = products.findIndex(p => p.id === id);
 
@@ -135,16 +140,18 @@ export async function updateProduct(formData: FormData) {
     }
     
     const existingProduct = products[productIndex];
-    let imagePath = existingProduct.imagen;
+    let imagePaths = existingProduct.imagenes;
 
-    if (imagen && imagen.size > 0) {
-        imagePath = await saveImage(imagen, id) || existingProduct.imagen;
+    if (imagenes && imagenes.length > 0) {
+        const imageFiles = imagenes.filter(img => img instanceof File && img.size > 0) as File[];
+        const newImagePaths = await saveImages(imageFiles, id);
+        imagePaths = [...imagePaths, ...newImagePaths];
     }
 
-    const updatedProduct = {
+    const updatedProduct: Product = {
         ...existingProduct,
         ...updatedData,
-        imagen: imagePath,
+        imagenes: imagePaths,
     };
 
     products[productIndex] = updatedProduct;
@@ -163,12 +170,14 @@ export async function deleteProduct(productId: string) {
     let products = await readProducts();
     const productToDelete = products.find(p => p.id === productId);
 
-    if (productToDelete && productToDelete.imagen) {
-        try {
-            const imagePath = path.join(process.cwd(), "public", productToDelete.imagen);
-            await fs.unlink(imagePath);
-        } catch (error) {
-            console.error("Error deleting product image:", error);
+    if (productToDelete && productToDelete.imagenes && productToDelete.imagenes.length > 0) {
+        for (const imageUrl of productToDelete.imagenes) {
+            try {
+                const imagePath = path.join(process.cwd(), "public", imageUrl);
+                await fs.unlink(imagePath);
+            } catch (error) {
+                console.error(`Error deleting product image ${imageUrl}:`, error);
+            }
         }
     }
     
