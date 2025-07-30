@@ -12,6 +12,7 @@ import { Menu } from 'lucide-react';
 import {
   Sheet,
   SheetContent,
+  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
 
@@ -55,6 +56,7 @@ export function Header() {
                 </Button>
               </SheetTrigger>
               <SheetContent side="left">
+                <SheetTitle className="sr-only">Menú de Navegación</SheetTitle>
                 <div className="flex flex-col gap-4 py-8 px-6">
                   <div className="flex items-center space-x-2 mb-4">
                     <Logo />
