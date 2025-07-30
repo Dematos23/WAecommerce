@@ -9,7 +9,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { addProduct, updateProduct } from "@/actions/aiActions";
 import type { Product } from "@/types";
 import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 
 
 export function ProductForm({ product }: { product?: Product }) {
@@ -77,6 +78,19 @@ export function ProductForm({ product }: { product?: Product }) {
                 La imagen debe estar en la carpeta `public/images/`.
               </p>
             </div>
+             <div className="flex items-center space-x-2">
+                <Checkbox 
+                  id="destacado" 
+                  name="destacado" 
+                  defaultChecked={product?.destacado}
+                />
+                <Label
+                  htmlFor="destacado"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  Marcar como producto destacado
+                </Label>
+              </div>
              <div className="flex justify-end gap-2">
                 <Button variant="outline" asChild>
                     <Link href="/admin/products">Cancelar</Link>

@@ -43,6 +43,7 @@ const productSchema = z.object({
   precio: z.coerce.number().min(0, "El precio debe ser un número positivo."),
   categoria: z.string().min(1, "La categoría es requerida."),
   imagen: z.string().min(1, "La URL de la imagen es requerida."),
+  destacado: z.boolean().optional(),
 });
 
 export async function addProduct(formData: FormData) {
@@ -52,6 +53,7 @@ export async function addProduct(formData: FormData) {
     precio: formData.get("precio"),
     categoria: formData.get("categoria"),
     imagen: formData.get("imagen"),
+    destacado: formData.get("destacado") === "on",
   });
 
   if (!validatedFields.success) {
@@ -84,6 +86,7 @@ export async function updateProduct(formData: FormData) {
         precio: formData.get('precio'),
         categoria: formData.get('categoria'),
         imagen: formData.get('imagen'),
+        destacado: formData.get("destacado") === "on",
     });
 
     if (!validatedFields.success || !validatedFields.data.id) {

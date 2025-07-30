@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { config } from "@/lib/config";
@@ -7,7 +8,7 @@ import type { Product } from "@/types";
 import { ArrowRight } from "lucide-react";
 
 export default function Home() {
-  const featuredProducts = products.slice(0, 4) as Product[];
+  const featuredProducts = (products as Product[]).filter(p => p.destacado);
 
   return (
     <div className="flex flex-col">
