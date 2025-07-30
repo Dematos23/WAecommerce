@@ -13,6 +13,8 @@ import {
 import {
   Dialog,
   DialogContent,
+  DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
 
 interface ProductImageGalleryProps {
@@ -45,6 +47,10 @@ export function ProductImageGallery({ images, productName }: ProductImageGallery
 
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="max-w-4xl w-full bg-transparent border-0 p-0 shadow-none">
+           <DialogTitle className="sr-only">{productName} Image Gallery</DialogTitle>
+           <DialogDescription className="sr-only">
+              Image gallery for {productName}. Use the next and previous buttons to navigate images.
+           </DialogDescription>
            <div className="relative w-full h-full flex items-center justify-center">
              <Carousel
                 opts={{
