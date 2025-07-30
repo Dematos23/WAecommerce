@@ -106,6 +106,7 @@ export function ProductForm({ product }: { product?: Product }) {
                 type="file"
                 accept="image/*"
                 multiple
+                className="file:cursor-pointer file:rounded-md file:bg-transparent file:px-4 file:py-2 hover:file:bg-accent hover:file:text-accent-foreground"
               />
                <p className="text-sm text-muted-foreground">
                 {product ? "Sube una o más imágenes para añadir al producto." : "Sube una o más imágenes para el producto."}
