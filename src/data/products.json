@@ -1,0 +1,50 @@
+[
+  {
+    "id": "prod_001",
+    "nombre": "Cafetera de Goteo",
+    "descripcion": "Prepara el café perfecto cada mañana. Capacidad para 12 tazas y función de pausa para servir.",
+    "precio": 49.99,
+    "categoria": "Hogar",
+    "imagen": "https://placehold.co/600x600.png"
+  },
+  {
+    "id": "prod_002",
+    "nombre": "Auriculares Bluetooth",
+    "descripcion": "Sonido inmersivo y cancelación de ruido. Hasta 20 horas de batería con una sola carga.",
+    "precio": 89.90,
+    "categoria": "Tecnología",
+    "imagen": "https://placehold.co/600x600.png"
+  },
+  {
+    "id": "prod_003",
+    "nombre": "Mochila Urbana",
+    "descripcion": "Diseño moderno y funcional. Compartimento para laptop de 15\" y múltiples bolsillos.",
+    "precio": 35.50,
+    "categoria": "Accesorios",
+    "imagen": "https://placehold.co/600x600.png"
+  },
+  {
+    "id": "prod_004",
+    "nombre": "Lámpara de Escritorio LED",
+    "descripcion": "Iluminación ajustable y diseño minimalista. Perfecta para estudiar o trabajar.",
+    "precio": 25.00,
+    "categoria": "Hogar",
+    "imagen": "https://placehold.co/600x600.png"
+  },
+  {
+    "id": "prod_005",
+    "nombre": "Teclado Mecánico RGB",
+    "descripcion": null,
+    "precio": 120.00,
+    "categoria": "Tecnología",
+    "imagen": "https://placehold.co/600x600.png"
+  },
+  {
+    "id": "prod_006",
+    "nombre": "Botella de Agua Reutilizable",
+    "descripcion": "Mantente hidratado con estilo. Acero inoxidable, libre de BPA y mantiene la temperatura.",
+    "precio": 19.99,
+    "categoria": "Accesorios",
+    "imagen": "https://placehold.co/600x600.png"
+  }
+]

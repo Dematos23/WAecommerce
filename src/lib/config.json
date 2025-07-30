@@ -1,0 +1,49 @@
+{
+  "variablesCss": {
+    "colorPrimario": "hsl(202, 70%, 83.7%)",
+    "colorSecundario": "hsl(259, 70%, 83.7%)",
+    "colorFondo": "hsl(210, 29%, 96.5%)",
+    "colorTexto": "hsl(215, 25%, 27%)",
+    "fontFamily": "'Inter', sans-serif",
+    "marginBase": "1rem",
+    "paddingBase": "1rem",
+    "borderRadius": "0.5rem",
+    "headingSize": "2.25rem",
+    "paragraphSize": "1rem"
+  },
+  "menus": [
+    { "titulo": "Inicio", "enlace": "/" },
+    { "titulo": "Catálogo", "enlace": "/products" },
+    { "titulo": "Sobre Nosotros", "enlace": "/about" },
+    { "titulo": "Contacto", "enlace": "/contact" }
+  ],
+  "titulos": {
+    "homepageHero": "TiendaExpress: Tu tienda, a un clic.",
+    "catalogo": "Nuestro Catálogo de Productos",
+    "carrito": "Tu Carrito de Compras",
+    "checkout": "Finalizar Pedido",
+    "sobreNosotros": "Conoce Más Sobre TiendaExpress",
+    "contacto": "Ponte en Contacto",
+    "generateDescription": "Generador de Descripciones de Producto con IA"
+  },
+  "textos": {
+    "mensajeBienvenida": "¡Bienvenido a TiendaExpress! Calidad y servicio que nos distinguen.",
+    "pieDePagina": "© 2024 TiendaExpress. Todos los derechos reservados.",
+    "instruccionesCheckout": "Completa tus datos y te enviaremos el resumen de tu pedido por WhatsApp para confirmar.",
+    "descripcionHomepage": "Explora nuestra selección de productos destacados, elegidos especialmente para ti. Calidad garantizada y los mejores precios.",
+    "descripcionSobreNosotros": "Somos TiendaExpress, dedicados a ofrecerte los mejores productos con la comodidad de comprar desde casa. Nuestra misión es simple: tu satisfacción.",
+    "infoContacto": "Estamos aquí para ayudarte. Contáctanos a través de los siguientes medios:",
+    "generateDescriptionInstrucciones": "Introduce el nombre y los atributos de un producto para generar una descripción atractiva y vendedora utilizando inteligencia artificial."
+  },
+  "contacto": {
+    "telefono": "+1234567890",
+    "correo": "contacto@tiendaexpress.com",
+    "direccion": "Calle Falsa 123, Ciudad Ejemplo",
+    "horarioAtencion": "Lunes a Viernes de 9:00 a 18:00"
+  },
+  "configuracionGeneral": {
+    "numeroWhatsApp": "1234567890",
+    "logoUrl": "/logo.svg",
+    "eslogan": "Rápido, fácil y a tu puerta."
+  }
+}
