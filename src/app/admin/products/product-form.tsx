@@ -1,6 +1,7 @@
 
 "use client";
 
+import { useState } from "react";
 import { useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,13 +13,22 @@ import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import Image from "next/image";
+import { X } from "lucide-react";
 
 
 export function ProductForm({ product }: { product?: Product }) {
   const action = product ? updateProduct : addProduct;
+  const [imagesToDelete, setImagesToDelete] = useState<string[]>([]);
+  const [currentImages, setCurrentImages] = useState<string[]>(product?.imagenes || []);
+
+  const handleDeleteImage = (imageUrl: string) => {
+    setImagesToDelete(prev => [...prev, imageUrl]);
+    setCurrentImages(prev => prev.filter(img => img !== imageUrl));
+  };
 
   return (
     <form action={action}>
+      <input type="hidden" name="imagesToDelete" value={imagesToDelete.join(',')} />
       {product && <input type="hidden" name="id" value={product.id} />}
       <Card>
         <CardContent className="pt-6">
@@ -68,12 +78,24 @@ export function ProductForm({ product }: { product?: Product }) {
             </div>
             <div className="space-y-2">
               <Label htmlFor="imagenes">Imágenes del Producto</Label>
-               {product?.imagenes && product.imagenes.length > 0 && (
+               {currentImages && currentImages.length > 0 && (
                 <div className="my-4">
                   <p className="text-sm text-muted-foreground mb-2">Imágenes Actuales:</p>
                   <div className="flex flex-wrap gap-2">
-                    {product.imagenes.map((img, index) => (
-                      <Image key={index} src={img} alt={`${product.nombre} - imagen ${index+1}`} width={100} height={100} className="rounded-md object-cover" />
+                    {currentImages.map((img, index) => (
+                       <div key={index} className="relative group">
+                          <Image src={img} alt={`${product?.nombre} - imagen ${index+1}`} width={100} height={100} className="rounded-md object-cover" />
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            size="icon"
+                            className="absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                            onClick={() => handleDeleteImage(img)}
+                          >
+                            <X className="h-4 w-4" />
+                            <span className="sr-only">Eliminar imagen</span>
+                          </Button>
+                      </div>
                     ))}
                   </div>
                 </div>

@@ -116,6 +116,8 @@ export async function addProduct(formData: FormData) {
 }
 
 export async function updateProduct(formData: FormData) {
+    const imagesToDelete = formData.get('imagesToDelete') as string | null;
+    
     const validatedFields = productSchema.safeParse({
         id: formData.get('id'),
         nombre: formData.get('nombre'),
@@ -144,6 +146,21 @@ export async function updateProduct(formData: FormData) {
     const existingProduct = products[productIndex];
     let imagePaths = existingProduct.imagenes;
 
+    // Handle image deletion
+    if (imagesToDelete) {
+        const pathsToDelete = imagesToDelete.split(',').filter(p => p);
+        for (const imagePath of pathsToDelete) {
+            try {
+                await fs.unlink(path.join(process.cwd(), 'public', imagePath));
+            } catch (error) {
+                console.error(`Failed to delete image file: ${imagePath}`, error);
+            }
+        }
+        imagePaths = imagePaths.filter(p => !pathsToDelete.includes(p));
+    }
+
+
+    // Handle new image upload
     if (imagenes && imagenes.length > 0) {
         const imageFiles = imagenes.filter(img => img instanceof File && img.size > 0) as File[];
         const newImagePaths = await saveImages(imageFiles, id);
@@ -160,8 +177,8 @@ export async function updateProduct(formData: FormData) {
     await writeProducts(products);
 
     revalidatePath("/admin/products");
-    revalidatePath(`/products`);
-    revalidatePath("/");
+    revalidatePath(`/products/${id}`);
+    revalidatePath(`/admin/products/edit/${id}`);
     redirect("/admin/products");
 }
 
