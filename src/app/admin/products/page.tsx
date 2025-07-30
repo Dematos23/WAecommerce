@@ -20,6 +20,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { deleteProduct, readProducts } from "@/actions/aiActions";
+import { Badge } from "@/components/ui/badge";
 
 
 export default async function AdminProductsPage() {
@@ -49,6 +50,7 @@ export default async function AdminProductsPage() {
                                 <TableHead>Nombre</TableHead>
                                 <TableHead>Categoría</TableHead>
                                 <TableHead>Precio</TableHead>
+                                <TableHead>Destacado</TableHead>
                                 <TableHead>
                                     <span className="sr-only">Acciones</span>
                                 </TableHead>
@@ -69,6 +71,13 @@ export default async function AdminProductsPage() {
                                     <TableCell className="font-medium">{product.nombre}</TableCell>
                                     <TableCell>{product.categoria}</TableCell>
                                     <TableCell>${product.precio.toFixed(2)}</TableCell>
+                                    <TableCell>
+                                        {product.destacado ? (
+                                            <Badge>Sí</Badge>
+                                        ) : (
+                                            <Badge variant="secondary">No</Badge>
+                                        )}
+                                    </TableCell>
                                     <TableCell>
                                         <ProductActions id={product.id} />
                                     </TableCell>
@@ -112,5 +121,3 @@ function ProductActions({ id }: { id: string }) {
         </DropdownMenu>
     )
 }
-
-    

@@ -61,7 +61,9 @@
     "precio": 19.99,
     "categoria": "Accesorios",
     "imagenes": [
-      "/images/prod_006.png"
+      "/images/prod_006/1753914018846_0.webp",
+      "/images/prod_006/1753914018860_1.webp",
+      "/images/prod_006/1753914018865_2.webp"
     ],
     "destacado": false
   },
