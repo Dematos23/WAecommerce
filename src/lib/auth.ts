@@ -5,6 +5,7 @@ import { SignJWT, jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 import credentials from '@/data/admin-credentials.json';
+import { redirect } from 'next/navigation';
 
 const secretKey = process.env.SESSION_SECRET || 'fallback-secret-key-for-development';
 if(process.env.NODE_ENV === 'production' && secretKey === 'fallback-secret-key-for-development'){
@@ -32,7 +33,7 @@ export async function decrypt(input: string): Promise<any> {
   }
 }
 
-export async function login(prevState: unknown, formData: FormData) {
+export async function login(prevState: { success: boolean; error?: string }, formData: FormData) {
   const user = formData.get('username');
   const pass = formData.get('password');
 
@@ -41,7 +42,7 @@ export async function login(prevState: unknown, formData: FormData) {
     const session = await encrypt({ user, expires });
 
     cookies().set('session', session, { expires, httpOnly: true });
-    return { success: true };
+    redirect('/admin');
   }
   return { success: false, error: 'Invalid username or password' };
 }

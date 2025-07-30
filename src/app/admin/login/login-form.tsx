@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useActionState, useEffect } from 'react';
+import { useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { login } from '@/lib/auth';
 import { Button } from '@/components/ui/button';
@@ -9,17 +9,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertCircle, LogIn } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 
 export function LoginForm() {
-  const [state, formAction] = useActionState(login, undefined);
-  const router = useRouter();
-
-  useEffect(() => {
-    if (state?.success) {
-      router.push('/admin');
-    }
-  }, [state, router]);
+  const [state, formAction] = useActionState(login, { success: false });
 
   return (
     <form action={formAction} className="space-y-4">
