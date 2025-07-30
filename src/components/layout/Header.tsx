@@ -52,7 +52,9 @@ export function Header() {
             </SheetTrigger>
             <SheetContent side="right">
               <div className="flex flex-col gap-4 py-8 px-6">
-              <Logo />
+              <div className="flex items-center space-x-2">
+                <Logo />
+              </div>
               <nav className="grid gap-4">
                 {config.menus.map((item) => (
                    <Link

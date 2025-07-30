@@ -1,6 +1,7 @@
 import { config } from '@/lib/config';
 import { Logo } from '@/components/ui/Logo';
 import { Mail, Phone, Clock, MapPin } from 'lucide-react';
+import Link from 'next/link';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -13,7 +14,9 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8 text-center md:text-left">
           {/* Columna Izquierda: Logo y Descripción */}
           <div className="flex flex-col items-center md:items-start">
-            <Logo />
+            <div className="flex items-center gap-2">
+              <Logo />
+            </div>
             <p className="mt-4 text-muted-foreground max-w-xs">
               {config.configuracionGeneral.eslogan}
             </p>
