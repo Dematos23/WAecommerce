@@ -6,20 +6,17 @@ export async function middleware(request: NextRequest) {
   const session = await getSession();
   const { pathname } = request.nextUrl;
 
-  // Protect all admin routes
-  if (pathname.startsWith('/admin') && !pathname.startsWith('/admin/login')) {
-    if (!session) {
-      return NextResponse.redirect(new URL('/admin/login', request.url));
-    }
-  }
-
   // If user is logged in and tries to access login page, redirect to admin dashboard
   if (pathname === '/admin/login' && session) {
     return NextResponse.redirect(new URL('/admin', request.url));
   }
   
-  // Update session on each request to keep it alive
-  if(session) {
+  // Protect all admin routes except the login page
+  if (pathname.startsWith('/admin') && !pathname.startsWith('/admin/login')) {
+    if (!session) {
+      return NextResponse.redirect(new URL('/admin/login', request.url));
+    }
+    // If there is a session, update it and allow the request to proceed.
     return await updateSession(request);
   }
 
