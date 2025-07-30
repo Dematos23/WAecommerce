@@ -32,7 +32,7 @@ export async function decrypt(input: string): Promise<any> {
   }
 }
 
-export async function login(formData: FormData) {
+export async function login(prevState: unknown, formData: FormData) {
   const user = formData.get('username');
   const pass = formData.get('password');
 
