@@ -33,3 +33,49 @@ export interface Reclamacion {
     estado: 'pendiente' | 'en-proceso' | 'resuelto';
     observacionesVendedor?: string;
 }
+
+export interface SiteConfig {
+  variablesCss: {
+    colorPrimario: string;
+    colorSecundario: string;
+    colorFondo: string;
+    colorTexto: string;
+    fontFamily: string;
+    marginBase: string;
+    paddingBase: string;
+    borderRadius: string;
+    headingSize: string;
+    paragraphSize: string;
+  };
+  menus: {
+    titulo: string;
+    enlace: string;
+  }[];
+  titulos: {
+    homepageHero: string;
+    catalogo: string;
+    carrito: string;
+    checkout: string;
+    sobreNosotros: string;
+    contacto: string;
+  };
+  textos: {
+    mensajeBienvenida: string;
+    pieDePagina: string;
+    instruccionesCheckout: string;
+    descripcionHomepage: string;
+    descripcionSobreNosotros: string;
+    infoContacto: string;
+  };
+  contacto: {
+    telefono: string;
+    correo: string;
+    direccion: string;
+    horarioAtencion: string;
+  };
+  configuracionGeneral: {
+    numeroWhatsApp: string;
+    logoUrl: string;
+    eslogan: string;
+  };
+}

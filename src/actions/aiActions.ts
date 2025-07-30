@@ -6,10 +6,11 @@ import path from "path";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import type { Product, Reclamacion } from "@/types";
+import type { Product, Reclamacion, SiteConfig } from "@/types";
 
 const productsFilePath = path.join(process.cwd(), "src/data/products.json");
 const reclamacionesFilePath = path.join(process.cwd(), "src/data/reclamaciones.json");
+const configFilePath = path.join(process.cwd(), "src/lib/config.json");
 const publicImagesPath = path.join(process.cwd(), "public/images");
 
 // --- Product Functions ---
@@ -282,4 +283,65 @@ export async function addReclamacion(formData: FormData) {
     redirect('/reclamaciones/confirmacion');
 }
 
-    
+
+// --- Config Functions ---
+export async function readConfig(): Promise<SiteConfig> {
+  try {
+    const data = await fs.readFile(configFilePath, "utf8");
+    return JSON.parse(data);
+  } catch (error) {
+    console.error("Error reading config file:", error);
+    throw new Error("Could not read site configuration.");
+  }
+}
+
+async function writeConfig(config: SiteConfig): Promise<void> {
+  try {
+    const data = JSON.stringify(config, null, 2);
+    await fs.writeFile(configFilePath, data, "utf8");
+  } catch (error) {
+    console.error("Error writing config file:", error);
+  }
+}
+
+export async function updateConfig(formData: FormData) {
+  const currentConfig = await readConfig();
+
+  const newConfig: SiteConfig = {
+      ...currentConfig,
+      titulos: {
+          homepageHero: formData.get('tituloHomepageHero') as string,
+          catalogo: formData.get('tituloCatalogo') as string,
+          carrito: formData.get('tituloCarrito') as string,
+          checkout: formData.get('tituloCheckout') as string,
+          sobreNosotros: formData.get('tituloSobreNosotros') as string,
+          contacto: formData.get('tituloContacto') as string,
+      },
+      textos: {
+          mensajeBienvenida: formData.get('textoMensajeBienvenida') as string,
+          pieDePagina: formData.get('textoPieDePagina') as string,
+          instruccionesCheckout: formData.get('textoInstruccionesCheckout') as string,
+          descripcionHomepage: formData.get('textoDescripcionHomepage') as string,
+          descripcionSobreNosotros: formData.get('textoDescripcionSobreNosotros') as string,
+          infoContacto: formData.get('textoInfoContacto') as string,
+      },
+      contacto: {
+          telefono: formData.get('contactoTelefono') as string,
+          correo: formData.get('contactoCorreo') as string,
+          direccion: formData.get('contactoDireccion') as string,
+          horarioAtencion: formData.get('contactoHorarioAtencion') as string,
+      },
+      configuracionGeneral: {
+          numeroWhatsApp: formData.get('generalNumeroWhatsApp') as string,
+          logoUrl: currentConfig.configuracionGeneral.logoUrl, // Keep the old logo URL
+          eslogan: formData.get('generalEslogan') as string,
+      }
+  };
+
+  await writeConfig(newConfig);
+
+  // Revalidate all paths to reflect changes immediately
+  revalidatePath('/', 'layout');
+
+  redirect('/admin/config');
+}
