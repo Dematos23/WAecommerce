@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, ChangeEvent } from "react";
 import { useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,15 +13,36 @@ import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import Image from "next/image";
-import { X } from "lucide-react";
+import { X, UploadCloud } from "lucide-react";
 
 
 export function ProductForm({ product }: { product?: Product }) {
   const action = product ? updateProduct : addProduct;
   const [imagesToDelete, setImagesToDelete] = useState<string[]>([]);
   const [currentImages, setCurrentImages] = useState<string[]>(product?.imagenes || []);
+  const [newImagePreviews, setNewImagePreviews] = useState<string[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleDeleteImage = (imageUrl: string) => {
+  const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      const filesArray = Array.from(event.target.files);
+      const previewsArray = filesArray.map(file => URL.createObjectURL(file));
+      setNewImagePreviews(prev => [...prev, ...previewsArray]);
+    }
+  };
+  
+  const handleRemoveNewImage = (index: number) => {
+    setNewImagePreviews(previews => previews.filter((_, i) => i !== index));
+    if (fileInputRef.current?.files) {
+        const dataTransfer = new DataTransfer();
+        const files = Array.from(fileInputRef.current.files);
+        files.splice(index, 1);
+        files.forEach(file => dataTransfer.items.add(file));
+        fileInputRef.current.files = dataTransfer.files;
+    }
+  };
+
+  const handleRemoveExistingImage = (imageUrl: string) => {
     setImagesToDelete(prev => [...prev, imageUrl]);
     setCurrentImages(prev => prev.filter(img => img !== imageUrl));
   };
@@ -77,40 +98,58 @@ export function ProductForm({ product }: { product?: Product }) {
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="imagenes">Imágenes del Producto</Label>
-               {currentImages && currentImages.length > 0 && (
-                <div className="my-4">
-                  <p className="text-sm text-muted-foreground mb-2">Imágenes Actuales:</p>
-                  <div className="flex flex-wrap gap-2">
+              <Label>Imágenes del Producto</Label>
+               {(currentImages.length > 0 || newImagePreviews.length > 0) && (
+                 <div className="my-4 p-4 border rounded-md grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-4">
+                    {/* Existing Images */}
                     {currentImages.map((img, index) => (
-                       <div key={index} className="relative group">
-                          <Image src={img} alt={`${product?.nombre} - imagen ${index+1}`} width={100} height={100} className="rounded-md object-cover" />
+                       <div key={img} className="relative group aspect-square">
+                          <Image src={img} alt={`${product?.nombre} - imagen ${index+1}`} fill className="rounded-md object-cover" />
                           <Button
                             type="button"
                             variant="destructive"
                             size="icon"
                             className="absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
-                            onClick={() => handleDeleteImage(img)}
+                            onClick={() => handleRemoveExistingImage(img)}
                           >
-                            <X className="h-4 w-4" />
-                            <span className="sr-only">Eliminar imagen</span>
+                            <X className="h-4 w-4" /><span className="sr-only">Eliminar imagen guardada</span>
+                          </Button>
+                      </div>
+                    ))}
+                    {/* New Image Previews */}
+                    {newImagePreviews.map((previewUrl, index) => (
+                       <div key={previewUrl} className="relative group aspect-square">
+                          <Image src={previewUrl} alt={`Nueva imagen ${index+1}`} fill className="rounded-md object-cover" />
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            size="icon"
+                            className="absolute top-1 right-1 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                            onClick={() => handleRemoveNewImage(index)}
+                          >
+                            <X className="h-4 w-4" /><span className="sr-only">Eliminar nueva imagen</span>
                           </Button>
                       </div>
                     ))}
                   </div>
-                </div>
-              )}
-              <Input
-                id="imagenes"
-                name="imagenes"
-                type="file"
-                accept="image/*"
-                multiple
-                className="file:cursor-pointer file:rounded-md file:bg-transparent file:px-4 file:py-2 hover:file:bg-accent hover:file:text-accent-foreground"
-              />
-               <p className="text-sm text-muted-foreground">
-                {product ? "Sube una o más imágenes para añadir al producto." : "Sube una o más imágenes para el producto."}
-              </p>
+               )}
+              
+              <div className="relative border-2 border-dashed border-muted-foreground/50 rounded-lg p-6 text-center hover:border-primary transition-colors">
+                <UploadCloud className="mx-auto h-12 w-12 text-muted-foreground" />
+                <p className="my-2 text-sm text-muted-foreground">
+                  Arrastra y suelta imágenes o haz clic para seleccionarlas.
+                </p>
+                <Input
+                  id="imagenes"
+                  name="imagenes"
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  ref={fileInputRef}
+                  onChange={handleImageChange}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                />
+              </div>
             </div>
              <div className="flex items-center space-x-2">
                 <Checkbox 
