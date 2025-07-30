@@ -1,3 +1,4 @@
+
 import { readConfig } from "@/actions/aiActions";
 import { ConfigForm } from "./config-form";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -6,7 +7,7 @@ export default async function AdminConfigPage() {
     const config = await readConfig();
 
     return (
-        <div className="container mx-auto p-4 md:p-8">
+        <div className="container mx-auto px-4 py-8">
             <div className="max-w-4xl mx-auto">
                 <Card>
                     <CardHeader>
