@@ -22,9 +22,9 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 max-w-7xl items-center justify-between px-4">
-        {/* Desktop Logo & Navigation */}
-        <div className="hidden md:flex items-center gap-6">
-          <Link href="/" className="mr-6 flex items-center space-x-2">
+        {/* Desktop Header */}
+        <div className="hidden md:flex flex-1 items-center justify-between">
+          <Link href="/" className="flex items-center gap-2">
             <Logo />
           </Link>
           <nav className="flex items-center gap-6 text-sm font-medium">
@@ -43,7 +43,11 @@ export function Header() {
               </Link>
             ))}
           </nav>
+          <div className="flex items-center gap-4">
+             <CartIcon />
+          </div>
         </div>
+
 
         {/* Mobile Header Layout */}
         <div className="flex md:hidden items-center justify-between w-full">
@@ -83,15 +87,15 @@ export function Header() {
 
           {/* Mobile Logo (Center) */}
           <div className="absolute left-1/2 -translate-x-1/2">
-             <Link href="/" className="flex items-center space-x-2">
+             <Link href="/">
                 <Logo />
             </Link>
           </div>
-        </div>
 
-        {/* Cart Icon (Right) */}
-        <div className="flex items-center gap-4">
-          <CartIcon />
+           {/* Cart Icon (Right) */}
+            <div className="flex items-center">
+                <CartIcon />
+            </div>
         </div>
       </div>
     </header>
