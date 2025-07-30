@@ -53,8 +53,8 @@ export default function ProductsPage() {
         </p>
       </div>
       
-      <div className="flex justify-end mb-6 md:hidden">
-          <ProductSort value={sortOrder} onValueChange={setSortOrder} />
+      <div className="flex justify-end mb-6">
+        <ProductSort value={sortOrder} onValueChange={setSortOrder} />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -66,9 +66,6 @@ export default function ProductsPage() {
           />
         </aside>
         <main className="md:col-span-3">
-           <div className="hidden md:flex justify-end mb-6">
-            <ProductSort value={sortOrder} onValueChange={setSortOrder} />
-          </div>
           {sortedAndFilteredProducts.length > 0 ? (
             <ProductGrid products={sortedAndFilteredProducts} />
           ) : (
