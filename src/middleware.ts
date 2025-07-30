@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getSession, updateSession } from './lib/auth';
 
 export async function middleware(request: NextRequest) {
+  // TODO: Re-enable session validation
+  return NextResponse.next();
+
+  /*
   const { pathname } = request.nextUrl;
   const session = await getSession(request);
 
@@ -17,6 +21,7 @@ export async function middleware(request: NextRequest) {
   }
 
   return NextResponse.next();
+  */
 }
 
 export const config = {
