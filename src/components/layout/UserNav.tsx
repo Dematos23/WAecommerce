@@ -14,18 +14,27 @@ import { Button } from '@/components/ui/button';
 import { LogOut, User as UserIcon, Settings } from 'lucide-react';
 import { logout } from '@/lib/auth';
 import type { User } from 'firebase/auth';
+import { useRouter } from 'next/navigation';
 
 interface UserNavProps {
   user: User | null;
 }
 
 export function UserNav({ user }: UserNavProps) {
+  const router = useRouter();
+
   if (!user) {
     return (
       <Button asChild variant="accent" className="font-bold">
         <Link href="/login">Login</Link>
       </Button>
     );
+  }
+
+  const handleLogout = async () => {
+    await logout();
+    router.push('/');
+    router.refresh(); // Force a refresh to update the user state in the layout
   }
 
   const userName = user.displayName || user.email;
@@ -54,24 +63,13 @@ export function UserNav({ user }: UserNavProps) {
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
            <Link href="/dashboard">
-              <UserIcon className="mr-2" />
+              <Settings className="mr-2 h-4 w-4" />
               <span>Dashboard</span>
             </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-           <Link href="/dashboard/settings">
-              <Settings className="mr-2" />
-              <span>Ajustes</span>
-            </Link>
-        </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onSelect={async (event) => {
-            event.preventDefault();
-            await logout();
-          }}
-        >
-          <LogOut className="mr-2" />
+        <DropdownMenuItem onSelect={handleLogout}>
+          <LogOut className="mr-2 h-4 w-4" />
           <span>Cerrar Sesión</span>
         </DropdownMenuItem>
       </DropdownMenuContent>

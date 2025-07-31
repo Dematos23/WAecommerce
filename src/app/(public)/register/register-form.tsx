@@ -1,8 +1,7 @@
 
 'use client';
 
-import { useActionState } from 'react';
-import { useFormStatus } from 'react-dom';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -10,7 +9,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertCircle, UserPlus } from 'lucide-react';
 import { register, signInWithGoogle } from '@/lib/auth';
 import { Separator } from '@/components/ui/separator';
-
+import { useRouter } from 'next/navigation';
 
 const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24px" height="24px" {...props}>
@@ -23,11 +22,50 @@ const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
 
 
 export function RegisterForm() {
-  const [state, formAction] = useActionState(register, undefined);
+  const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
+  const router = useRouter();
+
+  const handleGoogleSignIn = async () => {
+    const result = await signInWithGoogle();
+    if (result.success) {
+      router.push('/dashboard');
+    } else {
+      setError(result.error || 'Ocurrió un error inesperado.');
+    }
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setPending(true);
+    setError(null);
+
+    const formData = new FormData(event.currentTarget);
+    const name = formData.get('name') as string;
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+    const confirmPassword = formData.get('confirmPassword') as string;
+
+    if (password !== confirmPassword) {
+      setError('Las contraseñas no coinciden.');
+      setPending(false);
+      return;
+    }
+
+    const result = await register(name, email, password);
+
+    if (result.success) {
+      router.push('/dashboard');
+    } else {
+      setError(result.error || 'No se pudo crear la cuenta.');
+      setPending(false);
+    }
+  };
+
 
   return (
     <div className="space-y-4">
-       <Button variant="outline" className="w-full" onClick={signInWithGoogle}>
+       <Button variant="outline" className="w-full" onClick={handleGoogleSignIn}>
           <GoogleIcon className="mr-2" />
           Continuar con Google
       </Button>
@@ -38,12 +76,12 @@ export function RegisterForm() {
         <Separator className="flex-1" />
       </div>
 
-      <form action={formAction} className="space-y-4">
-        {state?.error && (
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {error && (
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>Error de Registro</AlertTitle>
-            <AlertDescription>{state.error}</AlertDescription>
+            <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
       <div className="space-y-2">
@@ -73,6 +111,7 @@ export function RegisterForm() {
             name="password"
             type="password"
             required
+            minLength={6}
           />
         </div>
         <div className="space-y-2">
@@ -84,19 +123,11 @@ export function RegisterForm() {
             required
           />
         </div>
-        <RegisterButton />
+        <Button type="submit" className="w-full" disabled={pending}>
+           {pending ? 'Creando cuenta...' : 'Crear Cuenta'}
+           <UserPlus className='ml-2' />
+        </Button>
       </form>
     </div>
-  );
-}
-
-function RegisterButton() {
-  const { pending } = useFormStatus();
-
-  return (
-    <Button type="submit" className="w-full" disabled={pending}>
-       {pending ? 'Creando cuenta...' : 'Crear Cuenta'}
-       <UserPlus className='ml-2' />
-    </Button>
   );
 }
