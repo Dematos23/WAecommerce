@@ -341,6 +341,7 @@ export async function readConfig(): Promise<SiteConfig> {
         priceAlign: 'left',
         buttonStyle: 'default',
         shadow: 'md',
+        imagePosition: 'top'
       }
     };
 
@@ -414,6 +415,7 @@ export async function readConfig(): Promise<SiteConfig> {
         priceAlign: 'left',
         buttonStyle: 'default',
         shadow: 'md',
+        imagePosition: 'top',
       }
     };
     return defaultConfig;
@@ -593,6 +595,7 @@ export async function updateTheme(formData: FormData) {
             priceAlign: formData.get('productCardPriceAlign') as 'left' | 'center',
             buttonStyle: formData.get('productCardButtonStyle') as 'default' | 'outline',
             shadow: formData.get('productCardShadow') as 'none' | 'sm' | 'md' | 'lg',
+            imagePosition: formData.get('productCardImagePosition') as 'top' | 'afterName' | 'afterDescription' | 'afterPrice',
         }
     };
 

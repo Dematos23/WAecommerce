@@ -7,7 +7,7 @@ import { updateTheme } from "@/actions/aiActions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Save, Sun, Moon, Palette, ShoppingBag, Eye, AlignLeft, AlignCenter } from "lucide-react";
+import { Save, Sun, Moon, Palette, ShoppingBag, Eye, AlignLeft, AlignCenter, Image as ImageIcon } from "lucide-react";
 import { useState, useMemo } from "react";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -96,6 +96,20 @@ export function ThemeForm({ config }: { config: SiteConfig }) {
                      <AccordionContent className="space-y-4 pt-4">
                         <div className="grid lg:grid-cols-2 gap-8 items-center">
                             <div className="space-y-6">
+                                <div className="space-y-2">
+                                    <Label>Posición de la Imagen</Label>
+                                    <Select name="productCardImagePosition" defaultValue={productCard.imagePosition} onValueChange={(v) => setProductCard(p => ({...p, imagePosition: v as any}))}>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Seleccione posición..." />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="top">Arriba (estándar)</SelectItem>
+                                            <SelectItem value="afterName">Debajo del Nombre</SelectItem>
+                                            <SelectItem value="afterDescription">Debajo de la Descripción</SelectItem>
+                                            <SelectItem value="afterPrice">Debajo del Precio</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
                                 <div>
                                      <Label>Alineación del Texto</Label>
                                      <div className="space-y-3 mt-2">
@@ -287,34 +301,59 @@ function ProductCardPreview({ productCard }: { productCard: SiteConfig['productC
       "mx-auto": productCard.nameAlign === 'center'
     });
     const descriptionClasses = cn("space-y-1", {
-        "mx-auto text-center": productCard.descriptionAlign === 'center',
+        "text-center": productCard.descriptionAlign === 'center',
     });
      const priceClasses = cn("h-6 w-1/3 rounded-sm bg-primary mt-4", {
         "mx-auto": productCard.priceAlign === 'center'
     });
 
+    const ImagePreview = () => (
+        <div className="relative aspect-square w-full bg-muted flex items-center justify-center p-4">
+            <ImageIcon className="h-8 w-8 text-muted-foreground" />
+        </div>
+    );
+
+    const NamePreview = () => <div className={cn("p-4", {"pt-0": productCard.imagePosition === 'afterName' })}><div className={nameClasses} /></div>
+    const DescPreview = () => <div className={cn("p-4 pt-0", {"pt-4": productCard.imagePosition === 'afterDescription'})}><div className={descriptionClasses}><div className="h-3 w-full rounded-sm bg-muted-foreground/50"/><div className="h-3 w-5/6 rounded-sm bg-muted-foreground/50"/></div></div>
+    const PricePreview = () => <div className={cn("p-4 pt-0", {"pt-4": productCard.imagePosition === 'afterPrice'})}><div className={priceClasses} /></div>
+
+    const renderOrder = () => {
+        const components: Record<string, React.ReactNode> = {
+            image: <ImagePreview key="image" />,
+            name: <NamePreview key="name" />,
+            description: <DescPreview key="desc" />,
+            price: <PricePreview key="price" />,
+        };
+
+        const order = ['name', 'description', 'price'];
+        
+        switch (productCard.imagePosition) {
+            case 'top': return [components.image, ...order.map(key => components[key])];
+            case 'afterName': 
+                order.splice(1, 0, 'image');
+                return order.map(key => components[key]);
+            case 'afterDescription':
+                order.splice(2, 0, 'image');
+                return order.map(key => components[key]);
+            case 'afterPrice':
+                return [...order.map(key => components[key]), components.image];
+            default:
+                return [components.image, ...order.map(key => components[key])];
+        }
+    };
+
 
     return (
         <div className={cardClasses}>
-            <CardHeader className="p-0">
-                <div className="relative aspect-square w-full bg-muted flex items-center justify-center">
-                    <Eye className="h-8 w-8 text-muted-foreground" />
-                </div>
-            </CardHeader>
-            <CardContent className="flex-1 p-4">
-                <div className={nameClasses} />
-                <div className={descriptionClasses}>
-                    <div className="h-3 w-full rounded-sm bg-muted-foreground/50"/>
-                    <div className="h-3 w-5/6 rounded-sm bg-muted-foreground/50"/>
-                </div>
-                <div className={priceClasses} />
-            </CardContent>
-            <CardFooter className="p-4 pt-0">
+            <div className="flex-1 flex flex-col">
+                {renderOrder()}
+            </div>
+            <div className="p-4 pt-0">
                 <Button className="w-full" variant={productCard.buttonStyle}>
                     <ShoppingBag className="mr-2 h-4 w-4" />
                     Add to Cart
                 </Button>
-            </CardFooter>
+            </div>
         </div>
     )
 }

@@ -86,5 +86,6 @@ export interface SiteConfig {
     priceAlign: 'left' | 'center';
     buttonStyle: 'default' | 'outline';
     shadow: 'none' | 'sm' | 'md' | 'lg';
+    imagePosition: 'top' | 'afterName' | 'afterDescription' | 'afterPrice';
   };
 }

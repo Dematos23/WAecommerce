@@ -64,6 +64,7 @@
     "descriptionAlign": "left",
     "priceAlign": "left",
     "buttonStyle": "default",
-    "shadow": "md"
+    "shadow": "md",
+    "imagePosition": "top"
   }
 }
