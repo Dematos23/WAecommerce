@@ -57,5 +57,10 @@
     "eslogan": "Rápido, fácil y a tu puerta.",
     "mensajePedidoWhatsApp": "¡Gracias por tu compra! 😊",
     "displayMode": "both"
+  },
+  "productCard": {
+    "textAlign": "left",
+    "buttonStyle": "default",
+    "shadow": "md"
   }
 }

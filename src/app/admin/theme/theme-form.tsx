@@ -7,13 +7,15 @@ import { updateTheme } from "@/actions/aiActions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Save, Sun, Moon } from "lucide-react";
+import { Save, Sun, Moon, Palette, ShoppingBag } from "lucide-react";
 import { useState, useMemo } from "react";
 import { Card } from "@/components/ui/card";
-
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export function ThemeForm({ config }: { config: SiteConfig }) {
     const [colors, setColors] = useState(config.variablesCss);
+    const [productCard, setProductCard] = useState(config.productCard);
 
     const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -45,43 +47,95 @@ export function ThemeForm({ config }: { config: SiteConfig }) {
 
     return (
         <form action={updateTheme} className="space-y-8">
-             <div className="grid lg:grid-cols-2 gap-8">
-                {/* Color Pickers */}
-                <div className="space-y-6">
-                    <div>
-                        <h4 className="font-medium text-lg mb-3">Tema Claro</h4>
-                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            <ColorInput label="Primario" name="colorPrimario" value={colors.colorPrimario} onChange={handleColorChange} />
-                            <ColorInput label="Secundario" name="colorSecundario" value={colors.colorSecundario} onChange={handleColorChange} />
-                            <ColorInput label="Acento" name="colorAcento" value={colors.colorAcento} onChange={handleColorChange} />
-                            <ColorInput label="Fondo" name="colorFondo" value={colors.colorFondo} onChange={handleColorChange} />
-                            <ColorInput label="Texto" name="colorTexto" value={colors.colorTexto} onChange={handleColorChange} />
-                        </div>
-                    </div>
-                     <div>
-                        <h4 className="font-medium text-lg mb-3">Tema Oscuro</h4>
-                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            <ColorInput label="Primario (Oscuro)" name="darkColorPrimario" value={colors.darkColorPrimario} onChange={handleColorChange} />
-                            <ColorInput label="Secundario (Oscuro)" name="darkColorSecundario" value={colors.darkColorSecundario} onChange={handleColorChange} />
-                             <ColorInput label="Acento (Oscuro)" name="darkColorAcento" value={colors.darkColorAcento} onChange={handleColorChange} />
-                            <ColorInput label="Fondo (Oscuro)" name="darkColorFondo" value={colors.darkColorFondo} onChange={handleColorChange} />
-                            <ColorInput label="Texto (Oscuro)" name="darkColorTexto" value={colors.darkColorTexto} onChange={handleColorChange} />
-                        </div>
-                    </div>
-                </div>
+            <Accordion type="multiple" defaultValue={['theme-colors', 'card-appearance']} className="w-full">
+                <AccordionItem value="theme-colors">
+                    <AccordionTrigger className="text-xl font-semibold flex items-center gap-2"><Palette/> Colores del Tema</AccordionTrigger>
+                    <AccordionContent className="space-y-4 pt-4">
+                        <div className="grid lg:grid-cols-2 gap-8">
+                            {/* Color Pickers */}
+                            <div className="space-y-6">
+                                <div>
+                                    <h4 className="font-medium text-lg mb-3">Tema Claro</h4>
+                                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                        <ColorInput label="Primario" name="colorPrimario" value={colors.colorPrimario} onChange={handleColorChange} />
+                                        <ColorInput label="Secundario" name="colorSecundario" value={colors.colorSecundario} onChange={handleColorChange} />
+                                        <ColorInput label="Acento" name="colorAcento" value={colors.colorAcento} onChange={handleColorChange} />
+                                        <ColorInput label="Fondo" name="colorFondo" value={colors.colorFondo} onChange={handleColorChange} />
+                                        <ColorInput label="Texto" name="colorTexto" value={colors.colorTexto} onChange={handleColorChange} />
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 className="font-medium text-lg mb-3">Tema Oscuro</h4>
+                                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                        <ColorInput label="Primario (Oscuro)" name="darkColorPrimario" value={colors.darkColorPrimario} onChange={handleColorChange} />
+                                        <ColorInput label="Secundario (Oscuro)" name="darkColorSecundario" value={colors.darkColorSecundario} onChange={handleColorChange} />
+                                        <ColorInput label="Acento (Oscuro)" name="darkColorAcento" value={colors.darkColorAcento} onChange={handleColorChange} />
+                                        <ColorInput label="Fondo (Oscuro)" name="darkColorFondo" value={colors.darkColorFondo} onChange={handleColorChange} />
+                                        <ColorInput label="Texto (Oscuro)" name="darkColorTexto" value={colors.darkColorTexto} onChange={handleColorChange} />
+                                    </div>
+                                </div>
+                            </div>
 
-                {/* Previews */}
-                <div className="space-y-6">
-                    <div>
-                        <h4 className="font-medium text-lg mb-3 flex items-center gap-2"><Sun className="h-5 w-5"/> Vista Previa (Claro)</h4>
-                        <ThemePreview colors={lightThemePreviewColors} />
-                    </div>
-                    <div>
-                        <h4 className="font-medium text-lg mb-3 flex items-center gap-2"><Moon className="h-5 w-5" /> Vista Previa (Oscuro)</h4>
-                        <ThemePreview colors={darkThemePreviewColors} />
-                    </div>
-                </div>
-            </div>
+                            {/* Previews */}
+                            <div className="space-y-6">
+                                <div>
+                                    <h4 className="font-medium text-lg mb-3 flex items-center gap-2"><Sun className="h-5 w-5"/> Vista Previa (Claro)</h4>
+                                    <ThemePreview colors={lightThemePreviewColors} />
+                                </div>
+                                <div>
+                                    <h4 className="font-medium text-lg mb-3 flex items-center gap-2"><Moon className="h-5 w-5" /> Vista Previa (Oscuro)</h4>
+                                    <ThemePreview colors={darkThemePreviewColors} />
+                                </div>
+                            </div>
+                        </div>
+                    </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="card-appearance">
+                     <AccordionTrigger className="text-xl font-semibold flex items-center gap-2"><ShoppingBag /> Apariencia de la Tarjeta de Producto</AccordionTrigger>
+                     <AccordionContent className="space-y-4 pt-4">
+                        <div className="grid md:grid-cols-3 gap-4">
+                             <div className="space-y-2">
+                                <Label htmlFor="productCardTextAlign">Alineación del Texto</Label>
+                                <Select name="productCardTextAlign" defaultValue={productCard.textAlign} onValueChange={(v) => setProductCard(p => ({...p, textAlign: v as any}))}>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Seleccione alineación..." />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="left">Izquierda</SelectItem>
+                                        <SelectItem value="center">Centro</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="productCardButtonStyle">Estilo del Botón</Label>
+                                <Select name="productCardButtonStyle" defaultValue={productCard.buttonStyle} onValueChange={(v) => setProductCard(p => ({...p, buttonStyle: v as any}))}>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Seleccione estilo..." />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="default">Sólido</SelectItem>
+                                        <SelectItem value="outline">Contorno</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                             <div className="space-y-2">
+                                <Label htmlFor="productCardShadow">Sombra de la Tarjeta</Label>
+                                <Select name="productCardShadow" defaultValue={productCard.shadow} onValueChange={(v) => setProductCard(p => ({...p, shadow: v as any}))}>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Seleccione sombra..." />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="none">Ninguna</SelectItem>
+                                        <SelectItem value="sm">Pequeña</SelectItem>
+                                        <SelectItem value="md">Mediana</SelectItem>
+                                        <SelectItem value="lg">Grande</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        </div>
+                     </AccordionContent>
+                </AccordionItem>
+            </Accordion>
             
             <div className="flex justify-end pt-4">
                 <SubmitButton />

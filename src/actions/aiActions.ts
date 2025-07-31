@@ -334,6 +334,11 @@ export async function readConfig(): Promise<SiteConfig> {
         eslogan: "Rápido, fácil y a tu puerta.",
         mensajePedidoWhatsApp: "¡Gracias por tu compra! 😊",
         displayMode: 'both',
+      },
+      productCard: {
+        textAlign: 'left',
+        buttonStyle: 'default',
+        shadow: 'md',
       }
     };
 
@@ -347,6 +352,7 @@ export async function readConfig(): Promise<SiteConfig> {
         textos: { ...defaultConfig.textos, ...config.textos },
         contacto: { ...defaultConfig.contacto, ...config.contacto },
         configuracionGeneral: { ...defaultConfig.configuracionGeneral, ...config.configuracionGeneral },
+        productCard: { ...defaultConfig.productCard, ...config.productCard },
     };
   } catch (error) {
     console.error("Error reading config file, returning defaults:", error);
@@ -399,6 +405,11 @@ export async function readConfig(): Promise<SiteConfig> {
         eslogan: "Rápido, fácil y a tu puerta.",
         mensajePedidoWhatsApp: "¡Gracias por tu compra! 😊",
         displayMode: "both"
+      },
+      productCard: {
+        textAlign: 'left',
+        buttonStyle: 'default',
+        shadow: 'md',
       }
     };
     return defaultConfig;
@@ -572,6 +583,11 @@ export async function updateTheme(formData: FormData) {
             darkColorTexto: formData.get('darkColorTexto') as string,
             darkColorAcento: formData.get('darkColorAcento') as string,
         },
+        productCard: {
+            textAlign: formData.get('productCardTextAlign') as 'left' | 'center',
+            buttonStyle: formData.get('productCardButtonStyle') as 'default' | 'outline',
+            shadow: formData.get('productCardShadow') as 'none' | 'sm' | 'md' | 'lg',
+        }
     };
 
     await writeConfig(newConfig);

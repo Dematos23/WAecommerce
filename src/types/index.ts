@@ -80,6 +80,9 @@ export interface SiteConfig {
     mensajePedidoWhatsApp?: string;
     displayMode?: 'logo' | 'name' | 'both';
   };
+  productCard: {
+    textAlign: 'left' | 'center';
+    buttonStyle: 'default' | 'outline';
+    shadow: 'none' | 'sm' | 'md' | 'lg';
+  };
 }
-
-    
