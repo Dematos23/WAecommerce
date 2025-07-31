@@ -17,32 +17,32 @@ export default async function ContactPage() {
             <div className="container mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
                 <div className="text-center">
                     <h1 className="text-5xl font-semibold text-primary">{contactPage.title}</h1>
-                    <p className="mt-4 text-xl text-muted-foreground">
+                    <p className="mt-4 text-lg text-muted-foreground max-w-3xl mx-auto">
                         {contactPage.description}
                     </p>
                 </div>
 
                 <div className="mt-16 grid grid-cols-1 gap-12 md:grid-cols-2">
                     {/* Contact Form */}
-                    <Card>
+                    <Card className="border-none shadow-none bg-transparent">
                         <CardHeader>
-                            <CardTitle className="text-3xl">{contactPage.formTitle}</CardTitle>
+                            <CardTitle className="text-3xl font-medium">{contactPage.formTitle}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <form action="#" method="POST" className="space-y-6">
                                 <div className="space-y-2">
-                                    <Label htmlFor="name">Nombre</Label>
+                                    <Label htmlFor="name" className="text-base">Nombre</Label>
                                     <Input id="name" name="name" type="text" placeholder="Tu nombre completo" />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="email">Correo Electrónico</Label>
+                                    <Label htmlFor="email" className="text-base">Correo Electrónico</Label>
                                     <Input id="email" name="email" type="email" placeholder="tu@ejemplo.com" />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="message">Mensaje</Label>
+                                    <Label htmlFor="message" className="text-base">Mensaje</Label>
                                     <Textarea id="message" name="message" rows={5} placeholder="¿En qué podemos ayudarte?" />
                                 </div>
-                                <Button type="submit" size="lg" variant="accent" className="w-full text-lg">
+                                <Button type="submit" size="lg" variant="accent" className="w-full font-bold text-base">
                                     Enviar Mensaje
                                 </Button>
                             </form>
@@ -51,30 +51,30 @@ export default async function ContactPage() {
 
                     {/* Contact Info */}
                     <div className="space-y-8">
-                        <Card>
+                        <Card className="border-none shadow-none bg-transparent">
                              <CardHeader>
-                                <CardTitle className="text-3xl">Información de Contacto</CardTitle>
+                                <CardTitle className="text-3xl font-medium">Información de Contacto</CardTitle>
                             </CardHeader>
-                            <CardContent className="space-y-6 text-lg">
+                            <CardContent className="space-y-6">
                                 <div className="flex items-start gap-4">
                                     <Phone className="h-7 w-7 text-primary" />
                                     <div>
-                                        <h3 className="font-semibold">Teléfono</h3>
-                                        <a href={`tel:${footer.contacto.telefono}`} className="text-muted-foreground hover:text-primary">{footer.contacto.telefono}</a>
+                                        <h3 className="font-semibold text-lg">Teléfono</h3>
+                                        <a href={`tel:${footer.contacto.telefono}`} className="text-base text-muted-foreground hover:text-primary">{footer.contacto.telefono}</a>
                                     </div>
                                 </div>
                                 <div className="flex items-start gap-4">
                                     <Mail className="h-7 w-7 text-primary" />
                                     <div>
-                                        <h3 className="font-semibold">Correo Electrónico</h3>
-                                        <a href={`mailto:${footer.contacto.correo}`} className="text-muted-foreground hover:text-primary">{footer.contacto.correo}</a>
+                                        <h3 className="font-semibold text-lg">Correo Electrónico</h3>
+                                        <a href={`mailto:${footer.contacto.correo}`} className="text-base text-muted-foreground hover:text-primary">{footer.contacto.correo}</a>
                                     </div>
                                 </div>
                                 <div className="flex items-start gap-4">
                                     <MapPin className="h-7 w-7 text-primary" />
                                     <div>
-                                        <h3 className="font-semibold">Dirección</h3>
-                                        <p className="text-muted-foreground">{footer.contacto.direccion}</p>
+                                        <h3 className="font-semibold text-lg">Dirección</h3>
+                                        <p className="text-base text-muted-foreground">{footer.contacto.direccion}</p>
                                     </div>
                                 </div>
                             </CardContent>
