@@ -20,6 +20,7 @@ import { CalendarIcon, User, ShoppingBag, FileWarning, Send } from 'lucide-react
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { useFormStatus } from "react-dom";
+import { useEffect, useState } from "react";
 
 const reclamacionSchema = z.object({
   fechaReclamo: z.date({ required_error: "La fecha es obligatoria." }),
@@ -47,10 +48,12 @@ const reclamacionSchema = z.object({
 type ReclamacionFormValues = z.infer<typeof reclamacionSchema>;
 
 export function ReclamacionesForm({ config }: { config: SiteConfig }) {
+  const [isClient, setIsClient] = useState(false);
+
   const form = useForm<ReclamacionFormValues>({
     resolver: zodResolver(reclamacionSchema),
     defaultValues: {
-      fechaReclamo: new Date(),
+      fechaReclamo: undefined,
       nombreCompleto: "",
       domicilio: "",
       numeroDocumento: "",
@@ -64,6 +67,11 @@ export function ReclamacionesForm({ config }: { config: SiteConfig }) {
       aceptaTerminos: false,
     },
   });
+
+  useEffect(() => {
+    setIsClient(true);
+    form.setValue('fechaReclamo', new Date());
+  }, [form]);
 
   const onSubmit = async (data: ReclamacionFormValues) => {
     const formData = new FormData();
@@ -115,7 +123,7 @@ export function ReclamacionesForm({ config }: { config: SiteConfig }) {
                                 mode="single"
                                 selected={field.value}
                                 onSelect={field.onChange}
-                                disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
+                                disabled={isClient ? (date) => date > new Date() || date < new Date("1900-01-01") : undefined}
                                 initialFocus
                             />
                             </PopoverContent>
