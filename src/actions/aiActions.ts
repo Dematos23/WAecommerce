@@ -288,13 +288,113 @@ export async function addReclamacion(formData: FormData) {
 // --- Config Functions ---
 export async function readConfig(): Promise<SiteConfig> {
   try {
-    const data = await fs.readFile(configFilePath, "utf8");
-    return JSON.parse(data);
+    const configData = await fs.readFile(configFilePath, "utf-8");
+    const config = JSON.parse(configData);
+    
+    // Fallback for potentially null values to avoid errors in components
+    const defaultConfig: SiteConfig = {
+      variablesCss: {
+        colorPrimario: "#113f69",
+        colorSecundario: "#3eac68",
+        colorFondo: "#f3f5f6",
+        colorTexto: "#3f4750",
+        darkColorPrimario: "#7bbaf3",
+        darkColorSecundario: "#b1a2e8",
+        darkColorFondo: "#2b323c",
+        darkColorTexto: "#f8f9fa"
+      },
+      menus: [],
+      titulos: {
+        homepageHero: "Bienvenido a TiendaExpress",
+        catalogo: "Nuestro Catálogo",
+        carrito: "Tu Carrito",
+        checkout: "Finalizar Compra",
+        sobreNosotros: "Sobre Nosotros",
+        contacto: "Contáctanos"
+      },
+      textos: {
+        mensajeBienvenida: "Gracias por visitarnos",
+        instruccionesCheckout: "Completa tus datos para finalizar tu pedido.",
+        descripcionHomepage: "Los mejores productos, seleccionados para ti.",
+        descripcionSobreNosotros: "Somos una tienda comprometida con la calidad.",
+        infoContacto: "Estamos aquí para ayudarte. Contáctanos por cualquiera de estos medios."
+      },
+      contacto: {
+        telefono: "N/A",
+        correo: "N/A",
+        direccion: "N/A",
+        horarioAtencion: "N/A"
+      },
+      configuracionGeneral: {
+        numeroWhatsApp: "",
+        logoUrl: "/logo.svg",
+        eslogan: "Rápido, fácil y a tu puerta."
+      }
+    };
+
+    // Deep merge to apply defaults only where needed
+    return {
+        ...defaultConfig,
+        ...config,
+        variablesCss: { ...defaultConfig.variablesCss, ...config.variablesCss },
+        menus: config.menus || defaultConfig.menus,
+        titulos: { ...defaultConfig.titulos, ...config.titulos },
+        textos: { ...defaultConfig.textos, ...config.textos },
+        contacto: { ...defaultConfig.contacto, ...config.contacto },
+        configuracionGeneral: { ...defaultConfig.configuracionGeneral, ...config.configuracionGeneral },
+    };
   } catch (error) {
-    console.error("Error reading config file:", error);
-    throw new Error("Could not read site configuration.");
+    console.error("Error reading config file, returning defaults:", error);
+    // In case of a file read error, return a fully default configuration
+    // This isn't ideal but prevents the site from crashing.
+    const defaultConfig: SiteConfig = {
+      variablesCss: {
+        colorPrimario: "#113f69",
+        colorSecundario: "#3eac68",
+        colorFondo: "#f3f5f6",
+        colorTexto: "#3f4750",
+        darkColorPrimario: "#7bbaf3",
+        darkColorSecundario: "#b1a2e8",
+        darkColorFondo: "#2b323c",
+        darkColorTexto: "#f8f9fa"
+      },
+      menus: [
+        { titulo: "Inicio", enlace: "/" },
+        { titulo: "Catálogo", enlace: "/products" },
+        { titulo: "Sobre Nosotros", enlace: "/about" },
+        { titulo: "Contacto", enlace: "/contact" }
+      ],
+      titulos: {
+        homepageHero: "Bienvenido a TiendaExpress",
+        catalogo: "Nuestro Catálogo",
+        carrito: "Tu Carrito",
+        checkout: "Finalizar Compra",
+        sobreNosotros: "Sobre Nosotros",
+        contacto: "Contáctanos"
+      },
+      textos: {
+        mensajeBienvenida: "Gracias por visitarnos",
+        instruccionesCheckout: "Completa tus datos para finalizar tu pedido.",
+        descripcionHomepage: "Los mejores productos, seleccionados para ti.",
+        descripcionSobreNosotros: "Somos una tienda comprometida con la calidad.",
+        infoContacto: "Estamos aquí para ayudarte. Contáctanos por cualquiera de estos medios."
+      },
+      contacto: {
+        telefono: "123-456-7890",
+        correo: "info@tiendaexpress.com",
+        direccion: "Calle Falsa 123, Ciudad",
+        horarioAtencion: "Lun-Vie: 9am - 6pm"
+      },
+      configuracionGeneral: {
+        numeroWhatsApp: "1234567890",
+        logoUrl: "/logo.svg",
+        eslogan: "Rápido, fácil y a tu puerta."
+      }
+    };
+    return defaultConfig;
   }
 }
+
 
 async function writeConfig(config: SiteConfig): Promise<void> {
   try {
@@ -306,6 +406,7 @@ async function writeConfig(config: SiteConfig): Promise<void> {
 }
 
 function hexToHsl(hex: string): string {
+    if (!hex) return '0 0% 0%';
     hex = hex.replace(/^#/, '');
     const r = parseInt(hex.substring(0, 2), 16) / 255;
     const g = parseInt(hex.substring(2, 4), 16) / 255;
@@ -416,8 +517,8 @@ export async function updateConfig(formData: FormData) {
           horarioAtencion: formData.get('contactoHorarioAtencion') as string,
       },
       configuracionGeneral: {
+          ...currentConfig.configuracionGeneral,
           numeroWhatsApp: formData.get('generalNumeroWhatsApp') as string,
-          logoUrl: currentConfig.configuracionGeneral.logoUrl, // Keep the old logo URL
           eslogan: formData.get('generalEslogan') as string,
       }
   };

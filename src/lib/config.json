@@ -1,8 +1,7 @@
-
 {
   "variablesCss": {
-    "colorPrimario": "#6ab0f3",
-    "colorSecundario": "#a492e8",
+    "colorPrimario": "#113f69",
+    "colorSecundario": "#3eac68",
     "colorFondo": "#f3f5f6",
     "colorTexto": "#3f4750",
     "darkColorPrimario": "#7bbaf3",
@@ -29,25 +28,25 @@
     }
   ],
   "titulos": {
-    "homepageHero": "TiendaExpress: Tu tienda, a un clic.",
-    "catalogo": "Nuestro Catálogo de Productos",
-    "carrito": "Tu Carrito de Compras",
-    "checkout": "Finalizar Pedido",
-    "sobreNosotros": "Conoce Más Sobre TiendaExpress",
-    "contacto": "Ponte en Contacto"
+    "homepageHero": null,
+    "catalogo": null,
+    "carrito": null,
+    "checkout": null,
+    "sobreNosotros": null,
+    "contacto": null
   },
   "textos": {
-    "mensajeBienvenida": "¡Bienvenido a TiendaExpress! Calidad y servicio que nos distinguen.",
-    "instruccionesCheckout": "Completa tus datos y te enviaremos el resumen de tu pedido por WhatsApp para confirmar.",
-    "descripcionHomepage": "Explora nuestra selección de productos destacados, elegidos especialmente para ti. Calidad garantizada y los mejores precios.",
-    "descripcionSobreNosotros": "Somos TiendaExpress, dedicados a ofrecerte los mejores productos con la comodidad de comprar desde casa. Nuestra misión es simple: tu satisfacción.",
-    "infoContacto": "Estamos aquí para ayudarte. Contáctanos a través de los siguientes medios:"
+    "mensajeBienvenida": null,
+    "instruccionesCheckout": null,
+    "descripcionHomepage": null,
+    "descripcionSobreNosotros": null,
+    "infoContacto": null
   },
   "contacto": {
-    "telefono": "+1234567890",
-    "correo": "contacto@tiendaexpress.com",
-    "direccion": "Calle Falsa 123, Ciudad Ejemplo",
-    "horarioAtencion": "Lunes a Viernes de 9:00 a 18:00"
+    "telefono": null,
+    "correo": null,
+    "direccion": null,
+    "horarioAtencion": null
   },
   "configuracionGeneral": {
     "numeroWhatsApp": "1234567890",

@@ -3,27 +3,28 @@
 
 import { useState, useMemo, useEffect } from "react";
 import { ProductGrid } from "@/components/products/ProductGrid";
-import { config } from "@/lib/config";
-import type { Product } from "@/types";
+import type { SiteConfig, Product } from "@/types";
 import { ProductFilters } from "@/components/products/ProductFilters";
 import { ProductSort } from "@/components/products/ProductSort";
-import { readProducts } from "@/actions/aiActions";
+import { readProducts, readConfig } from "@/actions/aiActions";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ProductsPage() {
   const [productsData, setProductsData] = useState<Product[]>([]);
+  const [config, setConfig] = useState<SiteConfig | null>(null);
   const [loading, setLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState("precio-asc");
   const [selectedCategory, setSelectedCategory] = useState("all");
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchData = async () => {
       setLoading(true);
-      const products = await readProducts();
+      const [products, configData] = await Promise.all([readProducts(), readConfig()]);
       setProductsData(products);
+      setConfig(configData);
       setLoading(false);
     };
-    fetchProducts();
+    fetchData();
   }, []);
 
   const categories = useMemo(() => {
@@ -55,6 +56,30 @@ export default function ProductsPage() {
 
     return filtered;
   }, [selectedCategory, sortOrder, productsData]);
+  
+  if (loading || !config) {
+    return (
+        <div className="container mx-auto py-12 px-4">
+            <div className="mb-10 text-center">
+                <Skeleton className="h-10 w-64 mx-auto" />
+                <Skeleton className="h-6 w-96 mx-auto mt-4" />
+            </div>
+            <div className="flex justify-end mb-6">
+                <Skeleton className="h-10 w-48" />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <aside className="md:col-span-1"><CardSkeleton /></aside>
+                <main className="md:col-span-3">
+                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                        {Array.from({ length: 8 }).map((_, i) => (
+                            <ProductCardSkeleton key={i} />
+                        ))}
+                    </div>
+                </main>
+            </div>
+        </div>
+    )
+  }
 
   return (
     <div className="container mx-auto py-12 px-4">
@@ -128,5 +153,3 @@ function CardSkeleton() {
         </div>
     )
 }
-
-    

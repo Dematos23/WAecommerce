@@ -1,8 +1,10 @@
-import { config } from "@/lib/config";
+import { readConfig } from "@/actions/aiActions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const config = await readConfig();
+
   const contactInfo = [
     {
       icon: <Phone className="h-6 w-6 text-primary" />,

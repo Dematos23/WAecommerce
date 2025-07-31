@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { config } from "@/lib/config";
 import { Separator } from "@/components/ui/separator";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,6 +14,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useToast } from "@/hooks/use-toast";
+import type { SiteConfig } from "@/types";
 
 const checkoutSchema = z.object({
   name: z.string().min(2, "El nombre es requerido"),
@@ -25,7 +25,11 @@ const checkoutSchema = z.object({
 
 type CheckoutFormValues = z.infer<typeof checkoutSchema>;
 
-export function CheckoutForm() {
+interface CheckoutFormProps {
+    config: SiteConfig
+}
+
+export function CheckoutForm({ config }: CheckoutFormProps) {
   const { cartItems, subtotal, clearCart } = useCart();
   const router = useRouter();
   const { toast } = useToast();

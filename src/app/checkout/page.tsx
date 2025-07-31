@@ -1,8 +1,10 @@
-import { config } from "@/lib/config";
+import { readConfig } from "@/actions/aiActions";
 import { CheckoutForm } from "./CheckoutForm";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
-export default function CheckoutPage() {
+export default async function CheckoutPage() {
+  const config = await readConfig();
+
   return (
     <div className="container mx-auto max-w-4xl py-12 px-4">
        <Card className="w-full">
@@ -11,7 +13,7 @@ export default function CheckoutPage() {
            <CardDescription>{config.textos.instruccionesCheckout}</CardDescription>
          </CardHeader>
          <CardContent>
-           <CheckoutForm />
+           <CheckoutForm config={config} />
          </CardContent>
        </Card>
     </div>

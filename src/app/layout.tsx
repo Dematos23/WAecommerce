@@ -6,6 +6,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { CartProvider } from '@/components/cart/CartProvider';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
+import { readConfig } from '@/actions/aiActions';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
@@ -14,11 +15,13 @@ export const metadata: Metadata = {
   description: 'Rápido, fácil y a tu puerta.',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const config = await readConfig();
+  
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -37,9 +40,9 @@ export default function RootLayout({
       >
         <CartProvider>
           <div className="relative flex flex-col bg-background min-h-screen">
-            <Header />
+            <Header config={config} />
             <main className="flex-1">{children}</main>
-            <Footer />
+            <Footer config={config} />
           </div>
           <Toaster />
         </CartProvider>

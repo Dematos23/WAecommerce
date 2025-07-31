@@ -1,14 +1,14 @@
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { config } from "@/lib/config";
 import { ProductGrid } from "@/components/products/ProductGrid";
 import type { Product } from "@/types";
 import { ArrowRight } from "lucide-react";
-import { readProducts } from "@/actions/aiActions";
+import { readProducts, readConfig } from "@/actions/aiActions";
 
 export default async function Home() {
   const products = await readProducts();
+  const config = await readConfig();
   const featuredProducts = products.filter(p => p.destacado);
 
   return (
@@ -57,5 +57,3 @@ export default async function Home() {
     </div>
   );
 }
-
-    

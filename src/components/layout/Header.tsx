@@ -3,7 +3,6 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { config } from '@/lib/config';
 import { cn } from '@/lib/utils';
 import { Logo } from '@/components/ui/Logo';
 import { CartIcon } from '@/components/cart/CartIcon';
@@ -15,8 +14,9 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
+import type { SiteConfig } from '@/types';
 
-export function Header() {
+export function Header({ config }: { config: SiteConfig }) {
   const pathname = usePathname();
 
   return (
@@ -46,7 +46,7 @@ export function Header() {
             ))}
           </nav>
           <div className="flex flex-1 justify-end items-center gap-4">
-             <CartIcon />
+             <CartIcon config={config} />
           </div>
         </div>
 
@@ -96,7 +96,7 @@ export function Header() {
 
            {/* Cart Icon (Right) */}
             <div className="flex items-center">
-                <CartIcon />
+                <CartIcon config={config} />
             </div>
         </div>
       </div>

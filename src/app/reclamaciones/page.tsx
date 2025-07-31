@@ -1,10 +1,11 @@
 
-import { config } from "@/lib/config";
+import { readConfig } from "@/actions/aiActions";
 import { ReclamacionesForm } from "./ReclamacionesForm";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { FileText } from "lucide-react";
 
-export default function ReclamacionesPage() {
+export default async function ReclamacionesPage() {
+  const config = await readConfig();
   return (
     <div className="container mx-auto max-w-4xl py-12 px-4">
        <Card className="w-full">
@@ -16,7 +17,7 @@ export default function ReclamacionesPage() {
            <CardDescription>Conforme a lo establecido en el Código de Protección y Defensa del Consumidor – Ley N° 29571</CardDescription>
          </CardHeader>
          <CardContent>
-           <ReclamacionesForm />
+           <ReclamacionesForm config={config} />
          </CardContent>
        </Card>
     </div>

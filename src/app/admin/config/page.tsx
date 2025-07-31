@@ -8,19 +8,17 @@ export default async function AdminConfigPage() {
 
     return (
         <div className="container mx-auto px-4 py-8">
-            <div className="mx-auto">
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Editar Configuración del Sitio</CardTitle>
-                        <CardDescription>
-                            Realiza cambios en los textos, títulos e información de contacto que se muestran en tu sitio web.
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <ConfigForm config={config} />
-                    </CardContent>
-                </Card>
-            </div>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Editar Configuración del Sitio</CardTitle>
+                    <CardDescription>
+                        Realiza cambios en la apariencia, textos, e información de contacto que se muestran en tu sitio web.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <ConfigForm config={config} />
+                </CardContent>
+            </Card>
         </div>
     )
 }

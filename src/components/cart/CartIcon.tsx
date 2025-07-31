@@ -5,13 +5,14 @@ import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/useCart";
 import { CartSheet } from "./CartSheet";
 import { useState } from "react";
+import type { SiteConfig } from "@/types";
 
-export function CartIcon() {
+export function CartIcon({ config }: { config: SiteConfig }) {
   const { cartCount } = useCart();
   const [isSheetOpen, setSheetOpen] = useState(false);
 
   return (
-    <CartSheet open={isSheetOpen} onOpenChange={setSheetOpen}>
+    <CartSheet open={isSheetOpen} onOpenChange={setSheetOpen} config={config}>
         <Button
           variant="outline"
           size="icon"

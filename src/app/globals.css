@@ -19,15 +19,15 @@ main {
 
 @layer base {
   :root {
-    --background: 210 29% 96.5%;
-    --foreground: 215 25% 27%;
+    --background: 200 14% 96%;
+    --foreground: 212 12% 28%;
     --card: 0 0% 100%;
     --card-foreground: 215 25% 27%;
     --popover: 0 0% 100%;
     --popover-foreground: 215 25% 27%;
-    --primary: 202 70% 60%;
+    --primary: 209 72% 24%;
     --primary-foreground: 215 25% 27%;
-    --secondary: 210 20% 90%;
+    --secondary: 143 47% 46%;
     --secondary-foreground: 215 25% 27%;
     --muted: 210 20% 90%;
     --muted-foreground: 215 20% 45%;
@@ -54,15 +54,15 @@ main {
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
   .dark {
-    --background: 215 28% 17%;
-    --foreground: 210 40% 98%;
+    --background: 215 17% 20%;
+    --foreground: 210 17% 98%;
     --card: 215 28% 17%;
     --card-foreground: 210 40% 98%;
     --popover: 215 28% 17%;
     --popover-foreground: 210 40% 98%;
-    --primary: 202 70% 70%;
+    --primary: 209 83% 72%;
     --primary-foreground: 215 25% 27%;
-    --secondary: 217 20% 24%;
+    --secondary: 253 60% 77%;
     --secondary-foreground: 210 40% 98%;
     --muted: 217 20% 24%;
     --muted-foreground: 215 20% 65%;

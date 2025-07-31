@@ -1,7 +1,8 @@
-import { config } from "@/lib/config";
+import { readConfig } from "@/actions/aiActions";
 import Image from "next/image";
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const config = await readConfig();
   return (
     <div className="bg-card">
       <div className="container mx-auto px-4 py-16">

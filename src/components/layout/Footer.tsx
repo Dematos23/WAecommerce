@@ -1,10 +1,10 @@
 
-import { config } from '@/lib/config';
 import { Logo } from '@/components/ui/Logo';
 import { Mail, Phone, Clock, MapPin } from 'lucide-react';
 import Link from 'next/link';
+import type { SiteConfig } from '@/types';
 
-export function Footer() {
+export function Footer({ config }: { config: SiteConfig }) {
   const currentYear = new Date().getFullYear();
   const mapAddress = encodeURIComponent(config.contacto.direccion);
   const mapUrl = `https://maps.google.com/maps?q=${mapAddress}&output=embed`;

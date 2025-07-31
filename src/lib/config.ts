@@ -1,3 +1,19 @@
-import configData from './config.json';
 
-export const config = configData;
+import type { SiteConfig } from "@/types";
+import { readConfig } from "@/actions/aiActions";
+
+let configCache: SiteConfig | null = null;
+
+export async function getCachedConfig(): Promise<SiteConfig> {
+  if (process.env.NODE_ENV !== 'development' && configCache) {
+    return configCache;
+  }
+  
+  const config = await readConfig();
+  
+  if (process.env.NODE_ENV !== 'development') {
+    configCache = config;
+  }
+
+  return config;
+}

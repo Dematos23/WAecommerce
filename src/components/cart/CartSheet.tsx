@@ -15,15 +15,16 @@ import Image from "next/image";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Trash2, Plus, Minus, ShoppingCart } from "lucide-react";
 import Link from "next/link";
-import { config } from "@/lib/config";
+import type { SiteConfig } from "@/types";
 
 interface CartSheetProps {
   children?: React.ReactNode;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  config: SiteConfig;
 }
 
-export function CartSheet({ open, onOpenChange, children }: CartSheetProps) {
+export function CartSheet({ open, onOpenChange, children, config }: CartSheetProps) {
   const { cartItems, removeFromCart, updateQuantity, subtotal, cartCount } =
     useCart();
 

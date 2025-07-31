@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { addReclamacion } from "@/actions/aiActions";
-import { config } from "@/lib/config";
+import type { SiteConfig } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -46,7 +46,7 @@ const reclamacionSchema = z.object({
 
 type ReclamacionFormValues = z.infer<typeof reclamacionSchema>;
 
-export function ReclamacionesForm() {
+export function ReclamacionesForm({ config }: { config: SiteConfig }) {
   const form = useForm<ReclamacionFormValues>({
     resolver: zodResolver(reclamacionSchema),
     defaultValues: {
@@ -326,4 +326,3 @@ function SubmitButton() {
     </Button>
   );
 }
-
