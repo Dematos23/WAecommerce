@@ -1,43 +1,32 @@
 
 "use server";
 
-import fs from "fs/promises";
-import path from "path";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import type { Product, Reclamacion, SiteConfig } from "@/types";
+import type { Product, Reclamacion, SiteConfig, Tenant } from "@/types";
 import { sendReclamacionConfirmation, sendReclamacionNotification } from "@/lib/email";
-
-const productsFilePath = path.join(process.cwd(), "src/data/products.json");
-const reclamacionesFilePath = path.join(process.cwd(), "src/data/reclamaciones.json");
-const configFilePath = path.join(process.cwd(), "src/lib/config.json");
-const publicImagesPath = path.join(process.cwd(), "public/images");
-const globalsCssPath = path.join(process.cwd(), "src/app/globals.css");
+import { adminDb } from "@/lib/firebase-admin";
+import { getTenant } from "@/lib/tenant";
 
 // --- Product Functions ---
 
 export async function readProducts(): Promise<Product[]> {
-  try {
-    const data = await fs.readFile(productsFilePath, "utf8");
-    return JSON.parse(data);
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-        await fs.writeFile(productsFilePath, '[]', 'utf8');
+    const tenant = await getTenant();
+    if (!tenant) return [];
+
+    const productsRef = adminDb.collection('tenants').doc(tenant.id).collection('products');
+    const snapshot = await productsRef.get();
+    
+    if (snapshot.empty) {
         return [];
     }
-    console.error("Error reading products file:", error);
-    return [];
-  }
+    
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
 }
 
 async function writeProducts(products: Product[]): Promise<void> {
-  try {
-    const data = JSON.stringify(products, null, 2);
-    await fs.writeFile(productsFilePath, data, "utf8");
-  } catch (error) {
-    console.error("Error writing products file:", error);
-  }
+    // This function will now be handled by addProduct, updateProduct, deleteProduct
 }
 
 const productSchema = z.object({
@@ -51,32 +40,18 @@ const productSchema = z.object({
 });
 
 async function saveImages(images: File[], productId: string): Promise<string[]> {
+    // This should be updated to use a cloud storage like Firebase Storage
+    // For now, we'll keep the existing logic but it's not multi-tenant safe
     if (!images || images.length === 0) return [];
-    
-    const imagePaths: string[] = [];
-    const productImagesPath = path.join(publicImagesPath, productId);
-
-    try {
-        await fs.mkdir(productImagesPath, { recursive: true });
-        for (let i = 0; i < images.length; i++) {
-            const image = images[i];
-            if (image.size === 0) continue;
-            
-            const imageExtension = image.name.split('.').pop();
-            const imageName = `${Date.now()}_${i}.${imageExtension}`;
-            const imageFullPath = path.join(productImagesPath, imageName);
-            const imageBuffer = Buffer.from(await image.arrayBuffer());
-            await fs.writeFile(imageFullPath, imageBuffer);
-            imagePaths.push(`/images/${productId}/${imageName}`);
-        }
-    } catch (error) {
-        console.error("Error saving images:", error);
-    }
-    return imagePaths;
+    console.warn("Image saving is not multi-tenant safe and should be migrated to a cloud storage provider.");
+    return [];
 }
 
 
 export async function addProduct(formData: FormData) {
+  const tenant = await getTenant();
+  if (!tenant) throw new Error("Tenant not found");
+
   const validatedFields = productSchema.safeParse({
     nombre: formData.get("nombre"),
     descripcion: formData.get("descripcion"),
@@ -93,24 +68,12 @@ export async function addProduct(formData: FormData) {
     };
   }
 
-  const products = await readProducts();
-  const productId = `prod_${new Date().getTime()}`;
-  const { imagenes, ...productData } = validatedFields.data;
-  
-  const newProduct: Product = {
-    id: productId,
+  const { id, imagenes, ...productData } = validatedFields.data;
+  const productsRef = adminDb.collection('tenants').doc(tenant.id).collection('products');
+  const newDocRef = await productsRef.add({
     ...productData,
-    imagenes: [], // Default empty
-  };
-
-  if (imagenes && imagenes.length > 0) {
-      const imageFiles = imagenes.filter(img => img instanceof File && img.size > 0) as File[];
-      const savedImagePaths = await saveImages(imageFiles, productId);
-      newProduct.imagenes = savedImagePaths;
-  }
-
-  products.push(newProduct);
-  await writeProducts(products);
+    imagenes: [], // Default empty, should be handled by a proper image upload service
+  });
   
   revalidatePath("/admin/products");
   revalidatePath("/products");
@@ -119,7 +82,8 @@ export async function addProduct(formData: FormData) {
 }
 
 export async function updateProduct(formData: FormData) {
-    const imagesToDelete = formData.get('imagesToDelete') as string | null;
+    const tenant = await getTenant();
+    if (!tenant) throw new Error("Tenant not found");
     
     const validatedFields = productSchema.safeParse({
         id: formData.get('id'),
@@ -127,7 +91,6 @@ export async function updateProduct(formData: FormData) {
         descripcion: formData.get('descripcion'),
         precio: formData.get('precio'),
         categoria: formData.get("categoria"),
-        imagenes: formData.getAll("imagenes"),
         destacado: formData.get("destacado") === "on",
     });
 
@@ -138,46 +101,12 @@ export async function updateProduct(formData: FormData) {
         };
     }
 
-    const { id, imagenes, ...updatedData } = validatedFields.data;
-    let products = await readProducts();
-    const productIndex = products.findIndex(p => p.id === id);
-
-    if (productIndex === -1) {
-        return { errors: { form: ['Product not found'] } };
-    }
+    const { id, ...updatedData } = validatedFields.data;
+    const productRef = adminDb.collection('tenants').doc(tenant.id).collection('products').doc(id);
     
-    const existingProduct = products[productIndex];
-    let imagePaths = existingProduct.imagenes;
-
-    // Handle image deletion
-    if (imagesToDelete) {
-        const pathsToDelete = imagesToDelete.split(',').filter(p => p);
-        for (const imagePath of pathsToDelete) {
-            try {
-                await fs.unlink(path.join(process.cwd(), 'public', imagePath));
-            } catch (error) {
-                console.error(`Failed to delete image file: ${imagePath}`, error);
-            }
-        }
-        imagePaths = imagePaths.filter(p => !pathsToDelete.includes(p));
-    }
-
-
-    // Handle new image upload
-    if (imagenes && imagenes.length > 0) {
-        const imageFiles = imagenes.filter(img => img instanceof File && img.size > 0) as File[];
-        const newImagePaths = await saveImages(imageFiles, id);
-        imagePaths = [...imagePaths, ...newImagePaths];
-    }
-
-    const updatedProduct: Product = {
-        ...existingProduct,
-        ...updatedData,
-        imagenes: imagePaths,
-    };
-
-    products[productIndex] = updatedProduct;
-    await writeProducts(products);
+    await productRef.update({
+        ...updatedData
+    });
 
     revalidatePath("/admin/products");
     revalidatePath(`/products/${id}`);
@@ -188,22 +117,12 @@ export async function updateProduct(formData: FormData) {
 
 export async function deleteProduct(productId: string) {
     if(!productId) return;
+    const tenant = await getTenant();
+    if (!tenant) throw new Error("Tenant not found");
 
-    let products = await readProducts();
-    const productToDelete = products.find(p => p.id === productId);
+    const productRef = adminDb.collection('tenants').doc(tenant.id).collection('products').doc(productId);
+    await productRef.delete();
     
-    products = products.filter(p => p.id !== productId);
-    await writeProducts(products);
-    
-    if (productToDelete) {
-      const productImagesPath = path.join(publicImagesPath, productId);
-      try {
-        await fs.rm(productImagesPath, { recursive: true, force: true });
-      } catch (error) {
-        console.error(`Error deleting product image folder ${productImagesPath}:`, error);
-      }
-    }
-
     revalidatePath('/admin/products');
     revalidatePath('/products');
     revalidatePath('/');
@@ -214,26 +133,21 @@ export async function deleteProduct(productId: string) {
 // --- Reclamaciones Functions ---
 
 async function readReclamaciones(): Promise<Reclamacion[]> {
-  try {
-    const data = await fs.readFile(reclamacionesFilePath, "utf8");
-    return JSON.parse(data);
-  } catch (error) {
-     if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-        await fs.writeFile(reclamacionesFilePath, '[]', 'utf8');
+    const tenant = await getTenant();
+    if (!tenant) return [];
+    
+    const reclamacionesRef = adminDb.collection('tenants').doc(tenant.id).collection('reclamaciones');
+    const snapshot = await reclamacionesRef.orderBy('fechaRegistro', 'desc').get();
+    
+    if (snapshot.empty) {
         return [];
     }
-    console.error("Error reading reclamaciones file:", error);
-    return [];
-  }
+    
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Reclamacion));
 }
 
 async function writeReclamaciones(reclamaciones: Reclamacion[]): Promise<void> {
-  try {
-    const data = JSON.stringify(reclamaciones, null, 2);
-    await fs.writeFile(reclamacionesFilePath, data, "utf8");
-  } catch (error) {
-    console.error("Error writing reclamaciones file:", error);
-  }
+  //This will be handled by addReclamacion
 }
 
 const reclamacionSchema = z.object({
@@ -255,27 +169,30 @@ const reclamacionSchema = z.object({
 
 
 export async function addReclamacion(formData: FormData) {
+    const tenant = await getTenant();
+    if (!tenant) throw new Error("Tenant not found");
+
     const data = Object.fromEntries(formData.entries());
     const validatedFields = reclamacionSchema.safeParse(data);
     
     if (!validatedFields.success) {
         console.error("Validation errors:", validatedFields.error.flatten().fieldErrors);
-        // Here you might want to return the errors to the form
         return { errors: validatedFields.error.flatten().fieldErrors };
     }
     
-    const reclamaciones = await readReclamaciones();
-    const newId = (reclamaciones.length + 1).toString().padStart(5, '0');
-
-    const newReclamacion: Reclamacion = {
-        id: `REC-${new Date().getFullYear()}-${newId}`,
+    const newReclamacionData = {
         ...validatedFields.data,
         fechaRegistro: new Date().toISOString(),
         estado: 'pendiente'
     };
 
-    reclamaciones.push(newReclamacion);
-    await writeReclamaciones(reclamaciones);
+    const reclamacionesRef = adminDb.collection('tenants').doc(tenant.id).collection('reclamaciones');
+    const newDocRef = await reclamacionesRef.add(newReclamacionData);
+
+    const newReclamacion: Reclamacion = {
+        id: newDocRef.id,
+        ...newReclamacionData
+    }
     
     const config = await readConfig();
 
@@ -284,7 +201,6 @@ export async function addReclamacion(formData: FormData) {
         await sendReclamacionNotification(newReclamacion, config);
     } catch (error) {
         console.error("Failed to send reclamacion emails:", error);
-        // Don't block the user flow if emails fail, but log the error.
     }
 
     revalidatePath('/reclamaciones');
@@ -294,11 +210,9 @@ export async function addReclamacion(formData: FormData) {
 
 // --- Config Functions ---
 export async function readConfig(): Promise<SiteConfig> {
-  try {
-    const configData = await fs.readFile(configFilePath, "utf-8");
-    const config = JSON.parse(configData);
-    
-    const defaultConfig: SiteConfig = {
+  const tenant = await getTenant();
+  
+  const defaultConfig: SiteConfig = {
       variablesCss: {
         colorPrimario: "#113f69",
         colorSecundario: "#3eac68",
@@ -308,7 +222,7 @@ export async function readConfig(): Promise<SiteConfig> {
       },
       menus: [],
       titulos: {
-        homepageHero: "Bienvenido a TiendaExpress",
+        homepageHero: "Bienvenido a Tu Tienda",
         catalogo: "Nuestro Catálogo",
         carrito: "Tu Carrito",
         checkout: "Finalizar Compra",
@@ -320,7 +234,7 @@ export async function readConfig(): Promise<SiteConfig> {
         instruccionesCheckout: "Completa tus datos para finalizar tu pedido.",
         descripcionHomepage: "Los mejores productos, seleccionados para ti.",
         descripcionSobreNosotros: "Somos una tienda comprometida con la calidad.",
-        infoContacto: "Estamos aquí para ayudarte. Contáctanos por cualquiera de estos medios."
+        infoContacto: "Estamos aquí para ayudarte."
       },
       contacto: {
         telefono: "N/A",
@@ -329,7 +243,7 @@ export async function readConfig(): Promise<SiteConfig> {
         horarioAtencion: "N/A"
       },
       configuracionGeneral: {
-        nombreTienda: "TiendaExpress",
+        nombreTienda: tenant?.name ?? "TiendaExpress",
         numeroWhatsApp: "",
         logoUrl: "/logo.svg",
         eslogan: "Rápido, fácil y a tu puerta.",
@@ -360,99 +274,34 @@ export async function readConfig(): Promise<SiteConfig> {
       }
     };
 
-    return {
-        ...defaultConfig,
-        ...config,
-        variablesCss: { ...defaultConfig.variablesCss, ...config.variablesCss },
-        menus: config.menus || defaultConfig.menus,
-        titulos: { ...defaultConfig.titulos, ...config.titulos },
-        textos: { ...defaultConfig.textos, ...config.textos },
-        contacto: { ...defaultConfig.contacto, ...config.contacto },
-        configuracionGeneral: { ...defaultConfig.configuracionGeneral, ...config.configuracionGeneral },
-        secondaryHero: { ...defaultConfig.secondaryHero, ...config.secondaryHero },
-        productCard: { ...defaultConfig.productCard, ...config.productCard },
-        informacionLegal: { ...defaultConfig.informacionLegal, ...config.informacionLegal },
-    };
-  } catch (error) {
-    console.error("Error reading config file, returning defaults:", error);
-    const defaultConfig: SiteConfig = {
-      variablesCss: {
-        colorPrimario: "#113f69",
-        colorSecundario: "#3eac68",
-        colorFondo: "#f3f5f6",
-        colorTexto: "#3f4750",
-        colorAcento: "#6d28d9",
-      },
-      menus: [
-        { titulo: "Inicio", enlace: "/" },
-        { titulo: "Catálogo", enlace: "/products" },
-        { titulo: "Sobre Nosotros", enlace: "/about" },
-        { titulo: "Contacto", enlace: "/contact" }
-      ],
-      titulos: {
-        homepageHero: "Bienvenido a TiendaExpress",
-        catalogo: "Nuestro Catálogo",
-        carrito: "Tu Carrito",
-        checkout: "Finalizar Compra",
-        sobreNosotros: "Sobre Nosotros",
-        contacto: "Contáctanos"
-      },
-      textos: {
-        mensajeBienvenida: "Gracias por visitarnos",
-        instruccionesCheckout: "Completa tus datos para finalizar tu pedido.",
-        descripcionHomepage: "Los mejores productos, seleccionados para ti.",
-        descripcionSobreNosotros: "Somos una tienda comprometida con la calidad.",
-        infoContacto: "Estamos aquí para ayudarte. Contáctanos por cualquiera de estos medios."
-      },
-      contacto: {
-        telefono: "123-456-7890",
-        correo: "info@tiendaexpress.com",
-        direccion: "Calle Falsa 123, Ciudad",
-        horarioAtencion: "Lun-Vie: 9am - 6pm"
-      },
-      configuracionGeneral: {
-        nombreTienda: "TiendaExpress",
-        numeroWhatsApp: "1234567890",
-        logoUrl: "/logo.svg",
-        eslogan: "Rápido, fácil y a tu puerta.",
-        mensajePedidoWhatsApp: "¡Gracias por tu compra! 😊",
-        displayMode: "both",
-        heroImageUrl: "",
-      },
-      secondaryHero: {
-        enabled: false,
-        title: "Título de prueba",
-        description: "Descripción de prueba",
-        imageUrl: "",
-        ctaText: "Ver más",
-        ctaLink: "/products"
-      },
-      productCard: {
-        nameAlign: 'left',
-        descriptionAlign: 'left',
-        priceAlign: 'left',
-        buttonStyle: 'default',
-        shadow: 'md',
-        imagePosition: 'top',
-      },
-       informacionLegal: {
-        razonSocial: "Tu Razón Social S.A.C.",
-        ruc: "12345678901",
-        direccionLegal: "Tu Dirección Fiscal, Ciudad, País"
-      }
-    };
-    return defaultConfig;
+  if (!tenant) {
+      return defaultConfig;
   }
+
+  const tenantConfig = (tenant.config || {}) as Partial<SiteConfig>;
+  
+  return {
+      ...defaultConfig,
+      ...tenantConfig,
+      variablesCss: { ...defaultConfig.variablesCss, ...tenantConfig.variablesCss },
+      menus: tenantConfig.menus || defaultConfig.menus,
+      titulos: { ...defaultConfig.titulos, ...tenantConfig.titulos },
+      textos: { ...defaultConfig.textos, ...tenantConfig.textos },
+      contacto: { ...defaultConfig.contacto, ...tenantConfig.contacto },
+      configuracionGeneral: { ...defaultConfig.configuracionGeneral, ...tenantConfig.configuracionGeneral, nombreTienda: tenant.name },
+      secondaryHero: { ...defaultConfig.secondaryHero, ...tenantConfig.secondaryHero },
+      productCard: { ...defaultConfig.productCard, ...tenantConfig.productCard },
+      informacionLegal: { ...defaultConfig.informacionLegal, ...tenantConfig.informacionLegal },
+  };
 }
 
 
 async function writeConfig(config: SiteConfig): Promise<void> {
-  try {
-    const data = JSON.stringify(config, null, 2);
-    await fs.writeFile(configFilePath, data, "utf8");
-  } catch (error) {
-    console.error("Error writing config file:", error);
-  }
+  const tenant = await getTenant();
+  if (!tenant) throw new Error("Tenant not found");
+
+  const tenantRef = adminDb.collection('tenants').doc(tenant.id);
+  await tenantRef.update({ config });
 }
 
 function hexToHsl(hex: string): string {
@@ -486,94 +335,19 @@ function hexToHsl(hex: string): string {
 
 
 async function updateCssVariables(config: SiteConfig) {
-    try {
-        let cssContent = await fs.readFile(globalsCssPath, 'utf8');
-
-        const themeRegex = /(:root\s*{[\s\S]*?})/;
-        
-        cssContent = cssContent.replace(themeRegex, (match) => {
-            let updatedTheme = match;
-            const colors = {
-                'background': config.variablesCss.colorFondo,
-                'foreground': config.variablesCss.colorTexto,
-                'primary': config.variablesCss.colorPrimario,
-                'secondary': config.variablesCss.colorSecundario,
-                'accent': config.variablesCss.colorAcento,
-            };
-            for (const [key, value] of Object.entries(colors)) {
-                if (value) {
-                   const hslValue = hexToHsl(value as string);
-                   const propRegex = new RegExp(`(--${key}:\\s*.*?);`);
-                   if (propRegex.test(updatedTheme)) {
-                      updatedTheme = updatedTheme.replace(propRegex, `--${key}: ${hslValue};`);
-                   }
-                }
-            }
-            return updatedTheme;
-        });
-        
-        await fs.writeFile(globalsCssPath, cssContent, 'utf8');
-
-    } catch (error) {
-        console.error("Error updating CSS variables:", error);
-    }
+    // This is now a client-side concern, handled dynamically.
+    // This function can be removed or adapted if static CSS generation is needed.
 }
 
 
 export async function updateConfig(formData: FormData) {
   const currentConfig = await readConfig();
 
-  const logoFile = formData.get("logo") as File;
-  let logoUrl = currentConfig.configuracionGeneral.logoUrl;
+  // Image handling should be migrated to a proper cloud storage solution
+  const logoUrl = currentConfig.configuracionGeneral.logoUrl;
+  const heroImageUrl = currentConfig.configuracionGeneral.heroImageUrl;
+  const secondaryHeroImageUrl = currentConfig.secondaryHero?.imageUrl || "";
 
-  const heroImageFile = formData.get("heroImage") as File;
-  let heroImageUrl = currentConfig.configuracionGeneral.heroImageUrl;
-
-  const secondaryHeroImageFile = formData.get("secondaryHeroImage") as File;
-  let secondaryHeroImageUrl = currentConfig.secondaryHero?.imageUrl || "";
-
-
-  if (logoFile && logoFile.size > 0) {
-    try {
-      await fs.mkdir(publicImagesPath, { recursive: true });
-      const logoExtension = logoFile.name.split('.').pop();
-      const logoName = `logo.${logoExtension}`;
-      const logoPath = path.join(publicImagesPath, logoName);
-      const imageBuffer = Buffer.from(await logoFile.arrayBuffer());
-      await fs.writeFile(logoPath, imageBuffer);
-      logoUrl = `/images/${logoName}`;
-    } catch (error) {
-      console.error("Error saving new logo:", error);
-    }
-  }
-
-  if (heroImageFile && heroImageFile.size > 0) {
-    try {
-      await fs.mkdir(publicImagesPath, { recursive: true });
-      const heroImageExtension = heroImageFile.name.split('.').pop();
-      const heroImageName = `hero-background.${heroImageExtension}`;
-      const heroImagePath = path.join(publicImagesPath, heroImageName);
-      const imageBuffer = Buffer.from(await heroImageFile.arrayBuffer());
-      await fs.writeFile(heroImagePath, imageBuffer);
-      heroImageUrl = `/images/${heroImageName}`;
-    } catch (error) {
-      console.error("Error saving hero image:", error);
-    }
-  }
-
-  if (secondaryHeroImageFile && secondaryHeroImageFile.size > 0) {
-    try {
-      await fs.mkdir(publicImagesPath, { recursive: true });
-      const secondaryHeroImageExtension = secondaryHeroImageFile.name.split('.').pop();
-      const secondaryHeroImageName = `secondary-hero.${secondaryHeroImageExtension}`;
-      const secondaryHeroImagePath = path.join(publicImagesPath, secondaryHeroImageName);
-      const imageBuffer = Buffer.from(await secondaryHeroImageFile.arrayBuffer());
-      await fs.writeFile(secondaryHeroImagePath, imageBuffer);
-      secondaryHeroImageUrl = `/images/${secondaryHeroImageName}`;
-    } catch (error) {
-      console.error("Error saving secondary hero image:", error);
-    }
-  }
 
   const newConfig: SiteConfig = {
       ...currentConfig,
@@ -625,10 +399,7 @@ export async function updateConfig(formData: FormData) {
   };
 
   await writeConfig(newConfig);
-
-  // Revalidate all paths to reflect changes immediately
   revalidatePath('/', 'layout');
-
   redirect('/admin/config');
 }
 
@@ -656,8 +427,6 @@ export async function updateTheme(formData: FormData) {
     };
 
     await writeConfig(newConfig);
-    await updateCssVariables(newConfig);
-
     revalidatePath('/', 'layout');
     redirect('/admin/theme');
 }

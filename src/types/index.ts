@@ -1,4 +1,5 @@
 
+
 export interface Product {
   id: string;
   nombre: string;
@@ -97,4 +98,13 @@ export interface SiteConfig {
     ruc: string;
     direccionLegal: string;
   };
+}
+
+export interface Tenant {
+    id: string;
+    name: string;
+    slug: string;
+    ownerId: string;
+    createdAt: any; // Firestore timestamp
+    config?: Partial<SiteConfig>;
 }
