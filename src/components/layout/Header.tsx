@@ -18,6 +18,10 @@ import type { SiteConfig } from '@/types';
 
 export function Header({ config }: { config: SiteConfig }) {
   const pathname = usePathname();
+  
+  const isPublicPage = ['/', '/login', '/register'].includes(pathname);
+
+  const renderCart = !isPublicPage && !pathname.startsWith('/dashboard');
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -46,7 +50,7 @@ export function Header({ config }: { config: SiteConfig }) {
             ))}
           </nav>
           <div className="flex flex-1 justify-end items-center gap-4">
-             <CartIcon config={config} />
+             {renderCart && <CartIcon config={config} />}
           </div>
         </div>
 
@@ -96,7 +100,7 @@ export function Header({ config }: { config: SiteConfig }) {
 
            {/* Cart Icon (Right) */}
             <div className="flex items-center gap-2">
-                <CartIcon config={config} />
+                {renderCart && <CartIcon config={config} />}
             </div>
         </div>
       </div>
