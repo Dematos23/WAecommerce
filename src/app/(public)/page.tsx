@@ -36,11 +36,18 @@ export default function SaaSLandingPage() {
             <p className="text-lg md:text-xl text-white/90 max-w-3xl mx-auto mb-8">
               La plataforma todo-en-uno para crear y gestionar tu e-commerce de forma rápida, fácil y sin comisiones por venta.
             </p>
-            <Button asChild size="lg" className="shadow-lg hover:scale-105 transition-transform">
-              <Link href="/register">
-                Empezar Gratis
-              </Link>
-            </Button>
+            <div className="flex justify-center gap-4">
+              <Button asChild size="lg" className="shadow-lg hover:scale-105 transition-transform">
+                <Link href="/register">
+                  Empezar Gratis
+                </Link>
+              </Button>
+              <Button asChild size="lg" variant="secondary" className="shadow-lg hover:scale-105 transition-transform">
+                <Link href="/login">
+                  Ingresar
+                </Link>
+              </Button>
+            </div>
           </div>
         </section>
 
