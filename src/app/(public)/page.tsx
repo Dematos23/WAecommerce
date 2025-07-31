@@ -22,10 +22,10 @@ export default async function SaaSLandingPage() {
         {/* Hero Section */}
         <section className="bg-background py-20 md:py-32">
            <div className="container mx-auto px-4 text-center">
-            <h1 className="text-5xl md:text-7xl font-semibold text-primary mb-4">
+            <h1 className="text-primary mb-4 h1">
               {homepage.hero.title}
             </h1>
-            <p className="text-lg md:text-xl text-foreground max-w-3xl mx-auto mb-8">
+            <p className="text-foreground max-w-3xl mx-auto mb-8 p">
               {homepage.hero.description}
             </p>
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
@@ -48,9 +48,9 @@ export default async function SaaSLandingPage() {
         <section id="features" className="py-16 bg-background">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
-               <span className="text-sm font-bold tracking-wider uppercase text-orange-500">{homepage.features.preTitle}</span>
-              <h2 className="text-4xl font-semibold text-foreground mt-2">{homepage.features.title}</h2>
-              <p className="text-muted-foreground mt-4 max-w-2xl mx-auto text-lg">
+               <span className="text-sm font-bold tracking-wider uppercase text-decorative">{homepage.features.preTitle}</span>
+              <h2 className="text-foreground mt-2 h2">{homepage.features.title}</h2>
+              <p className="text-muted-foreground mt-4 max-w-2xl mx-auto p">
                 {homepage.features.description}
               </p>
             </div>
@@ -78,8 +78,8 @@ export default async function SaaSLandingPage() {
         {homepage.secondaryHero?.enabled && (
             <section className="bg-primary py-20">
             <div className="container mx-auto px-4 text-center">
-                <h2 className="text-4xl font-semibold text-primary-foreground">{homepage.secondaryHero.title}</h2>
-                <p className="text-primary-foreground/80 mt-4 max-w-2xl mx-auto text-lg">
+                <h2 className="text-primary-foreground h2">{homepage.secondaryHero.title}</h2>
+                <p className="text-primary-foreground/80 mt-4 max-w-2xl mx-auto p">
                 {homepage.secondaryHero.description}
                 </p>
                 <Button asChild size="lg" variant="accent" className="mt-8 font-bold text-lg">

@@ -25,7 +25,7 @@ main {
     --card-foreground: 0 0% 7%;
     --popover: 240 8% 97%;
     --popover-foreground: 0 0% 7%;
-    --primary: 220 100% 56%;
+    --primary: 222 100% 56%;
     --primary-foreground: 240 8% 97%;
     --secondary: 210 20% 90%;
     --secondary-foreground: 0 0% 7%;
@@ -37,7 +37,7 @@ main {
     --destructive-foreground: 0 0% 98%;
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 220 100% 56%;
+    --ring: 222 100% 56%;
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
@@ -52,6 +52,7 @@ main {
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    --decorative: 20 98% 50%;
   }
 }
 
@@ -65,15 +66,16 @@ main {
   }
 }
 
-h1 {
+h1, .h1 {
     @apply text-5xl font-semibold;
 }
-h2 {
+h2, .h2 {
     @apply text-4xl font-medium;
 }
-h3 {
+h3, .h3 {
     @apply text-3xl font-medium;
 }
-p {
+p, .p {
     @apply text-base lg:text-lg;
 }
+

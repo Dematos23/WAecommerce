@@ -16,8 +16,8 @@ export default async function ContactPage() {
         <div className="bg-background text-foreground">
             <div className="container mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
                 <div className="text-center">
-                    <h1 className="text-5xl font-semibold text-primary">{contactPage.title}</h1>
-                    <p className="mt-4 text-lg text-muted-foreground max-w-3xl mx-auto">
+                    <h1 className="h1 text-primary">{contactPage.title}</h1>
+                    <p className="mt-4 text-muted-foreground max-w-3xl mx-auto p">
                         {contactPage.description}
                     </p>
                 </div>
@@ -26,7 +26,7 @@ export default async function ContactPage() {
                     {/* Contact Form */}
                     <Card className="border-none shadow-none bg-transparent">
                         <CardHeader>
-                            <CardTitle className="text-3xl font-medium">{contactPage.formTitle}</CardTitle>
+                            <CardTitle className="h3">{contactPage.formTitle}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <form action="#" method="POST" className="space-y-6">
@@ -53,7 +53,7 @@ export default async function ContactPage() {
                     <div className="space-y-8">
                         <Card className="border-none shadow-none bg-transparent">
                              <CardHeader>
-                                <CardTitle className="text-3xl font-medium">Información de Contacto</CardTitle>
+                                <CardTitle className="h3">Información de Contacto</CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-6">
                                 <div className="flex items-start gap-4">

@@ -14,8 +14,8 @@ export default async function PricingPage() {
     <div className="bg-background text-foreground">
       <div className="container mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h1 className="text-5xl font-semibold text-primary">{pricingPage.title}</h1>
-          <p className="mt-4 text-xl text-muted-foreground">
+          <h1 className="h1 text-primary">{pricingPage.title}</h1>
+          <p className="mt-4 p text-muted-foreground">
             {pricingPage.description}
           </p>
         </div>

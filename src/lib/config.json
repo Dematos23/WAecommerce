@@ -1,4 +1,21 @@
 {
+  "variablesCss": {
+    "colorPrimario": "#1D63FF",
+    "colorSecundario": "#F8F8F9",
+    "colorFondo": "#F8F8F9",
+    "colorTexto": "#111111",
+    "colorAcento": "#FFCE32",
+    "colorDecorativo": "#F95B03",
+    "fontFamily": "Manrope",
+    "h1Size": "48px",
+    "h2Size": "36px",
+    "h3Size": "28px",
+    "paragraphSize": "18px",
+    "buttonFontSize": "16px",
+    "marginBase": "1rem",
+    "paddingBase": "1rem",
+    "borderRadius": "0.5rem"
+  },
   "header": {
     "menu": [
       { "titulo": "Características", "enlace": "/#features" },
@@ -71,7 +88,7 @@
     "title": "Planes y Precios",
     "description": "Elige el plan que mejor se adapte a las necesidades de tu negocio.",
     "plans": [
-       {
+      {
         "name": "Básico",
         "price": "$29",
         "period": "/mes",
@@ -112,7 +129,7 @@
       }
     ]
   },
-   "contactPage": {
+  "contactPage": {
     "title": "Contáctanos",
     "description": "Estamos aquí para ayudarte. Rellena el formulario o utiliza nuestros datos de contacto.",
     "formTitle": "Envíanos un Mensaje"
