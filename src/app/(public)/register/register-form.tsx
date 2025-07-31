@@ -29,7 +29,11 @@ export function RegisterForm() {
   const handleGoogleSignIn = async () => {
     const result = await signInWithGoogle();
     if (result.success) {
-      router.push('/dashboard');
+      if (result.type === 'admin') {
+        router.push('/admin');
+      } else {
+        router.push('/dashboard');
+      }
     } else {
       setError(result.error || 'Ocurrió un error inesperado.');
     }
@@ -55,7 +59,11 @@ export function RegisterForm() {
     const result = await register(name, email, password);
 
     if (result.success) {
-      router.push('/dashboard');
+       if (result.type === 'admin') {
+        router.push('/admin');
+      } else {
+        router.push('/dashboard');
+      }
     } else {
       setError(result.error || 'No se pudo crear la cuenta.');
       setPending(false);

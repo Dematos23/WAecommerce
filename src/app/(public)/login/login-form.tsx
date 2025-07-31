@@ -29,7 +29,7 @@ export function LoginForm() {
   const handleGoogleSignIn = async () => {
     const result = await signInWithGoogle();
     if (result.success) {
-      if (result.role === 'admin') {
+      if (result.type === 'admin') {
         router.push('/admin');
       } else {
         router.push('/dashboard');
@@ -50,7 +50,7 @@ export function LoginForm() {
     const result = await login(email, password);
 
     if (result.success) {
-       if (result.role === 'admin') {
+       if (result.type === 'admin') {
         router.push('/admin');
       } else {
         router.push('/dashboard');

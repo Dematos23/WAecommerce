@@ -27,16 +27,16 @@ async function createUserInFirestore(user: FirebaseUser, name?: string) {
             photoURL: user.photoURL,
             providerId: user.providerData[0]?.providerId,
             createdAt: serverTimestamp(),
-            role: 'client', // Default role for new users
+            type: 'client', // Default type for new users
         });
     }
 }
 
-async function getUserRole(uid: string): Promise<string | null> {
+async function getUserType(uid: string): Promise<string | null> {
     const userRef = doc(db, 'users', uid);
     const docSnap = await getDoc(userRef);
     if (docSnap.exists()) {
-        return docSnap.data()?.role || 'client';
+        return docSnap.data()?.type || 'client';
     }
     return null;
 }
@@ -45,8 +45,8 @@ async function getUserRole(uid: string): Promise<string | null> {
 export async function login(email: string, password:  string) {
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    const role = await getUserRole(userCredential.user.uid);
-    return { success: true, user: userCredential.user, role };
+    const type = await getUserType(userCredential.user.uid);
+    return { success: true, user: userCredential.user, type };
   } catch (error: any) {
     return { success: false, error: error.message };
   }
@@ -57,8 +57,8 @@ export async function register(name: string, email: string, password:  string) {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         await updateProfile(userCredential.user, { displayName: name });
         await createUserInFirestore(userCredential.user, name);
-        const role = await getUserRole(userCredential.user.uid);
-        return { success: true, user: userCredential.user, role };
+        const type = await getUserType(userCredential.user.uid);
+        return { success: true, user: userCredential.user, type };
     } catch (error: any) {
         return { success: false, error: error.message };
     }
@@ -68,8 +68,8 @@ export async function signInWithGoogle() {
   try {
     const result = await signInWithPopup(auth, googleProvider);
     await createUserInFirestore(result.user);
-    const role = await getUserRole(result.user.uid);
-    return { success: true, user: result.user, role };
+    const type = await getUserType(result.user.uid);
+    return { success: true, user: result.user, type };
   } catch (error: any) {
      return { success: false, error: error.message };
   }
