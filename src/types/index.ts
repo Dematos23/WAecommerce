@@ -59,7 +59,6 @@ export interface SiteConfig {
   };
   textos: {
     mensajeBienvenida: string;
-    pieDePagina: string;
     instruccionesCheckout: string;
     descripcionHomepage: string;
     descripcionSobreNosotros: string;

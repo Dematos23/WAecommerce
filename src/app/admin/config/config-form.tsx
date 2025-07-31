@@ -28,10 +28,6 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
                             <Label htmlFor="generalNumeroWhatsApp">Número de WhatsApp (para pedidos)</Label>
                             <Input id="generalNumeroWhatsApp" name="generalNumeroWhatsApp" defaultValue={config.configuracionGeneral.numeroWhatsApp} />
                         </div>
-                         <div className="space-y-2">
-                            <Label htmlFor="textoPieDePagina">Texto del Pie de Página</Label>
-                            <Input id="textoPieDePagina" name="textoPieDePagina" defaultValue={config.textos.pieDePagina} />
-                        </div>
                     </AccordionContent>
                 </AccordionItem>
 

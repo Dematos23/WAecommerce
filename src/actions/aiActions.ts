@@ -402,8 +402,8 @@ export async function updateConfig(formData: FormData) {
           contacto: formData.get('tituloContacto') as string,
       },
       textos: {
+          ...currentConfig.textos,
           mensajeBienvenida: formData.get('textoMensajeBienvenida') as string,
-          pieDePagina: formData.get('textoPieDePagina') as string,
           instruccionesCheckout: formData.get('textoInstruccionesCheckout') as string,
           descripcionHomepage: formData.get('textoDescripcionHomepage') as string,
           descripcionSobreNosotros: formData.get('textoDescripcionSobreNosotros') as string,
