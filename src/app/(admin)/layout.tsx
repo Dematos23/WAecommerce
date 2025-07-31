@@ -2,7 +2,7 @@
 'use client';
 
 import { SidebarProvider, Sidebar, SidebarTrigger, SidebarHeader, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarInset } from "@/components/ui/sidebar";
-import { Home, Users, Settings } from "lucide-react";
+import { Home, Users, Settings, CreditCard } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { Logo } from "@/components/ui/Logo";
 import { readConfig } from "@/actions/aiActions";
@@ -53,6 +53,12 @@ function AdminSidebar() {
                         <SidebarMenuButton href="/admin/users" isActive={pathname.startsWith('/admin/users')} tooltip="Users">
                             <Users />
                             <span>Users</span>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton href="/admin/plans" isActive={pathname.startsWith('/admin/plans')} tooltip="Plans">
+                            <CreditCard />
+                            <span>Plans</span>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                     <SidebarMenuItem>
