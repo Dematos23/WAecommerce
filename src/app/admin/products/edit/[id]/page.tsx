@@ -7,6 +7,8 @@ export default async function EditProductPage({ params }: { params: { id: string
     const { id } = params;
     const products = await readProducts();
     const product = products.find(p => p.id === id);
+    const categories = [...new Set(products.map(p => p.categoria))];
+
 
     if (!product) {
         return (
@@ -20,7 +22,7 @@ export default async function EditProductPage({ params }: { params: { id: string
          <div className="container mx-auto p-4 md:p-8">
             <div className="max-w-2xl mx-auto">
                 <h1 className="text-3xl font-bold mb-6">Editar Producto</h1>
-                <ProductForm product={product} />
+                <ProductForm product={product} categories={categories} />
             </div>
         </div>
     )

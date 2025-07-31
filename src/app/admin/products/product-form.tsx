@@ -14,14 +14,17 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import Image from "next/image";
 import { X, UploadCloud } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 
-export function ProductForm({ product }: { product?: Product }) {
+export function ProductForm({ product, categories = [] }: { product?: Product, categories?: string[] }) {
   const action = product ? updateProduct : addProduct;
   const [imagesToDelete, setImagesToDelete] = useState<string[]>([]);
   const [currentImages, setCurrentImages] = useState<string[]>(product?.imagenes || []);
   const [newImagePreviews, setNewImagePreviews] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [selectedCategory, setSelectedCategory] = useState(product?.categoria || '');
+  const [isCreatingNewCategory, setIsCreatingNewCategory] = useState(false);
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -46,6 +49,17 @@ export function ProductForm({ product }: { product?: Product }) {
     setImagesToDelete(prev => [...prev, imageUrl]);
     setCurrentImages(prev => prev.filter(img => img !== imageUrl));
   };
+
+  const handleCategoryChange = (value: string) => {
+    if (value === 'create-new') {
+        setIsCreatingNewCategory(true);
+        setSelectedCategory('');
+    } else {
+        setIsCreatingNewCategory(false);
+        setSelectedCategory(value);
+    }
+  };
+
 
   return (
     <form action={action}>
@@ -88,13 +102,43 @@ export function ProductForm({ product }: { product?: Product }) {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="categoria">Categoría</Label>
-                <Input
-                  id="categoria"
-                  name="categoria"
-                  placeholder="Ej: Ropa"
-                  defaultValue={product?.categoria}
-                  required
-                />
+                 <Select
+                    name="categoria"
+                    onValueChange={handleCategoryChange}
+                    defaultValue={selectedCategory}
+                    required={!isCreatingNewCategory}
+                    disabled={isCreatingNewCategory}
+                >
+                    <SelectTrigger>
+                        <SelectValue placeholder="Seleccione una categoría..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {categories.map((cat) => (
+                            <SelectItem key={cat} value={cat}>
+                                {cat}
+                            </SelectItem>
+                        ))}
+                        <SelectItem value="create-new">
+                            Crear nueva categoría...
+                        </SelectItem>
+                    </SelectContent>
+                </Select>
+                 {isCreatingNewCategory && (
+                    <div className="flex gap-2 items-center mt-2">
+                        <Input
+                            name="new_category"
+                            placeholder="Nombre de la nueva categoría"
+                            required
+                        />
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => setIsCreatingNewCategory(false)}
+                        >
+                            Cancelar
+                        </Button>
+                    </div>
+                )}
               </div>
             </div>
             <div className="space-y-2">
