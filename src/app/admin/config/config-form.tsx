@@ -26,7 +26,7 @@ function SubmitButton() {
 }
 
 export function ConfigForm({ config }: { config: SiteConfig }) {
-    const [address, setAddress] = useState(config.contacto.direccion);
+    const [address, setAddress] = useState(config.contacto.direccion || '');
     const [mapUrl, setMapUrl] = useState("");
     const [logoPreview, setLogoPreview] = useState(config.configuracionGeneral.logoUrl);
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -66,7 +66,7 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
                          <div className="grid md:grid-cols-2 gap-4">
                              <div className="space-y-2">
                                 <Label htmlFor="generalNombreTienda">Nombre de la Tienda</Label>
-                                <Input id="generalNombreTienda" name="generalNombreTienda" defaultValue={config.configuracionGeneral.nombreTienda} />
+                                <Input id="generalNombreTienda" name="generalNombreTienda" defaultValue={config.configuracionGeneral.nombreTienda || ''} />
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="generalDisplayMode">Visualización del Encabezado</Label>
@@ -105,11 +105,11 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="generalNumeroWhatsApp">Número de WhatsApp (para pedidos)</Label>
-                            <Input id="generalNumeroWhatsApp" name="generalNumeroWhatsApp" defaultValue={config.configuracionGeneral.numeroWhatsApp} />
+                            <Input id="generalNumeroWhatsApp" name="generalNumeroWhatsApp" defaultValue={config.configuracionGeneral.numeroWhatsApp || ''} />
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="generalMensajePedidoWhatsApp">Mensaje Personalizado para Pedido de WhatsApp</Label>
-                            <Textarea id="generalMensajePedidoWhatsApp" name="generalMensajePedidoWhatsApp" defaultValue={config.configuracionGeneral.mensajePedidoWhatsApp} />
+                            <Textarea id="generalMensajePedidoWhatsApp" name="generalMensajePedidoWhatsApp" defaultValue={config.configuracionGeneral.mensajePedidoWhatsApp || ''} />
                         </div>
                     </AccordionContent>
                 </AccordionItem>
@@ -120,19 +120,19 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
                     <AccordionContent className="space-y-4 pt-4">
                          <div className="space-y-2">
                             <Label htmlFor="tituloHomepageHero">Título Principal (Hero)</Label>
-                            <Input id="tituloHomepageHero" name="tituloHomepageHero" defaultValue={config.titulos.homepageHero} />
+                            <Input id="tituloHomepageHero" name="tituloHomepageHero" defaultValue={config.titulos.homepageHero || ''} />
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="generalEslogan">Eslogan (debajo del título principal)</Label>
-                            <Input id="generalEslogan" name="generalEslogan" defaultValue={config.configuracionGeneral.eslogan} />
+                            <Input id="generalEslogan" name="generalEslogan" defaultValue={config.configuracionGeneral.eslogan || ''} />
                         </div>
                          <div className="space-y-2">
                             <Label htmlFor="textoDescripcionHomepage">Descripción (Productos Destacados)</Label>
-                            <Textarea id="textoDescripcionHomepage" name="textoDescripcionHomepage" defaultValue={config.textos.descripcionHomepage} />
+                            <Textarea id="textoDescripcionHomepage" name="textoDescripcionHomepage" defaultValue={config.textos.descripcionHomepage || ''} />
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="textoMensajeBienvenida">Mensaje de Bienvenida (Sección inferior)</Label>
-                            <Textarea id="textoMensajeBienvenida" name="textoMensajeBienvenida" defaultValue={config.textos.mensajeBienvenida} />
+                            <Textarea id="textoMensajeBienvenida" name="textoMensajeBienvenida" defaultValue={config.textos.mensajeBienvenida || ''} />
                         </div>
                     </AccordionContent>
                 </AccordionItem>
@@ -145,7 +145,7 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
                             <h4 className="font-medium text-lg">Página de Catálogo</h4>
                              <div className="space-y-2">
                                 <Label htmlFor="tituloCatalogo">Título del Catálogo</Label>
-                                <Input id="tituloCatalogo" name="tituloCatalogo" defaultValue={config.titulos.catalogo} />
+                                <Input id="tituloCatalogo" name="tituloCatalogo" defaultValue={config.titulos.catalogo || ''} />
                             </div>
                         </div>
                         <div className="p-4 border rounded-md space-y-4">
@@ -153,27 +153,27 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
                             <div className="grid md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <Label htmlFor="tituloCarrito">Título del Carrito</Label>
-                                    <Input id="tituloCarrito" name="tituloCarrito" defaultValue={config.titulos.carrito} />
+                                    <Input id="tituloCarrito" name="tituloCarrito" defaultValue={config.titulos.carrito || ''} />
                                 </div>
                                 <div className="space-y-2">
                                     <Label htmlFor="tituloCheckout">Título del Checkout</Label>
-                                    <Input id="tituloCheckout" name="tituloCheckout" defaultValue={config.titulos.checkout} />
+                                    <Input id="tituloCheckout" name="tituloCheckout" defaultValue={config.titulos.checkout || ''} />
                                 </div>
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="textoInstruccionesCheckout">Instrucciones del Checkout</Label>
-                                <Textarea id="textoInstruccionesCheckout" name="textoInstruccionesCheckout" defaultValue={config.textos.instruccionesCheckout} />
+                                <Textarea id="textoInstruccionesCheckout" name="textoInstruccionesCheckout" defaultValue={config.textos.instruccionesCheckout || ''} />
                             </div>
                         </div>
                          <div className="p-4 border rounded-md space-y-4">
                             <h4 className="font-medium text-lg">Página Sobre Nosotros</h4>
                             <div className="space-y-2">
                                 <Label htmlFor="tituloSobreNosotros">Título de Sobre Nosotros</Label>
-                                <Input id="tituloSobreNosotros" name="tituloSobreNosotros" defaultValue={config.titulos.sobreNosotros} />
+                                <Input id="tituloSobreNosotros" name="tituloSobreNosotros" defaultValue={config.titulos.sobreNosotros || ''} />
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="textoDescripcionSobreNosotros">Descripción de Sobre Nosotros</Label>
-                                <Textarea id="textoDescripcionSobreNosotros" name="textoDescripcionSobreNosotros" defaultValue={config.textos.descripcionSobreNosotros} />
+                                <Textarea id="textoDescripcionSobreNosotros" name="textoDescripcionSobreNosotros" defaultValue={config.textos.descripcionSobreNosotros || ''} />
                             </div>
                         </div>
                     </AccordionContent>
@@ -185,25 +185,25 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
                     <AccordionContent className="space-y-4 pt-4">
                         <div className="space-y-2">
                             <Label htmlFor="tituloContacto">Título de la Página de Contacto</Label>
-                            <Input id="tituloContacto" name="tituloContacto" defaultValue={config.titulos.contacto} />
+                            <Input id="tituloContacto" name="tituloContacto" defaultValue={config.titulos.contacto || ''} />
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="textoInfoContacto">Texto introductorio de Contacto</Label>
-                            <Textarea id="textoInfoContacto" name="textoInfoContacto" defaultValue={config.textos.infoContacto} />
+                            <Textarea id="textoInfoContacto" name="textoInfoContacto" defaultValue={config.textos.infoContacto || ''} />
                         </div>
                         <div className="grid md:grid-cols-2 gap-4">
                            <div className="space-y-2">
                                 <Label htmlFor="contactoTelefono">Teléfono</Label>
-                                <Input id="contactoTelefono" name="contactoTelefono" defaultValue={config.contacto.telefono} />
+                                <Input id="contactoTelefono" name="contactoTelefono" defaultValue={config.contacto.telefono || ''} />
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="contactoCorreo">Correo Electrónico</Label>
-                                <Input id="contactoCorreo" name="contactoCorreo" type="email" defaultValue={config.contacto.correo} />
+                                <Input id="contactoCorreo" name="contactoCorreo" type="email" defaultValue={config.contacto.correo || ''} />
                             </div>
                         </div>
                          <div className="space-y-2">
                             <Label htmlFor="contactoHorarioAtencion">Horario de Atención</Label>
-                            <Input id="contactoHorarioAtencion" name="contactoHorarioAtencion" defaultValue={config.contacto.horarioAtencion} />
+                            <Input id="contactoHorarioAtencion" name="contactoHorarioAtencion" defaultValue={config.contacto.horarioAtencion || ''} />
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="contactoDireccion">Dirección</Label>
@@ -238,5 +238,5 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
                 <SubmitButton />
             </div>
         </form>
-    )
+    );
 }
