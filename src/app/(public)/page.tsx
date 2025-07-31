@@ -35,11 +35,6 @@ export default async function SaaSLandingPage() {
                   <ChevronRight className="ml-2 h-5 w-5"/>
                 </Link>
               </Button>
-              <Button asChild size="lg" variant="link" className="font-bold text-lg text-primary">
-                <Link href={homepage.hero.ctaSecondary.link}>
-                  {homepage.hero.ctaSecondary.text}
-                </Link>
-              </Button>
             </div>
           </div>
         </section>

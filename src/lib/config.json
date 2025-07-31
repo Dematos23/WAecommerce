@@ -52,7 +52,7 @@
     "hero": {
       "title": "Lanza tu Tienda Online en Minutos, no en Meses.",
       "description": "Kima te da las herramientas para crear y gestionar tu e-commerce de forma rápida, fácil y sin comisiones por venta.",
-      "ctaPrimary": { "text": "Empezar Gratis", "link": "/register" },
+      "ctaPrimary": { "text": "Empieza ahora", "link": "/register" },
       "ctaSecondary": { "text": "Login", "link": "/login" }
     },
     "features": {
