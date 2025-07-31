@@ -336,7 +336,9 @@ export async function readConfig(): Promise<SiteConfig> {
         displayMode: 'both',
       },
       productCard: {
-        textAlign: 'left',
+        nameAlign: 'left',
+        descriptionAlign: 'left',
+        priceAlign: 'left',
         buttonStyle: 'default',
         shadow: 'md',
       }
@@ -407,7 +409,9 @@ export async function readConfig(): Promise<SiteConfig> {
         displayMode: "both"
       },
       productCard: {
-        textAlign: 'left',
+        nameAlign: 'left',
+        descriptionAlign: 'left',
+        priceAlign: 'left',
         buttonStyle: 'default',
         shadow: 'md',
       }
@@ -584,7 +588,9 @@ export async function updateTheme(formData: FormData) {
             darkColorAcento: formData.get('darkColorAcento') as string,
         },
         productCard: {
-            textAlign: formData.get('productCardTextAlign') as 'left' | 'center',
+            nameAlign: formData.get('productCardNameAlign') as 'left' | 'center',
+            descriptionAlign: formData.get('productCardDescriptionAlign') as 'left' | 'center',
+            priceAlign: formData.get('productCardPriceAlign') as 'left' | 'center',
             buttonStyle: formData.get('productCardButtonStyle') as 'default' | 'outline',
             shadow: formData.get('productCardShadow') as 'none' | 'sm' | 'md' | 'lg',
         }

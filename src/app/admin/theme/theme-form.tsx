@@ -7,7 +7,7 @@ import { updateTheme } from "@/actions/aiActions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Save, Sun, Moon, Palette, ShoppingBag, Eye } from "lucide-react";
+import { Save, Sun, Moon, Palette, ShoppingBag, Eye, AlignLeft, AlignCenter } from "lucide-react";
 import { useState, useMemo } from "react";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -95,18 +95,29 @@ export function ThemeForm({ config }: { config: SiteConfig }) {
                      <AccordionTrigger className="text-xl font-semibold flex items-center gap-2"><ShoppingBag /> Apariencia de la Tarjeta de Producto</AccordionTrigger>
                      <AccordionContent className="space-y-4 pt-4">
                         <div className="grid lg:grid-cols-2 gap-8 items-center">
-                            <div className="space-y-4">
-                                <div className="space-y-2">
-                                    <Label htmlFor="productCardTextAlign">Alineación del Texto</Label>
-                                    <Select name="productCardTextAlign" defaultValue={productCard.textAlign} onValueChange={(v) => setProductCard(p => ({...p, textAlign: v as any}))}>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Seleccione alineación..." />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="left">Izquierda</SelectItem>
-                                            <SelectItem value="center">Centro</SelectItem>
-                                        </SelectContent>
-                                    </Select>
+                            <div className="space-y-6">
+                                <div>
+                                     <Label>Alineación del Texto</Label>
+                                     <div className="space-y-3 mt-2">
+                                        <AlignmentSelect 
+                                            label="Nombre"
+                                            name="productCardNameAlign"
+                                            value={productCard.nameAlign}
+                                            onValueChange={(v) => setProductCard(p => ({...p, nameAlign: v as any}))}
+                                        />
+                                         <AlignmentSelect 
+                                            label="Descripción"
+                                            name="productCardDescriptionAlign"
+                                            value={productCard.descriptionAlign}
+                                            onValueChange={(v) => setProductCard(p => ({...p, descriptionAlign: v as any}))}
+                                        />
+                                         <AlignmentSelect 
+                                            label="Precio"
+                                            name="productCardPriceAlign"
+                                            value={productCard.priceAlign}
+                                            onValueChange={(v) => setProductCard(p => ({...p, priceAlign: v as any}))}
+                                        />
+                                     </div>
                                 </div>
                                 <div className="space-y-2">
                                     <Label htmlFor="productCardButtonStyle">Estilo del Botón</Label>
@@ -147,6 +158,23 @@ export function ThemeForm({ config }: { config: SiteConfig }) {
                 <SubmitButton />
             </div>
         </form>
+    )
+}
+
+function AlignmentSelect({label, name, value, onValueChange}: {label: string, name: string, value: 'left' | 'center', onValueChange: (value: string) => void}) {
+    return (
+        <div className="flex items-center justify-between">
+            <Label htmlFor={name} className="text-muted-foreground">{label}</Label>
+             <Select name={name} value={value} onValueChange={onValueChange}>
+                <SelectTrigger className="w-[140px]">
+                    <SelectValue placeholder="Seleccione..." />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectItem value="left"><span className="flex items-center gap-2"><AlignLeft/> Izquierda</span></SelectItem>
+                    <SelectItem value="center"><span className="flex items-center gap-2"><AlignCenter/> Centro</span></SelectItem>
+                </SelectContent>
+            </Select>
+        </div>
     )
 }
 
@@ -255,10 +283,16 @@ function ProductCardPreview({ productCard }: { productCard: SiteConfig['productC
         }
     );
 
-    const contentClasses = cn("flex-1 p-4", {
-        "text-center": productCard.textAlign === 'center',
-        "text-left": productCard.textAlign === 'left'
+    const nameClasses = cn("h-4 w-3/4 rounded-sm bg-primary/80 mb-2", {
+      "mx-auto": productCard.nameAlign === 'center'
     });
+    const descriptionClasses = cn("space-y-1", {
+        "mx-auto text-center": productCard.descriptionAlign === 'center',
+    });
+     const priceClasses = cn("h-6 w-1/3 rounded-sm bg-primary mt-4", {
+        "mx-auto": productCard.priceAlign === 'center'
+    });
+
 
     return (
         <div className={cardClasses}>
@@ -267,15 +301,13 @@ function ProductCardPreview({ productCard }: { productCard: SiteConfig['productC
                     <Eye className="h-8 w-8 text-muted-foreground" />
                 </div>
             </CardHeader>
-            <CardContent className={contentClasses}>
-                <div className="h-4 w-3/4 rounded-sm bg-primary/80 mb-2" />
-                <div className="space-y-1">
+            <CardContent className="flex-1 p-4">
+                <div className={nameClasses} />
+                <div className={descriptionClasses}>
                     <div className="h-3 w-full rounded-sm bg-muted-foreground/50"/>
                     <div className="h-3 w-5/6 rounded-sm bg-muted-foreground/50"/>
                 </div>
-                <div className={cn("h-6 w-1/3 rounded-sm bg-primary mt-4", {
-                    "mx-auto": productCard.textAlign === 'center'
-                })} />
+                <div className={priceClasses} />
             </CardContent>
             <CardFooter className="p-4 pt-0">
                 <Button className="w-full" variant={productCard.buttonStyle}>

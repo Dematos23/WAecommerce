@@ -1,3 +1,4 @@
+
 {
   "variablesCss": {
     "colorPrimario": "#7bbaf3",
@@ -59,7 +60,9 @@
     "displayMode": "both"
   },
   "productCard": {
-    "textAlign": "left",
+    "nameAlign": "left",
+    "descriptionAlign": "left",
+    "priceAlign": "left",
     "buttonStyle": "default",
     "shadow": "md"
   }

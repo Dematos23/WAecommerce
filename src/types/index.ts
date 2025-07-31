@@ -81,7 +81,9 @@ export interface SiteConfig {
     displayMode?: 'logo' | 'name' | 'both';
   };
   productCard: {
-    textAlign: 'left' | 'center';
+    nameAlign: 'left' | 'center';
+    descriptionAlign: 'left' | 'center';
+    priceAlign: 'left' | 'center';
     buttonStyle: 'default' | 'outline';
     shadow: 'none' | 'sm' | 'md' | 'lg';
   };

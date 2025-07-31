@@ -71,9 +71,17 @@ export function ProductCard({ product }: ProductCardProps) {
     }
   );
 
-  const contentClasses = cn("flex-1 p-6", {
-    "text-center": config.productCard.textAlign === 'center',
-    "text-left": config.productCard.textAlign === 'left'
+  const nameClasses = cn("mb-2 text-lg font-semibold", {
+    "text-center": config.productCard.nameAlign === 'center',
+    "text-left": config.productCard.nameAlign === 'left'
+  });
+  const descriptionClasses = cn("text-sm text-muted-foreground mb-4 h-10 overflow-hidden", {
+    "text-center": config.productCard.descriptionAlign === 'center',
+    "text-left": config.productCard.descriptionAlign === 'left'
+  });
+  const priceClasses = cn("text-xl font-bold text-primary", {
+    "text-center": config.productCard.priceAlign === 'center',
+    "text-left": config.productCard.priceAlign === 'left'
   });
 
   return (
@@ -94,12 +102,12 @@ export function ProductCard({ product }: ProductCardProps) {
           </Link>
         </div>
       </CardHeader>
-      <CardContent className={contentClasses}>
-        <CardTitle className="mb-2 text-lg font-semibold">{product.nombre}</CardTitle>
-        <p className="text-sm text-muted-foreground mb-4 h-10 overflow-hidden">
+      <CardContent className="p-6 flex-1 flex flex-col">
+        <CardTitle className={nameClasses}>{product.nombre}</CardTitle>
+        <div className={descriptionClasses}>
           {product.descripcion || `Descubre más sobre ${product.nombre}.`}
-        </p>
-        <p className="text-xl font-bold text-primary">
+        </div>
+        <p className={priceClasses}>
           {formatCurrency(product.precio)}
         </p>
       </CardContent>
