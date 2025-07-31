@@ -208,3 +208,15 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
             </div>
         </form>
     )
+}
+
+function SubmitButton() {
+    const { pending } = useFormStatus();
+
+    return (
+        <Button type="submit" disabled={pending} size="lg">
+            <Save className="mr-2 h-4 w-4" />
+            {pending ? "Guardando..." : "Guardar Cambios"}
+        </Button>
+    )
+}
