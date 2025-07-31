@@ -45,12 +45,12 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
             const file = event.target.files[0];
             setLogoPreview(URL.createObjectURL(file));
         } else {
-             setLogoPreview(config.configuracionGeneral.logoUrl);
+             setLogoPreview(config.configuracionGeneral.logoUrl || '');
         }
     };
 
     const handleRemoveLogo = () => {
-        setLogoPreview(config.configuracionGeneral.logoUrl);
+        setLogoPreview(config.configuracionGeneral.logoUrl || '');
         if (fileInputRef.current) {
             fileInputRef.current.value = "";
         }
@@ -87,7 +87,7 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
                              {logoPreview && (
                                 <div className="my-2 relative w-fit">
                                     <Image src={logoPreview} alt="Logo preview" width={100} height={100} className="rounded-md border p-2" />
-                                     {logoPreview !== config.configuracionGeneral.logoUrl && (
+                                     {logoPreview !== (config.configuracionGeneral.logoUrl || '') && (
                                         <Button
                                             type="button"
                                             variant="destructive"
@@ -216,18 +216,22 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
                         </div>
                         <div>
                              <Label>Vista Previa del Mapa</Label>
-                             <div className="mt-2 overflow-hidden rounded-lg h-64 w-full border">
-                                <iframe
-                                    key={mapUrl}
-                                    src={mapUrl}
-                                    width="100%"
-                                    height="100%"
-                                    style={{ border: 0 }}
-                                    allowFullScreen={false}
-                                    loading="lazy"
-                                    referrerPolicy="no-referrer-when-downgrade"
-                                    title="Vista previa del mapa"
-                                ></iframe>
+                             <div className="mt-2 overflow-hidden rounded-lg h-64 w-full border flex items-center justify-center bg-secondary/30">
+                                {mapUrl ? (
+                                    <iframe
+                                        key={mapUrl}
+                                        src={mapUrl}
+                                        width="100%"
+                                        height="100%"
+                                        style={{ border: 0 }}
+                                        allowFullScreen={false}
+                                        loading="lazy"
+                                        referrerPolicy="no-referrer-when-downgrade"
+                                        title="Vista previa del mapa"
+                                    ></iframe>
+                                ) : (
+                                    <p className="text-muted-foreground">Escribe una dirección para ver el mapa.</p>
+                                )}
                             </div>
                         </div>
                     </AccordionContent>
