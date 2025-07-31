@@ -15,15 +15,11 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
 
     return (
         <form action={updateConfig} className="space-y-8">
-            <Accordion type="multiple" defaultValue={['general']} className="w-full">
+            <Accordion type="multiple" defaultValue={['general', 'homepage']} className="w-full">
                 {/* General Settings */}
                 <AccordionItem value="general">
                     <AccordionTrigger className="text-xl font-semibold">Configuración General</AccordionTrigger>
                     <AccordionContent className="space-y-4 pt-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="generalEslogan">Eslogan</Label>
-                            <Input id="generalEslogan" name="generalEslogan" defaultValue={config.configuracionGeneral.eslogan} />
-                        </div>
                         <div className="space-y-2">
                             <Label htmlFor="generalNumeroWhatsApp">Número de WhatsApp (para pedidos)</Label>
                             <Input id="generalNumeroWhatsApp" name="generalNumeroWhatsApp" defaultValue={config.configuracionGeneral.numeroWhatsApp} />
@@ -38,6 +34,10 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
                          <div className="space-y-2">
                             <Label htmlFor="tituloHomepageHero">Título Principal (Hero)</Label>
                             <Input id="tituloHomepageHero" name="tituloHomepageHero" defaultValue={config.titulos.homepageHero} />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="generalEslogan">Eslogan (debajo del título principal)</Label>
+                            <Input id="generalEslogan" name="generalEslogan" defaultValue={config.configuracionGeneral.eslogan} />
                         </div>
                          <div className="space-y-2">
                             <Label htmlFor="textoDescripcionHomepage">Descripción (Productos Destacados)</Label>

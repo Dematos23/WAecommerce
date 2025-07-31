@@ -30,7 +30,7 @@
     }
   ],
   "titulos": {
-    "homepageHero": null,
+    "homepageHero": "TiendaExpress: Tu tienda, a un clic.",
     "catalogo": null,
     "carrito": null,
     "checkout": null,
@@ -38,9 +38,9 @@
     "contacto": null
   },
   "textos": {
-    "mensajeBienvenida": null,
+    "mensajeBienvenida": "Conócenos!",
     "instruccionesCheckout": null,
-    "descripcionHomepage": null,
+    "descripcionHomepage": "Rápido, fácil y a tu puerta.",
     "descripcionSobreNosotros": null,
     "infoContacto": null
   },
@@ -51,7 +51,7 @@
     "horarioAtencion": null
   },
   "configuracionGeneral": {
-    "numeroWhatsApp": "1234567890",
+    "numeroWhatsApp": "984092034",
     "logoUrl": "/logo.svg",
     "eslogan": "Rápido, fácil y a tu puerta."
   }
