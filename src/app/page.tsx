@@ -13,7 +13,7 @@ export default async function Home() {
 
   return (
     <div className="flex flex-col">
-      <section className="bg-card py-20 md:py-32">
+      <section className="bg-secondary/30 py-20 md:py-32">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-primary-foreground mb-4 font-headline">
             {config.titulos.homepageHero}

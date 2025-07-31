@@ -1,10 +1,10 @@
 {
   "variablesCss": {
-    "colorPrimario": "#9ec3e6",
+    "colorPrimario": "#cce6ff",
     "colorSecundario": "#eb3e05",
-    "colorFondo": "#f3f5f6",
-    "colorTexto": "#3f4750",
-    "colorAcento": "#6d28d9",
+    "colorFondo": "#ffffff",
+    "colorTexto": "#22262a",
+    "colorAcento": "#2fe487",
     "darkColorPrimario": "#7bbaf3",
     "darkColorSecundario": "#b1a2e8",
     "darkColorFondo": "#2b323c",
