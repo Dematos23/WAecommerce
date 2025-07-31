@@ -4,12 +4,7 @@
     "colorSecundario": "#b1a2e8",
     "colorFondo": "#ffffff",
     "colorTexto": "#22262a",
-    "colorAcento": "#2fe487",
-    "darkColorPrimario": "#7bbaf3",
-    "darkColorSecundario": "#b1a2e8",
-    "darkColorFondo": "#2b323c",
-    "darkColorTexto": "#f8f9fa",
-    "darkColorAcento": "#a78bfa"
+    "colorAcento": "#2fe487"
   },
   "menus": [
     {

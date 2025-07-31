@@ -7,7 +7,7 @@ import { updateTheme } from "@/actions/aiActions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Save, Sun, Moon, Palette, ShoppingBag, Eye, AlignLeft, AlignCenter, Image as ImageIcon } from "lucide-react";
+import { Save, Palette, ShoppingBag, Eye, AlignLeft, AlignCenter, Image as ImageIcon } from "lucide-react";
 import { useState, useMemo } from "react";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -34,17 +34,6 @@ export function ThemeForm({ config }: { config: SiteConfig }) {
         '--muted-foreground': '#6b7280'
     }), [colors]);
 
-     const darkThemePreviewColors = useMemo(() => ({
-        '--background': colors.darkColorFondo,
-        '--foreground': colors.darkColorTexto,
-        '--primary': colors.darkColorPrimario,
-        '--secondary': colors.darkColorSecundario,
-        '--accent': colors.darkColorAcento,
-        '--card': '#1f2937',
-        '--card-foreground': colors.darkColorTexto,
-        '--muted-foreground': '#9ca3af'
-    }), [colors]);
-
 
     return (
         <form action={updateTheme} className="space-y-8">
@@ -65,27 +54,13 @@ export function ThemeForm({ config }: { config: SiteConfig }) {
                                         <ColorInput label="Texto" name="colorTexto" value={colors.colorTexto} onChange={handleColorChange} />
                                     </div>
                                 </div>
-                                <div>
-                                    <h4 className="font-medium text-lg mb-3">Tema Oscuro</h4>
-                                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                        <ColorInput label="Primario (Oscuro)" name="darkColorPrimario" value={colors.darkColorPrimario} onChange={handleColorChange} />
-                                        <ColorInput label="Secundario (Oscuro)" name="darkColorSecundario" value={colors.darkColorSecundario} onChange={handleColorChange} />
-                                        <ColorInput label="Acento (Oscuro)" name="darkColorAcento" value={colors.darkColorAcento} onChange={handleColorChange} />
-                                        <ColorInput label="Fondo (Oscuro)" name="darkColorFondo" value={colors.darkColorFondo} onChange={handleColorChange} />
-                                        <ColorInput label="Texto (Oscuro)" name="darkColorTexto" value={colors.darkColorTexto} onChange={handleColorChange} />
-                                    </div>
-                                </div>
                             </div>
 
                             {/* Previews */}
                             <div className="space-y-6">
                                 <div>
-                                    <h4 className="font-medium text-lg mb-3 flex items-center gap-2"><Sun className="h-5 w-5"/> Vista Previa (Claro)</h4>
+                                    <h4 className="font-medium text-lg mb-3 flex items-center gap-2"> Vista Previa</h4>
                                     <ThemePreview colors={lightThemePreviewColors} />
-                                </div>
-                                <div>
-                                    <h4 className="font-medium text-lg mb-3 flex items-center gap-2"><Moon className="h-5 w-5" /> Vista Previa (Oscuro)</h4>
-                                    <ThemePreview colors={darkThemePreviewColors} />
                                 </div>
                             </div>
                         </div>
@@ -341,7 +316,8 @@ function ProductCardPreview({ productCard }: { productCard: SiteConfig['productC
                 order.splice(2, 0, 'image');
                 return order.map(key => components[key]);
             case 'afterPrice':
-                return [...order.map(key => components[key]), components.image];
+                order.splice(3,0, 'image');
+                return order.map(key => components[key]);
             default:
                 return [components.image, ...order.map(key => components[key])];
         }

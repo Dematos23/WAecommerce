@@ -291,7 +291,6 @@ export async function readConfig(): Promise<SiteConfig> {
     const configData = await fs.readFile(configFilePath, "utf-8");
     const config = JSON.parse(configData);
     
-    // Fallback for potentially null values to avoid errors in components
     const defaultConfig: SiteConfig = {
       variablesCss: {
         colorPrimario: "#113f69",
@@ -299,11 +298,6 @@ export async function readConfig(): Promise<SiteConfig> {
         colorFondo: "#f3f5f6",
         colorTexto: "#3f4750",
         colorAcento: "#6d28d9",
-        darkColorPrimario: "#7bbaf3",
-        darkColorSecundario: "#b1a2e8",
-        darkColorFondo: "#2b323c",
-        darkColorTexto: "#f8f9fa",
-        darkColorAcento: "#a78bfa",
       },
       menus: [],
       titulos: {
@@ -345,7 +339,6 @@ export async function readConfig(): Promise<SiteConfig> {
       }
     };
 
-    // Deep merge to apply defaults only where needed
     return {
         ...defaultConfig,
         ...config,
@@ -359,8 +352,6 @@ export async function readConfig(): Promise<SiteConfig> {
     };
   } catch (error) {
     console.error("Error reading config file, returning defaults:", error);
-    // In case of a file read error, return a fully default configuration
-    // This isn't ideal but prevents the site from crashing.
     const defaultConfig: SiteConfig = {
       variablesCss: {
         colorPrimario: "#113f69",
@@ -368,11 +359,6 @@ export async function readConfig(): Promise<SiteConfig> {
         colorFondo: "#f3f5f6",
         colorTexto: "#3f4750",
         colorAcento: "#6d28d9",
-        darkColorPrimario: "#7bbaf3",
-        darkColorSecundario: "#b1a2e8",
-        darkColorFondo: "#2b323c",
-        darkColorTexto: "#f8f9fa",
-        darkColorAcento: "#a78bfa",
       },
       menus: [
         { titulo: "Inicio", enlace: "/" },
@@ -466,40 +452,29 @@ async function updateCssVariables(config: SiteConfig) {
     try {
         let cssContent = await fs.readFile(globalsCssPath, 'utf8');
 
-        const updateTheme = (themeSelector: string, themeColors: any) => {
-            const themeRegex = new RegExp(`(${themeSelector}\\s*{[\\s\\S]*?})`, 'g');
-            
-            return cssContent.replace(themeRegex, (match) => {
-                let updatedTheme = match;
-                for (const [key, value] of Object.entries(themeColors)) {
-                    if (value) {
-                       const hslValue = hexToHsl(value as string);
-                       const propRegex = new RegExp(`(--${key}:\\s*.*?);`);
-                       if (propRegex.test(updatedTheme)) {
-                          updatedTheme = updatedTheme.replace(propRegex, `--${key}: ${hslValue};`);
-                       }
-                    }
+        const themeRegex = /(:root\s*{[\s\S]*?})/;
+        
+        cssContent = cssContent.replace(themeRegex, (match) => {
+            let updatedTheme = match;
+            const colors = {
+                'background': config.variablesCss.colorFondo,
+                'foreground': config.variablesCss.colorTexto,
+                'primary': config.variablesCss.colorPrimario,
+                'secondary': config.variablesCss.colorSecundario,
+                'accent': config.variablesCss.colorAcento,
+            };
+            for (const [key, value] of Object.entries(colors)) {
+                if (value) {
+                   const hslValue = hexToHsl(value as string);
+                   const propRegex = new RegExp(`(--${key}:\\s*.*?);`);
+                   if (propRegex.test(updatedTheme)) {
+                      updatedTheme = updatedTheme.replace(propRegex, `--${key}: ${hslValue};`);
+                   }
                 }
-                return updatedTheme;
-            });
-        };
-
-        cssContent = updateTheme(':root', {
-            'background': config.variablesCss.colorFondo,
-            'foreground': config.variablesCss.colorTexto,
-            'primary': config.variablesCss.colorPrimario,
-            'secondary': config.variablesCss.colorSecundario,
-            'accent': config.variablesCss.colorAcento,
+            }
+            return updatedTheme;
         });
         
-        cssContent = updateTheme('.dark', {
-            'background': config.variablesCss.darkColorFondo,
-            'foreground': config.variablesCss.darkColorTexto,
-            'primary': config.variablesCss.darkColorPrimario,
-            'secondary': config.variablesCss.darkColorSecundario,
-            'accent': config.variablesCss.darkColorAcento,
-        });
-
         await fs.writeFile(globalsCssPath, cssContent, 'utf8');
 
     } catch (error) {
@@ -583,11 +558,6 @@ export async function updateTheme(formData: FormData) {
             colorFondo: formData.get('colorFondo') as string,
             colorTexto: formData.get('colorTexto') as string,
             colorAcento: formData.get('colorAcento') as string,
-            darkColorPrimario: formData.get('darkColorPrimario') as string,
-            darkColorSecundario: formData.get('darkColorSecundario') as string,
-            darkColorFondo: formData.get('darkColorFondo') as string,
-            darkColorTexto: formData.get('darkColorTexto') as string,
-            darkColorAcento: formData.get('darkColorAcento') as string,
         },
         productCard: {
             nameAlign: formData.get('productCardNameAlign') as 'left' | 'center',
@@ -605,5 +575,3 @@ export async function updateTheme(formData: FormData) {
     revalidatePath('/', 'layout');
     redirect('/admin/theme');
 }
-
-    

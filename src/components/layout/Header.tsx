@@ -15,7 +15,6 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import type { SiteConfig } from '@/types';
-import { ModeToggle } from './ModeToggle';
 
 export function Header({ config }: { config: SiteConfig }) {
   const pathname = usePathname();
@@ -48,7 +47,6 @@ export function Header({ config }: { config: SiteConfig }) {
           </nav>
           <div className="flex flex-1 justify-end items-center gap-4">
              <CartIcon config={config} />
-             <ModeToggle />
           </div>
         </div>
 
@@ -99,7 +97,6 @@ export function Header({ config }: { config: SiteConfig }) {
            {/* Cart Icon (Right) */}
             <div className="flex items-center gap-2">
                 <CartIcon config={config} />
-                <ModeToggle />
             </div>
         </div>
       </div>

@@ -1,4 +1,3 @@
-
 [
   {
     "id": "prod_001",
@@ -7,7 +6,7 @@
     "precio": 49.99,
     "categoria": "Hogar",
     "imagenes": [
-      "/images/prod_001.png"
+      "/images/prod_001/1753932098824_0.webp"
     ],
     "destacado": true
   },
@@ -18,7 +17,7 @@
     "precio": 89.9,
     "categoria": "Tecnología",
     "imagenes": [
-      "/images/prod_002.png"
+      "/images/prod_002/1753932162136_0.webp"
     ],
     "destacado": true
   },
@@ -29,7 +28,7 @@
     "precio": 35.5,
     "categoria": "Accesorios",
     "imagenes": [
-      "/images/prod_003.png"
+      "/images/prod_003/1753932180108_0.jpg"
     ],
     "destacado": true
   },
@@ -42,7 +41,7 @@
     "imagenes": [
       "/images/prod_004.png"
     ],
-    "destacado": true
+    "destacado": false
   },
   {
     "id": "prod_005",
@@ -72,18 +71,22 @@
     "id": "prod_007",
     "nombre": "Smartwatch Fitness Tracker",
     "descripcion": "Monitoriza tu actividad diaria, ritmo cardíaco y sueño. Resistente al agua y compatible con iOS/Android.",
-    "precio": 75.00,
+    "precio": 75,
     "categoria": "Tecnología",
-    "imagenes": ["https://placehold.co/400x400.png"],
-    "destacado": true
+    "imagenes": [
+      "https://placehold.co/400x400.png"
+    ],
+    "destacado": false
   },
   {
     "id": "prod_008",
     "nombre": "Silla Ergonómica de Oficina",
     "descripcion": "Soporte lumbar ajustable, reposabrazos y altura regulable para máximo confort durante tu jornada.",
-    "precio": 150.00,
+    "precio": 150,
     "categoria": "Hogar",
-    "imagenes": ["https://placehold.co/400x400.png"],
+    "imagenes": [
+      "https://placehold.co/400x400.png"
+    ],
     "destacado": false
   },
   {
@@ -92,16 +95,20 @@
     "descripcion": "Hecha 100% de algodón con cierre ajustable. Un accesorio versátil para cualquier ocasión.",
     "precio": 15.99,
     "categoria": "Accesorios",
-    "imagenes": ["https://placehold.co/400x400.png"],
+    "imagenes": [
+      "https://placehold.co/400x400.png"
+    ],
     "destacado": false
   },
   {
     "id": "prod_010",
     "nombre": "Mouse Inalámbrico",
     "descripcion": "Diseño ambidiestro y conexión estable. Perfecto para trabajar o navegar con precisión.",
-    "precio": 22.50,
+    "precio": 22.5,
     "categoria": "Tecnología",
-    "imagenes": ["https://placehold.co/400x400.png"],
+    "imagenes": [
+      "https://placehold.co/400x400.png"
+    ],
     "destacado": false
   }
 ]

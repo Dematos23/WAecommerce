@@ -7,7 +7,6 @@ import { CartProvider } from '@/components/cart/CartProvider';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { readConfig } from '@/actions/aiActions';
-import { ThemeProvider } from '@/components/layout/ThemeProvider';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
@@ -24,7 +23,7 @@ export default async function RootLayout({
   const config = await readConfig();
   
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -39,21 +38,14 @@ export default async function RootLayout({
           inter.variable
         )}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <CartProvider>
-            <div className="relative flex flex-col bg-background min-h-screen">
-              <Header config={config} />
-              <main className="flex-1">{children}</main>
-              <Footer config={config} />
-            </div>
-            <Toaster />
-          </CartProvider>
-        </ThemeProvider>
+        <CartProvider>
+          <div className="relative flex flex-col bg-background min-h-screen">
+            <Header config={config} />
+            <main className="flex-1">{children}</main>
+            <Footer config={config} />
+          </div>
+          <Toaster />
+        </CartProvider>
       </body>
     </html>
   );
