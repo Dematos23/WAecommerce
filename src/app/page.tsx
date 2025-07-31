@@ -39,13 +39,13 @@ export default async function Home() {
 
       {config.secondaryHero?.enabled && (
         <section className="bg-card">
-          <div className="container mx-auto px-4 relative pb-12">
+          <div className="container mx-auto px-4 relative">
             <div className="grid md:grid-cols-2">
-              <div className="flex flex-col justify-center py-12 md:py-24 pr-8">
-                 <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">{config.secondaryHero.title}</h2>
-                 <p className="text-muted-foreground text-lg mb-6">{config.secondaryHero.description}</p>
+              <div className="py-12 md:py-24 pr-8 flex flex-col justify-center">
+                <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">{config.secondaryHero.title}</h2>
+                <p className="text-muted-foreground text-lg mb-6">{config.secondaryHero.description}</p>
               </div>
-              <div className="relative min-h-[300px] md:min-h-full">
+              <div className="relative h-64 md:h-auto min-h-[300px]">
                  <Image 
                     src={config.secondaryHero.imageUrl || "https://placehold.co/600x600.png"}
                     alt={config.secondaryHero.title || "Hero image"}
@@ -54,8 +54,8 @@ export default async function Home() {
                  />
               </div>
             </div>
-             <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10">
-                <Button asChild size="lg" className="shadow-lg">
+             <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-10">
+                <Button asChild size="lg" className="shadow-lg hover:scale-105 transition-transform">
                     <Link href={config.secondaryHero.ctaLink || "#"}>
                         <ShoppingBag className="mr-2" /> {config.secondaryHero.ctaText || "Comprar Ahora"}
                     </Link>
