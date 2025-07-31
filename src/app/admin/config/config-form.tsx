@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useFormStatus } from "react-dom";
 import type { SiteConfig } from "@/types";
 import { updateConfig } from "@/actions/aiActions";
@@ -10,13 +10,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Save, Home, FileCog, Phone, Store } from "lucide-react";
+import { Save, Home, FileCog, Phone, Store, X } from "lucide-react";
 import Image from "next/image";
 
 export function ConfigForm({ config }: { config: SiteConfig }) {
     const [address, setAddress] = useState(config.contacto.direccion);
     const [mapUrl, setMapUrl] = useState("");
     const [logoPreview, setLogoPreview] = useState(config.configuracionGeneral.logoUrl);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         const encodedAddress = encodeURIComponent(address);
@@ -27,6 +28,15 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
         if (event.target.files && event.target.files[0]) {
             const file = event.target.files[0];
             setLogoPreview(URL.createObjectURL(file));
+        } else {
+             setLogoPreview(config.configuracionGeneral.logoUrl);
+        }
+    };
+
+    const handleRemoveLogo = () => {
+        setLogoPreview(config.configuracionGeneral.logoUrl);
+        if (fileInputRef.current) {
+            fileInputRef.current.value = "";
         }
     };
 
@@ -44,11 +54,23 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
                         <div className="space-y-2">
                              <Label htmlFor="logo">Logo de la Tienda</Label>
                              {logoPreview && (
-                                <div className="my-2">
+                                <div className="my-2 relative w-fit">
                                     <Image src={logoPreview} alt="Logo preview" width={100} height={100} className="rounded-md border p-2" />
+                                     {logoPreview !== config.configuracionGeneral.logoUrl && (
+                                        <Button
+                                            type="button"
+                                            variant="destructive"
+                                            size="icon"
+                                            className="absolute top-1 right-1 h-6 w-6"
+                                            onClick={handleRemoveLogo}
+                                        >
+                                            <X className="h-4 w-4" />
+                                            <span className="sr-only">Eliminar logo seleccionado</span>
+                                        </Button>
+                                    )}
                                 </div>
                              )}
-                            <Input id="logo" name="logo" type="file" accept="image/*" onChange={handleLogoChange} />
+                            <Input id="logo" name="logo" type="file" accept="image/*" onChange={handleLogoChange} ref={fileInputRef} />
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="generalNumeroWhatsApp">Número de WhatsApp (para pedidos)</Label>
@@ -186,15 +208,3 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
             </div>
         </form>
     )
-}
-
-function SubmitButton() {
-    const { pending } = useFormStatus();
-
-    return (
-        <Button type="submit" disabled={pending} size="lg">
-            <Save className="mr-2 h-4 w-4" />
-            {pending ? "Guardando..." : "Guardar Cambios"}
-        </Button>
-    )
-}
