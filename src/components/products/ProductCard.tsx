@@ -118,7 +118,7 @@ export function ProductCard({ product }: ProductCardProps) {
              {productCard.imagePosition !== 'afterDescription' && <DescriptionComponent />}
              {productCard.imagePosition === 'afterDescription' && <ImageComponent/>}
              
-             {productCard.imagePosition !== 'afterPrice' && <PriceComponent />}
+             <PriceComponent />
              {productCard.imagePosition === 'afterPrice' && <ImageComponent />}
         </CardContent>
         <CardFooter className="p-6 pt-0">
