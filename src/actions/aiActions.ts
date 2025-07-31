@@ -7,6 +7,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import type { Product, Reclamacion, SiteConfig } from "@/types";
+import { sendReclamacionConfirmation, sendReclamacionNotification } from "@/lib/email";
 
 const productsFilePath = path.join(process.cwd(), "src/data/products.json");
 const reclamacionesFilePath = path.join(process.cwd(), "src/data/reclamaciones.json");
@@ -276,9 +277,15 @@ export async function addReclamacion(formData: FormData) {
     reclamaciones.push(newReclamacion);
     await writeReclamaciones(reclamaciones);
     
-    // TODO: Implement email sending logic here
-    // sendEmailToClient(newReclamacion);
-    // sendEmailToBusiness(newReclamacion);
+    const config = await readConfig();
+
+    try {
+        await sendReclamacionConfirmation(newReclamacion, config);
+        await sendReclamacionNotification(newReclamacion, config);
+    } catch (error) {
+        console.error("Failed to send reclamacion emails:", error);
+        // Don't block the user flow if emails fail, but log the error.
+    }
 
     revalidatePath('/reclamaciones');
     redirect('/reclamaciones/confirmacion');

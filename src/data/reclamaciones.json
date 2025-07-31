@@ -1,2 +1,21 @@
-
-[]
+[
+  {
+    "id": "REC-2025-00001",
+    "fechaReclamo": "2025-07-31T03:33:37.978Z",
+    "nombreCompleto": "Diego",
+    "domicilio": "asdasd",
+    "tipoDocumento": "dni",
+    "numeroDocumento": "74147399",
+    "email": "dematos23@gmail.com",
+    "telefono": "",
+    "nombreApoderado": "",
+    "tipoBien": "producto",
+    "montoReclamado": "50",
+    "descripcionBien": "prueba",
+    "tipoReclamacion": "reclamo",
+    "detalleReclamacion": "prueba asdsa ",
+    "pedido": "test",
+    "fechaRegistro": "2025-07-31T03:34:36.571Z",
+    "estado": "pendiente"
+  }
+]
