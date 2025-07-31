@@ -35,23 +35,23 @@
     "carrito": null,
     "checkout": null,
     "sobreNosotros": null,
-    "contacto": "Contáctanos cuando desees!"
+    "contacto": null
   },
   "textos": {
     "mensajeBienvenida": "Conócenos!",
     "instruccionesCheckout": null,
     "descripcionHomepage": "Rápido, fácil y a tu puerta.",
     "descripcionSobreNosotros": null,
-    "infoContacto": "Siempre eres bienvenido"
+    "infoContacto": null
   },
   "contacto": {
-    "telefono": "094 092 034",
-    "correo": "dematos23@gmail.com",
-    "direccion": "Alcanfores 111, miraflores",
-    "horarioAtencion": "11am - 3pm"
+    "telefono": null,
+    "correo": null,
+    "direccion": null,
+    "horarioAtencion": null
   },
   "configuracionGeneral": {
-    "nombreTienda": "TiendaExpress",
+    "nombreTienda": "Tienda Express",
     "numeroWhatsApp": "984092034",
     "logoUrl": "/images/logo.png",
     "eslogan": "Rápido, fácil y a tu puerta.",

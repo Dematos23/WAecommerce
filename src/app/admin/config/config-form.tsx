@@ -20,8 +20,12 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-        const encodedAddress = encodeURIComponent(address);
-        setMapUrl(`https://maps.google.com/maps?q=${encodedAddress}&output=embed`);
+        if (address) {
+            const encodedAddress = encodeURIComponent(address);
+            setMapUrl(`https://maps.google.com/maps?q=${encodedAddress}&output=embed`);
+        } else {
+            setMapUrl("");
+        }
     }, [address]);
 
     const handleLogoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,7 +45,7 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
     };
 
     return (
-        <form action={updateConfig} className="space-y-8" encType="multipart/form-data">
+        <form action={updateConfig} className="space-y-8">
             <Accordion type="multiple" defaultValue={['general', 'homepage']} className="w-full">
                 {/* General Settings */}
                 <AccordionItem value="general">
