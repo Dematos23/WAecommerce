@@ -104,45 +104,9 @@ export function ProductCard({ product }: ProductCardProps) {
     </CardHeader>
   );
 
-  const InfoComponent = () => (
-    <CardContent className="p-6 flex-1">
-      {productCard.imagePosition !== 'afterName' && <CardTitle className={nameClasses}>{product.nombre}</CardTitle>}
-      {productCard.imagePosition === 'afterName' && <ImageComponent/>}
-      
-      {productCard.imagePosition !== 'afterDescription' && <div className={descriptionClasses}>
-        {product.descripcion || `Descubre más sobre ${product.nombre}.`}
-      </div>}
-      {productCard.imagePosition === 'afterDescription' && <ImageComponent/>}
-
-      {productCard.imagePosition !== 'afterPrice' && <p className={priceClasses}>{formatCurrency(product.precio)}</p>}
-      {productCard.imagePosition === 'afterPrice' && <ImageComponent/>}
-    </CardContent>
-  );
-
   const NameComponent = () => <CardTitle className={nameClasses}>{product.nombre}</CardTitle>;
   const DescriptionComponent = () => <div className={descriptionClasses}>{product.descripcion || `Descubre más sobre ${product.nombre}.`}</div>;
   const PriceComponent = () => <p className={priceClasses}>{formatCurrency(product.precio)}</p>;
-  
-  const renderOrder = () => {
-    const components: React.ReactNode[] = [];
-    const content = (
-        <div key="content" className="p-6 flex-1 flex flex-col">
-            {NameComponent()}
-            {productCard.imagePosition === 'afterName' && <ImageComponent />}
-            {DescriptionComponent()}
-            {productCard.imagePosition === 'afterDescription' && <ImageComponent />}
-            {PriceComponent()}
-            {productCard.imagePosition === 'afterPrice' && <ImageComponent />}
-        </div>
-    );
-
-    if (productCard.imagePosition === 'top') {
-        components.push(<ImageComponent key="image-top" />);
-    }
-    components.push(content);
-
-    return components;
-  };
   
   return (
     <Card className={cardClasses}>
@@ -155,20 +119,14 @@ export function ProductCard({ product }: ProductCardProps) {
              {productCard.imagePosition === 'afterDescription' && <ImageComponent/>}
              
              {productCard.imagePosition !== 'afterPrice' && <PriceComponent />}
+             {productCard.imagePosition === 'afterPrice' && <ImageComponent />}
         </CardContent>
-        {productCard.imagePosition === 'afterPrice' ? (
-            <Button className="w-full rounded-t-none" onClick={handleAddToCart} variant={productCard.buttonStyle}>
+        <CardFooter className="p-6 pt-0">
+            <Button className="w-full" onClick={handleAddToCart} variant={productCard.buttonStyle}>
                 <ShoppingCart className="mr-2 h-4 w-4" />
                 Añadir al carrito
             </Button>
-        ) : (
-            <CardFooter className="p-6 pt-0">
-                <Button className="w-full" onClick={handleAddToCart} variant={productCard.buttonStyle}>
-                    <ShoppingCart className="mr-2 h-4 w-4" />
-                    Añadir al carrito
-                </Button>
-            </CardFooter>
-        )}
+        </CardFooter>
     </Card>
   );
 }

@@ -1,4 +1,3 @@
-
 {
   "variablesCss": {
     "colorPrimario": "#7bbaf3",
@@ -60,11 +59,11 @@
     "displayMode": "both"
   },
   "productCard": {
-    "nameAlign": "left",
-    "descriptionAlign": "left",
-    "priceAlign": "left",
+    "nameAlign": "center",
+    "descriptionAlign": "center",
+    "priceAlign": "center",
     "buttonStyle": "default",
     "shadow": "md",
-    "imagePosition": "top"
+    "imagePosition": "afterPrice"
   }
 }
