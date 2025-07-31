@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Save, PanelTop, FileCog, Phone, Settings2, X, Building } from "lucide-react";
+import { Save, PanelTop, FileCog, Phone, Settings2, X, Building, Image as ImageIcon } from "lucide-react";
 import Image from "next/image";
 
 function SubmitButton() {
@@ -29,7 +29,9 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
     const [address, setAddress] = useState(config.contacto.direccion || '');
     const [mapUrl, setMapUrl] = useState("");
     const [logoPreview, setLogoPreview] = useState(config.configuracionGeneral.logoUrl);
-    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [heroImagePreview, setHeroImagePreview] = useState(config.configuracionGeneral.heroImageUrl);
+    const logoFileInputRef = useRef<HTMLInputElement>(null);
+    const heroImageFileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         if (address) {
@@ -51,8 +53,24 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
 
     const handleRemoveLogo = () => {
         setLogoPreview(config.configuracionGeneral.logoUrl || '');
-        if (fileInputRef.current) {
-            fileInputRef.current.value = "";
+        if (logoFileInputRef.current) {
+            logoFileInputRef.current.value = "";
+        }
+    };
+    
+    const handleHeroImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files && event.target.files[0]) {
+            const file = event.target.files[0];
+            setHeroImagePreview(URL.createObjectURL(file));
+        } else {
+             setHeroImagePreview(config.configuracionGeneral.heroImageUrl || '');
+        }
+    };
+
+    const handleRemoveHeroImage = () => {
+        setHeroImagePreview(config.configuracionGeneral.heroImageUrl || '');
+        if (heroImageFileInputRef.current) {
+            heroImageFileInputRef.current.value = "";
         }
     };
 
@@ -101,7 +119,7 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
                                     )}
                                 </div>
                              )}
-                            <Input id="logo" name="logo" type="file" accept="image/*" onChange={handleLogoChange} ref={fileInputRef} />
+                            <Input id="logo" name="logo" type="file" accept="image/*" onChange={handleLogoChange} ref={logoFileInputRef} />
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="generalNumeroWhatsApp">Número de WhatsApp (para pedidos)</Label>
@@ -125,6 +143,27 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
                         <div className="space-y-2">
                             <Label htmlFor="generalEslogan">Eslogan (debajo del título principal)</Label>
                             <Input id="generalEslogan" name="generalEslogan" defaultValue={config.configuracionGeneral.eslogan || ''} />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="heroImage">Imagen de Fondo del Hero</Label>
+                            {heroImagePreview && (
+                                <div className="my-2 relative w-fit">
+                                    <Image src={heroImagePreview} alt="Hero image preview" width={200} height={100} className="rounded-md border p-2 object-cover" />
+                                    {heroImagePreview !== (config.configuracionGeneral.heroImageUrl || '') && (
+                                    <Button
+                                        type="button"
+                                        variant="destructive"
+                                        size="icon"
+                                        className="absolute top-1 right-1 h-6 w-6"
+                                        onClick={handleRemoveHeroImage}
+                                    >
+                                        <X className="h-4 w-4" />
+                                        <span className="sr-only">Eliminar imagen seleccionada</span>
+                                    </Button>
+                                    )}
+                                </div>
+                            )}
+                            <Input id="heroImage" name="heroImage" type="file" accept="image/*" onChange={handleHeroImageChange} ref={heroImageFileInputRef} />
                         </div>
                          <div className="space-y-2">
                             <Label htmlFor="textoDescripcionHomepage">Descripción (Productos Destacados)</Label>

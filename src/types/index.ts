@@ -74,6 +74,7 @@ export interface SiteConfig {
     eslogan: string;
     mensajePedidoWhatsApp?: string;
     displayMode?: 'logo' | 'name' | 'both';
+    heroImageUrl?: string;
   };
   productCard: {
     nameAlign: 'left' | 'center';

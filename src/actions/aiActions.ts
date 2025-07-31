@@ -335,6 +335,7 @@ export async function readConfig(): Promise<SiteConfig> {
         eslogan: "Rápido, fácil y a tu puerta.",
         mensajePedidoWhatsApp: "¡Gracias por tu compra! 😊",
         displayMode: 'both',
+        heroImageUrl: '',
       },
       productCard: {
         nameAlign: 'left',
@@ -406,7 +407,8 @@ export async function readConfig(): Promise<SiteConfig> {
         logoUrl: "/logo.svg",
         eslogan: "Rápido, fácil y a tu puerta.",
         mensajePedidoWhatsApp: "¡Gracias por tu compra! 😊",
-        displayMode: "both"
+        displayMode: "both",
+        heroImageUrl: "",
       },
       productCard: {
         nameAlign: 'left',
@@ -507,6 +509,9 @@ export async function updateConfig(formData: FormData) {
   const logoFile = formData.get("logo") as File;
   let logoUrl = currentConfig.configuracionGeneral.logoUrl;
 
+  const heroImageFile = formData.get("heroImage") as File;
+  let heroImageUrl = currentConfig.configuracionGeneral.heroImageUrl;
+
   if (logoFile && logoFile.size > 0) {
     try {
       await fs.mkdir(publicImagesPath, { recursive: true });
@@ -518,6 +523,20 @@ export async function updateConfig(formData: FormData) {
       logoUrl = `/images/${logoName}`;
     } catch (error) {
       console.error("Error saving new logo:", error);
+    }
+  }
+
+  if (heroImageFile && heroImageFile.size > 0) {
+    try {
+      await fs.mkdir(publicImagesPath, { recursive: true });
+      const heroImageExtension = heroImageFile.name.split('.').pop();
+      const heroImageName = `hero-background.${heroImageExtension}`;
+      const heroImagePath = path.join(publicImagesPath, heroImageName);
+      const imageBuffer = Buffer.from(await heroImageFile.arrayBuffer());
+      await fs.writeFile(heroImagePath, imageBuffer);
+      heroImageUrl = `/images/${heroImageName}`;
+    } catch (error) {
+      console.error("Error saving hero image:", error);
     }
   }
 
@@ -549,6 +568,7 @@ export async function updateConfig(formData: FormData) {
           ...currentConfig.configuracionGeneral,
           nombreTienda: formData.get('generalNombreTienda') as string,
           logoUrl: logoUrl,
+          heroImageUrl: heroImageUrl,
           displayMode: formData.get('generalDisplayMode') as 'logo' | 'name' | 'both',
           numeroWhatsApp: formData.get('generalNumeroWhatsApp') as string,
           eslogan: formData.get('generalEslogan') as string,

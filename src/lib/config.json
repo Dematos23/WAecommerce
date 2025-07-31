@@ -51,7 +51,8 @@
     "logoUrl": "/images/logo.png",
     "eslogan": "Rápido, fácil y a tu puerta.",
     "mensajePedidoWhatsApp": "¡Gracias por tu compra! 😊",
-    "displayMode": "both"
+    "displayMode": "both",
+    "heroImageUrl": ""
   },
   "productCard": {
     "nameAlign": "center",

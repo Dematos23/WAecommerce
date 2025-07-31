@@ -11,14 +11,22 @@ export default async function Home() {
   const config = await readConfig();
   const featuredProducts = products.filter(p => p.destacado);
 
+  const heroStyle = config.configuracionGeneral.heroImageUrl
+    ? { backgroundImage: `url(${config.configuracionGeneral.heroImageUrl})` }
+    : {};
+
   return (
     <div className="flex flex-col">
-      <section className="bg-secondary/30 py-20 md:py-32">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-primary-foreground mb-4 font-headline">
+      <section 
+        className="relative bg-secondary/30 py-20 md:py-32 bg-cover bg-center"
+        style={heroStyle}
+      >
+        <div className="absolute inset-0 bg-black/50 z-0"></div>
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-white mb-4 font-headline">
             {config.titulos.homepageHero}
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
+          <p className="text-lg md:text-xl text-white/90 max-w-3xl mx-auto mb-8">
             {config.configuracionGeneral.eslogan}
           </p>
           <Button asChild size="lg">
