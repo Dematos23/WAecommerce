@@ -44,8 +44,7 @@ const productSchema = z.object({
   nombre: z.string().min(1, "El nombre es requerido."),
   descripcion: z.string().nullable(),
   precio: z.coerce.number().min(0, "El precio debe ser un número positivo."),
-  categoria: z.string().optional(),
-  new_category: z.string().optional(),
+  categoria: z.string().min(1, "La categoría es requerida."),
   imagenes: z.array(z.any()).optional(),
   destacado: z.boolean().optional(),
 });
@@ -82,7 +81,6 @@ export async function addProduct(formData: FormData) {
     descripcion: formData.get("descripcion"),
     precio: formData.get("precio"),
     categoria: formData.get("categoria"),
-    new_category: formData.get("new_category"),
     imagenes: formData.getAll("imagenes"),
     destacado: formData.get("destacado") === "on",
   });
@@ -96,17 +94,11 @@ export async function addProduct(formData: FormData) {
 
   const products = await readProducts();
   const productId = `prod_${new Date().getTime()}`;
-  const { imagenes, new_category, ...productData } = validatedFields.data;
+  const { imagenes, ...productData } = validatedFields.data;
   
-  const category = new_category || productData.categoria;
-  if (!category) {
-    return { errors: { categoria: ['La categoría es requerida.'] } };
-  }
-
   const newProduct: Product = {
     id: productId,
     ...productData,
-    categoria: category,
     imagenes: [], // Default empty
   };
 
@@ -134,7 +126,6 @@ export async function updateProduct(formData: FormData) {
         descripcion: formData.get('descripcion'),
         precio: formData.get('precio'),
         categoria: formData.get("categoria"),
-        new_category: formData.get("new_category"),
         imagenes: formData.getAll("imagenes"),
         destacado: formData.get("destacado") === "on",
     });
@@ -146,7 +137,7 @@ export async function updateProduct(formData: FormData) {
         };
     }
 
-    const { id, imagenes, new_category, ...updatedData } = validatedFields.data;
+    const { id, imagenes, ...updatedData } = validatedFields.data;
     let products = await readProducts();
     const productIndex = products.findIndex(p => p.id === id);
 
@@ -178,15 +169,9 @@ export async function updateProduct(formData: FormData) {
         imagePaths = [...imagePaths, ...newImagePaths];
     }
 
-    const category = new_category || updatedData.categoria;
-    if (!category) {
-        return { errors: { categoria: ['La categoría es requerida.'] } };
-    }
-
     const updatedProduct: Product = {
         ...existingProduct,
         ...updatedData,
-        categoria: category,
         imagenes: imagePaths,
     };
 

@@ -13,7 +13,7 @@ import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import Image from "next/image";
-import { X, UploadCloud } from "lucide-react";
+import { X, UploadCloud, Check, Ban } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 
@@ -25,6 +25,9 @@ export function ProductForm({ product, categories = [] }: { product?: Product, c
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedCategory, setSelectedCategory] = useState(product?.categoria || '');
   const [isCreatingNewCategory, setIsCreatingNewCategory] = useState(false);
+  const [allCategories, setAllCategories] = useState(categories);
+  const [newCategoryName, setNewCategoryName] = useState('');
+
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -59,12 +62,27 @@ export function ProductForm({ product, categories = [] }: { product?: Product, c
         setSelectedCategory(value);
     }
   };
+  
+  const handleSaveNewCategory = () => {
+    if (newCategoryName && !allCategories.includes(newCategoryName)) {
+      setAllCategories(prev => [...prev, newCategoryName]);
+      setSelectedCategory(newCategoryName);
+      setIsCreatingNewCategory(false);
+      setNewCategoryName('');
+    }
+  };
+
+  const handleCancelNewCategory = () => {
+    setIsCreatingNewCategory(false);
+    setNewCategoryName('');
+  };
 
 
   return (
     <form action={action}>
       <input type="hidden" name="imagesToDelete" value={imagesToDelete.join(',')} />
       {product && <input type="hidden" name="id" value={product.id} />}
+      <input type="hidden" name="categoria" value={selectedCategory} />
       <Card>
         <CardContent className="pt-6">
           <div className="space-y-6">
@@ -102,36 +120,42 @@ export function ProductForm({ product, categories = [] }: { product?: Product, c
               </div>
               <div className="space-y-2">
                 <Label htmlFor="categoria">Categoría</Label>
-                 <Select
-                    name="categoria"
-                    onValueChange={handleCategoryChange}
-                    defaultValue={selectedCategory}
-                    disabled={isCreatingNewCategory}
-                >
-                    <SelectTrigger>
-                        <SelectValue placeholder="Seleccione una categoría..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {categories.map((cat) => (
-                            <SelectItem key={cat} value={cat}>
-                                {cat}
+                {!isCreatingNewCategory ? (
+                    <Select
+                        onValueChange={handleCategoryChange}
+                        value={selectedCategory}
+                    >
+                        <SelectTrigger>
+                            <SelectValue placeholder="Seleccione una categoría..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {allCategories.map((cat) => (
+                                <SelectItem key={cat} value={cat}>
+                                    {cat}
+                                </SelectItem>
+                            ))}
+                            <SelectItem value="create-new">
+                                Crear nueva categoría...
                             </SelectItem>
-                        ))}
-                        <SelectItem value="create-new">
-                            Crear nueva categoría...
-                        </SelectItem>
-                    </SelectContent>
-                </Select>
-                 {isCreatingNewCategory && (
-                    <div className="mt-2">
+                        </SelectContent>
+                    </Select>
+                ) : (
+                    <div className="space-y-2">
                         <Input
                             name="new_category"
                             placeholder="Nombre de la nueva categoría"
+                            value={newCategoryName}
+                            onChange={(e) => setNewCategoryName(e.target.value)}
                             required
                         />
-                         <p className="text-xs text-muted-foreground mt-1">
-                            Para cancelar, simplemente seleccione una categoría existente de la lista.
-                        </p>
+                         <div className="flex gap-2">
+                            <Button type="button" onClick={handleSaveNewCategory} size="sm">
+                                <Check className="h-4 w-4 mr-1" /> Guardar
+                            </Button>
+                             <Button type="button" onClick={handleCancelNewCategory} variant="ghost" size="sm">
+                                <Ban className="h-4 w-4 mr-1" /> Cancelar
+                            </Button>
+                         </div>
                     </div>
                 )}
               </div>
