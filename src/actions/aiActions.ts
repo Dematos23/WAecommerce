@@ -332,7 +332,8 @@ export async function readConfig(): Promise<SiteConfig> {
         numeroWhatsApp: "",
         logoUrl: "/logo.svg",
         eslogan: "Rápido, fácil y a tu puerta.",
-        mensajePedidoWhatsApp: "¡Gracias por tu compra! 😊"
+        mensajePedidoWhatsApp: "¡Gracias por tu compra! 😊",
+        displayMode: 'both',
       }
     };
 
@@ -396,7 +397,8 @@ export async function readConfig(): Promise<SiteConfig> {
         numeroWhatsApp: "1234567890",
         logoUrl: "/logo.svg",
         eslogan: "Rápido, fácil y a tu puerta.",
-        mensajePedidoWhatsApp: "¡Gracias por tu compra! 😊"
+        mensajePedidoWhatsApp: "¡Gracias por tu compra! 😊",
+        displayMode: "both"
       }
     };
     return defaultConfig;
@@ -537,6 +539,7 @@ export async function updateConfig(formData: FormData) {
           ...currentConfig.configuracionGeneral,
           nombreTienda: formData.get('generalNombreTienda') as string,
           logoUrl: logoUrl,
+          displayMode: formData.get('generalDisplayMode') as 'logo' | 'name' | 'both',
           numeroWhatsApp: formData.get('generalNumeroWhatsApp') as string,
           eslogan: formData.get('generalEslogan') as string,
           mensajePedidoWhatsApp: formData.get('generalMensajePedidoWhatsApp') as string,

@@ -78,6 +78,7 @@ export interface SiteConfig {
     logoUrl: string;
     eslogan: string;
     mensajePedidoWhatsApp?: string;
+    displayMode?: 'logo' | 'name' | 'both';
   };
 }
 

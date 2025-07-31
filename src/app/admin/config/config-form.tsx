@@ -10,8 +10,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Save, Home, FileCog, Phone, Store, X } from "lucide-react";
 import Image from "next/image";
+
+function SubmitButton() {
+    const { pending } = useFormStatus();
+
+    return (
+        <Button type="submit" disabled={pending} size="lg">
+            <Save className="mr-2 h-4 w-4" />
+            {pending ? "Guardando..." : "Guardar Cambios"}
+        </Button>
+    )
+}
 
 export function ConfigForm({ config }: { config: SiteConfig }) {
     const [address, setAddress] = useState(config.contacto.direccion);
@@ -51,10 +63,25 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
                 <AccordionItem value="general">
                     <AccordionTrigger className="text-xl font-semibold flex items-center gap-2"><Store/> Configuración General</AccordionTrigger>
                     <AccordionContent className="space-y-4 pt-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="generalNombreTienda">Nombre de la Tienda</Label>
-                            <Input id="generalNombreTienda" name="generalNombreTienda" defaultValue={config.configuracionGeneral.nombreTienda} />
-                        </div>
+                         <div className="grid md:grid-cols-2 gap-4">
+                             <div className="space-y-2">
+                                <Label htmlFor="generalNombreTienda">Nombre de la Tienda</Label>
+                                <Input id="generalNombreTienda" name="generalNombreTienda" defaultValue={config.configuracionGeneral.nombreTienda} />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="generalDisplayMode">Visualización del Encabezado</Label>
+                                <Select name="generalDisplayMode" defaultValue={config.configuracionGeneral.displayMode || 'both'}>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Seleccione cómo mostrar..." />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="both">Logo y Nombre</SelectItem>
+                                        <SelectItem value="logo">Solo Logo</SelectItem>
+                                        <SelectItem value="name">Solo Nombre</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                         </div>
                         <div className="space-y-2">
                              <Label htmlFor="logo">Logo de la Tienda</Label>
                              {logoPreview && (
@@ -211,16 +238,5 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
                 <SubmitButton />
             </div>
         </form>
-    )
-}
-
-function SubmitButton() {
-    const { pending } = useFormStatus();
-
-    return (
-        <Button type="submit" disabled={pending} size="lg">
-            <Save className="mr-2 h-4 w-4" />
-            {pending ? "Guardando..." : "Guardar Cambios"}
-        </Button>
     )
 }
