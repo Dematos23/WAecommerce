@@ -3,7 +3,6 @@
 import { SignJWT, jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
-import credentials from '@/data/admin-credentials.json';
 import { redirect } from 'next/navigation';
 
 const secretKey = process.env.SESSION_SECRET || 'fallback-secret-key-for-development';
@@ -32,22 +31,24 @@ export async function decrypt(input: string): Promise<any> {
   }
 }
 
-export async function login(prevState: { success: boolean; error?: string }, formData: FormData) {
-  const user = formData.get('username');
-  const pass = formData.get('password');
+export async function login(prevState: { success: boolean; error?: string } | undefined, formData: FormData) {
+  const email = formData.get('email') as string;
+  const password = formData.get('password') as string;
 
-  if (user === credentials.username && pass === credentials.password) {
+  // This is a placeholder for actual database user verification
+  if (email === 'admin@example.com' && password === 'password') {
     const expires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
-    const session = await encrypt({ user, expires });
+    const session = await encrypt({ user: { email, tenantId: 'default' }, expires });
 
     cookies().set('session', session, { expires, httpOnly: true });
-    redirect('/admin');
+    redirect('/dashboard');
   }
   return { success: false, error: 'Usuario o contraseña inválidos' };
 }
 
 export async function logout() {
   cookies().set('session', '', { expires: new Date(0) });
+  redirect('/login');
 }
 
 export async function getSession(request?: NextRequest) {

@@ -8,15 +8,14 @@ import type { Product, Reclamacion, SiteConfig, Tenant } from "@/types";
 import { sendReclamacionConfirmation, sendReclamacionNotification } from "@/lib/email";
 import { db } from "@/lib/firebase";
 import { getTenant } from "@/lib/tenant";
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, orderBy } from 'firebase/firestore';
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy, where, getDoc } from 'firebase/firestore';
 
 // --- Product Functions ---
 
-export async function readProducts(): Promise<Product[]> {
-    const tenant = await getTenant();
-    if (!tenant) return [];
+export async function readProducts(tenantId: string): Promise<Product[]> {
+    if (!tenantId) return [];
 
-    const productsRef = collection(db, 'tenants', tenant.id, 'products');
+    const productsRef = collection(db, 'tenants', tenantId, 'products');
     const snapshot = await getDocs(productsRef);
     
     if (snapshot.empty) {
@@ -24,10 +23,6 @@ export async function readProducts(): Promise<Product[]> {
     }
     
     return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
-}
-
-async function writeProducts(products: Product[]): Promise<void> {
-    // This function will now be handled by addProduct, updateProduct, deleteProduct
 }
 
 const productSchema = z.object({
@@ -40,18 +35,8 @@ const productSchema = z.object({
   destacado: z.boolean().optional(),
 });
 
-async function saveImages(images: File[], productId: string): Promise<string[]> {
-    // This should be updated to use a cloud storage like Firebase Storage
-    // For now, we'll keep the existing logic but it's not multi-tenant safe
-    if (!images || images.length === 0) return [];
-    console.warn("Image saving is not multi-tenant safe and should be migrated to a cloud storage provider.");
-    return [];
-}
-
-
-export async function addProduct(formData: FormData) {
-  const tenant = await getTenant();
-  if (!tenant) throw new Error("Tenant not found");
+export async function addProduct(tenantId: string, formData: FormData) {
+  if (!tenantId) throw new Error("Tenant not found");
 
   const validatedFields = productSchema.safeParse({
     nombre: formData.get("nombre"),
@@ -70,21 +55,18 @@ export async function addProduct(formData: FormData) {
   }
 
   const { id, imagenes, ...productData } = validatedFields.data;
-  const productsRef = collection(db, 'tenants', tenant.id, 'products');
-  const newDocRef = await addDoc(productsRef, {
+  const productsRef = collection(db, 'tenants', tenantId, 'products');
+  await addDoc(productsRef, {
     ...productData,
     imagenes: [], // Default empty, should be handled by a proper image upload service
   });
   
-  revalidatePath("/admin/products");
-  revalidatePath("/products");
-  revalidatePath("/");
-  redirect("/admin/products");
+  revalidatePath("/dashboard/products");
+  redirect("/dashboard/products");
 }
 
-export async function updateProduct(formData: FormData) {
-    const tenant = await getTenant();
-    if (!tenant) throw new Error("Tenant not found");
+export async function updateProduct(tenantId: string, formData: FormData) {
+    if (!tenantId) throw new Error("Tenant not found");
     
     const validatedFields = productSchema.safeParse({
         id: formData.get('id'),
@@ -103,41 +85,35 @@ export async function updateProduct(formData: FormData) {
     }
 
     const { id, ...updatedData } = validatedFields.data;
-    const productRef = doc(db, 'tenants', tenant.id, 'products', id);
+    const productRef = doc(db, 'tenants', tenantId, 'products', id);
     
     await updateDoc(productRef, {
         ...updatedData
     });
 
-    revalidatePath("/admin/products");
-    revalidatePath(`/products/${id}`);
-    revalidatePath(`/admin/products/edit/${id}`);
-    redirect("/admin/products");
+    revalidatePath("/dashboard/products");
+    revalidatePath(`/dashboard/products/edit/${id}`);
+    redirect("/dashboard/products");
 }
 
 
-export async function deleteProduct(productId: string) {
-    if(!productId) return;
-    const tenant = await getTenant();
-    if (!tenant) throw new Error("Tenant not found");
-
-    const productRef = doc(db, 'tenants', tenant.id, 'products', productId);
+export async function deleteProduct(tenantId: string, productId: string) {
+    if(!productId || !tenantId) return;
+    
+    const productRef = doc(db, 'tenants', tenantId, 'products', productId);
     await deleteDoc(productRef);
     
-    revalidatePath('/admin/products');
-    revalidatePath('/products');
-    revalidatePath('/');
-    redirect("/admin/products");
+    revalidatePath('/dashboard/products');
+    redirect("/dashboard/products");
 }
 
 
 // --- Reclamaciones Functions ---
 
-async function readReclamaciones(): Promise<Reclamacion[]> {
-    const tenant = await getTenant();
-    if (!tenant) return [];
+async function readReclamaciones(tenantId: string): Promise<Reclamacion[]> {
+    if (!tenantId) return [];
     
-    const reclamacionesRef = collection(db, 'tenants', tenant.id, 'reclamaciones');
+    const reclamacionesRef = collection(db, 'tenants', tenantId, 'reclamaciones');
     const snapshot = await getDocs(query(reclamacionesRef, orderBy('fechaRegistro', 'desc')));
     
     if (snapshot.empty) {
@@ -145,10 +121,6 @@ async function readReclamaciones(): Promise<Reclamacion[]> {
     }
     
     return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Reclamacion));
-}
-
-async function writeReclamaciones(reclamaciones: Reclamacion[]): Promise<void> {
-  //This will be handled by addReclamacion
 }
 
 const reclamacionSchema = z.object({
@@ -169,9 +141,8 @@ const reclamacionSchema = z.object({
 });
 
 
-export async function addReclamacion(formData: FormData) {
-    const tenant = await getTenant();
-    if (!tenant) throw new Error("Tenant not found");
+export async function addReclamacion(tenantId: string, formData: FormData) {
+    if (!tenantId) throw new Error("Tenant not found");
 
     const data = Object.fromEntries(formData.entries());
     const validatedFields = reclamacionSchema.safeParse(data);
@@ -187,7 +158,7 @@ export async function addReclamacion(formData: FormData) {
         estado: 'pendiente'
     };
 
-    const reclamacionesRef = collection(db, 'tenants', tenant.id, 'reclamaciones');
+    const reclamacionesRef = collection(db, 'tenants', tenantId, 'reclamaciones');
     const newDocRef = await addDoc(reclamacionesRef, newReclamacionData);
 
     const newReclamacion: Reclamacion = {
@@ -195,7 +166,7 @@ export async function addReclamacion(formData: FormData) {
         ...newReclamacionData
     }
     
-    const config = await readConfig();
+    const config = await readConfig(tenantId);
 
     try {
         await sendReclamacionConfirmation(newReclamacion, config);
@@ -203,17 +174,18 @@ export async function addReclamacion(formData: FormData) {
     } catch (error) {
         console.error("Failed to send reclamacion emails:", error);
     }
-
-    revalidatePath('/reclamaciones');
-    redirect('/reclamaciones/confirmacion');
+    
+    const tenant = await getDoc(doc(db, 'tenants', tenantId));
+    const storeSlug = tenant.data()?.slug;
+    
+    revalidatePath(`/${storeSlug}/reclamaciones`);
+    redirect(`/${storeSlug}/reclamaciones/confirmacion`);
 }
 
 
 // --- Config Functions ---
-export async function readConfig(): Promise<SiteConfig> {
-  const tenant = await getTenant();
-  
-  const defaultConfig: SiteConfig = {
+export async function readConfig(tenantId: string): Promise<SiteConfig> {
+  const defaultConfig: Partial<SiteConfig> = {
       variablesCss: {
         colorPrimario: "#113f69",
         colorSecundario: "#3eac68",
@@ -244,7 +216,7 @@ export async function readConfig(): Promise<SiteConfig> {
         horarioAtencion: "N/A"
       },
       configuracionGeneral: {
-        nombreTienda: tenant?.name ?? "TiendaExpress",
+        nombreTienda: "TiendaExpress",
         numeroWhatsApp: "",
         logoUrl: "/logo.svg",
         eslogan: "Rápido, fácil y a tu puerta.",
@@ -275,13 +247,21 @@ export async function readConfig(): Promise<SiteConfig> {
       }
     };
 
-  if (!tenant) {
-      return defaultConfig;
+  if (!tenantId) {
+      return defaultConfig as SiteConfig;
+  }
+  
+  const tenantDocRef = doc(db, 'tenants', tenantId);
+  const tenantDoc = await getDoc(tenantDocRef);
+
+  if (!tenantDoc.exists()) {
+    return defaultConfig as SiteConfig;
   }
 
+  const tenant = tenantDoc.data() as Tenant;
   const tenantConfig = (tenant.config || {}) as Partial<SiteConfig>;
   
-  return {
+  const mergedConfig = {
       ...defaultConfig,
       ...tenantConfig,
       variablesCss: { ...defaultConfig.variablesCss, ...tenantConfig.variablesCss },
@@ -294,57 +274,22 @@ export async function readConfig(): Promise<SiteConfig> {
       productCard: { ...defaultConfig.productCard, ...tenantConfig.productCard },
       informacionLegal: { ...defaultConfig.informacionLegal, ...tenantConfig.informacionLegal },
   };
+
+  return mergedConfig as SiteConfig;
 }
 
 
-async function writeConfig(config: SiteConfig): Promise<void> {
-  const tenant = await getTenant();
-  if (!tenant) throw new Error("Tenant not found");
+async function writeConfig(tenantId: string, config: SiteConfig): Promise<void> {
+  if (!tenantId) throw new Error("Tenant not found");
 
-  const tenantRef = doc(db, 'tenants', tenant.id);
+  const tenantRef = doc(db, 'tenants', tenantId);
   await updateDoc(tenantRef, { config });
 }
 
-function hexToHsl(hex: string): string {
-    if (!hex) return '0 0% 0%';
-    hex = hex.replace(/^#/, '');
-    const r = parseInt(hex.substring(0, 2), 16) / 255;
-    const g = parseInt(hex.substring(2, 4), 16) / 255;
-    const b = parseInt(hex.substring(4, 6), 16) / 255;
 
-    const max = Math.max(r, g, b);
-    const min = Math.min(r, g, b);
-    let h = 0, s = 0, l = (max + min) / 2;
+export async function updateConfig(tenantId: string, formData: FormData) {
+  const currentConfig = await readConfig(tenantId);
 
-    if (max !== min) {
-        const d = max - min;
-        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-        switch (max) {
-            case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-            case g: h = (b - r) / d + 2; break;
-            case b: h = (r - g) / d + 4; break;
-        }
-        h /= 6;
-    }
-    
-    h = Math.round(h * 360);
-    s = Math.round(s * 100);
-    l = Math.round(l * 100);
-
-    return `${h} ${s}% ${l}%`;
-}
-
-
-async function updateCssVariables(config: SiteConfig) {
-    // This is now a client-side concern, handled dynamically.
-    // This function can be removed or adapted if static CSS generation is needed.
-}
-
-
-export async function updateConfig(formData: FormData) {
-  const currentConfig = await readConfig();
-
-  // Image handling should be migrated to a proper cloud storage solution
   const logoUrl = currentConfig.configuracionGeneral.logoUrl;
   const heroImageUrl = currentConfig.configuracionGeneral.heroImageUrl;
   const secondaryHeroImageUrl = currentConfig.secondaryHero?.imageUrl || "";
@@ -399,13 +344,13 @@ export async function updateConfig(formData: FormData) {
       }
   };
 
-  await writeConfig(newConfig);
-  revalidatePath('/', 'layout');
-  redirect('/admin/config');
+  await writeConfig(tenantId, newConfig);
+  revalidatePath('/dashboard/config');
+  redirect('/dashboard/config');
 }
 
-export async function updateTheme(formData: FormData) {
-    const currentConfig = await readConfig();
+export async function updateTheme(tenantId: string, formData: FormData) {
+    const currentConfig = await readConfig(tenantId);
 
     const newConfig: SiteConfig = {
         ...currentConfig,
@@ -427,7 +372,7 @@ export async function updateTheme(formData: FormData) {
         }
     };
 
-    await writeConfig(newConfig);
-    revalidatePath('/', 'layout');
-    redirect('/admin/theme');
+    await writeConfig(tenantId, newConfig);
+    revalidatePath('/dashboard/theme');
+    redirect('/dashboard/theme');
 }

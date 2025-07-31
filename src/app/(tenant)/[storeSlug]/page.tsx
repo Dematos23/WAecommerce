@@ -3,13 +3,23 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ProductGrid } from "@/components/products/ProductGrid";
 import { readProducts, readConfig } from "@/actions/aiActions";
-import { ArrowRight, ShoppingBag } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import type { SiteConfig } from "@/types";
+import { getTenantBySlug } from "@/lib/tenant";
+import { notFound } from "next/navigation";
 
-export default async function Home() {
-  const products = await readProducts();
-  const config = await readConfig();
+export default async function StoreHomePage({ params }: { params: { storeSlug: string } }) {
+  const tenant = await getTenantBySlug(params.storeSlug);
+  if (!tenant) {
+    notFound();
+  }
+
+  const [products, config] = await Promise.all([
+    readProducts(tenant.id),
+    readConfig(tenant.id),
+  ]);
+
   const featuredProducts = products.filter(p => p.destacado);
 
   const heroStyle = config.configuracionGeneral.heroImageUrl
@@ -31,7 +41,7 @@ export default async function Home() {
             {config.configuracionGeneral.eslogan}
           </p>
           <Button asChild size="lg" className="shadow-lg hover:scale-105 transition-transform">
-            <Link href="/products">
+            <Link href={`/${params.storeSlug}/products`}>
               Ver Catálogo <ArrowRight className="ml-2" />
             </Link>
           </Button>
@@ -42,11 +52,11 @@ export default async function Home() {
         <section className="bg-card">
           <div className="container mx-auto px-4 relative">
             <div className="grid md:grid-cols-2">
-              <div className="flex flex-col justify-center py-12 md:py-24 pr-8">
+              <div className="py-12 md:py-24 pr-8 flex flex-col justify-center">
                 <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">{config.secondaryHero.title}</h2>
                 <p className="text-muted-foreground text-lg mb-6">{config.secondaryHero.description}</p>
               </div>
-              <div className="relative min-h-[300px] md:h-auto">
+              <div className="relative h-64 md:h-auto min-h-[300px]">
                  <Image 
                     src={config.secondaryHero.imageUrl || "https://placehold.co/600x600.png"}
                     alt={config.secondaryHero.title || "Hero image"}
@@ -74,7 +84,7 @@ export default async function Home() {
               {config.textos.descripcionHomepage}
             </p>
           </div>
-          <ProductGrid products={featuredProducts} config={config as SiteConfig} />
+          <ProductGrid products={featuredProducts} />
         </div>
       </section>
       
@@ -85,7 +95,7 @@ export default async function Home() {
               Cada producto en nuestra tienda es seleccionado cuidadosamente para asegurar la mejor calidad y tu completa satisfaction.
             </p>
              <Button asChild variant="link" className="mt-4 text-lg">
-                <Link href="/about">
+                <Link href={`/${params.storeSlug}/about`}>
                     Conoce más sobre nosotros <ArrowRight className="ml-2" />
                 </Link>
             </Button>

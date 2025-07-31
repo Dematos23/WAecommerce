@@ -11,7 +11,7 @@ export default async function AdminPage() {
   const session = await getSession();
 
   // if (!session) {
-  //   redirect("/admin/login");
+  //   redirect("/login");
   // }
 
   return (
@@ -24,19 +24,19 @@ export default async function AdminPage() {
                     title="Gestionar Productos"
                     description="Añade, edita o elimina productos de tu tienda."
                     icon={<ShoppingBag className="h-8 w-8 text-primary" />}
-                    link="/admin/products"
+                    link="/dashboard/products"
                 />
                 <ManagementCard
                     title="Configuración del Sitio"
                     description="Edita los títulos, textos e información de contacto."
                     icon={<FileJson className="h-8 w-8 text-primary" />}
-                    link="/admin/config"
+                    link="/dashboard/config"
                 />
                 <ManagementCard
                     title="Ajustes del Tema"
                     description="Personaliza la apariencia de tu sitio web."
                     icon={<Settings className="h-8 w-8 text-primary" />}
-                    link="/admin/theme"
+                    link="/dashboard/theme"
                 />
             </div>
         </main>

@@ -38,10 +38,13 @@ export default function AdminProductsPage() {
     const [priceRange, setPriceRange] = useState([0, 500]);
     const [maxPrice, setMaxPrice] = useState(500);
 
+    // This is a placeholder for the tenantId. In a real app, this would come from the session or context.
+    const tenantId = "default"; // Replace with actual tenantId
+
     useEffect(() => {
         const fetchProducts = async () => {
             setLoading(true);
-            const productsData = await readProducts();
+            const productsData = await readProducts(tenantId);
             setProducts(productsData);
             
             if (productsData.length > 0) {
@@ -53,7 +56,7 @@ export default function AdminProductsPage() {
             setLoading(false);
         };
         fetchProducts();
-    }, []);
+    }, [tenantId]);
 
     const categories = useMemo(() => {
         const allCategories = products.map((p) => p.categoria);
@@ -86,7 +89,7 @@ export default function AdminProductsPage() {
                     <p className="text-muted-foreground">Añade, edita o elimina productos de tu tienda.</p>
                 </div>
                 <Button asChild>
-                    <Link href="/admin/products/new">
+                    <Link href="/dashboard/products/new">
                         <PlusCircle className="mr-2 h-4 w-4" /> Añadir Producto
                     </Link>
                 </Button>
@@ -170,7 +173,7 @@ export default function AdminProductsPage() {
                                         )}
                                     </TableCell>
                                     <TableCell>
-                                        <ProductActions id={product.id} />
+                                        <ProductActions tenantId={tenantId} id={product.id} />
                                     </TableCell>
                                 </TableRow>
                             ))}
@@ -182,8 +185,8 @@ export default function AdminProductsPage() {
     );
 }
 
-function ProductActions({ id }: { id: string }) {
-    const deleteProductWithId = deleteProduct.bind(null, id);
+function ProductActions({ tenantId, id }: { tenantId: string, id: string }) {
+    const deleteProductWithId = deleteProduct.bind(null, tenantId, id);
 
     return (
         <DropdownMenu>
@@ -195,7 +198,7 @@ function ProductActions({ id }: { id: string }) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
                 <DropdownMenuItem asChild>
-                    <Link href={`/admin/products/edit/${id}`} className="flex items-center gap-2 cursor-pointer">
+                    <Link href={`/dashboard/products/edit/${id}`} className="flex items-center gap-2 cursor-pointer">
                         <Edit className="h-4 w-4" />
                         <span>Editar</span>
                     </Link>

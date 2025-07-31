@@ -11,7 +11,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertCircle, LogIn } from 'lucide-react';
 
 export function LoginForm() {
-  const [state, formAction] = useActionState(login, { success: false });
+  const [state, formAction] = useActionState(login, undefined);
 
   return (
     <form action={formAction} className="space-y-4">
@@ -23,11 +23,12 @@ export function LoginForm() {
         </Alert>
       )}
       <div className="space-y-2">
-        <Label htmlFor="username">Usuario</Label>
+        <Label htmlFor="email">Correo Electrónico</Label>
         <Input
-          id="username"
-          name="username"
-          placeholder="admin"
+          id="email"
+          name="email"
+          type="email"
+          placeholder="admin@example.com"
           required
         />
       </div>
