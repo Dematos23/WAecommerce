@@ -11,8 +11,10 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Save, PanelTop, FileCog, Phone, Settings2, X, Building, Image as ImageIcon } from "lucide-react";
+import { Save, PanelTop, FileCog, Phone, Settings2, X, Building, ImageIcon, Sparkles } from "lucide-react";
 import Image from "next/image";
+import { Separator } from "@/components/ui/separator";
+import { Switch } from "@/components/ui/switch";
 
 function SubmitButton() {
     const { pending } = useFormStatus();
@@ -30,8 +32,12 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
     const [mapUrl, setMapUrl] = useState("");
     const [logoPreview, setLogoPreview] = useState(config.configuracionGeneral.logoUrl);
     const [heroImagePreview, setHeroImagePreview] = useState(config.configuracionGeneral.heroImageUrl);
+    const [secondaryHeroImagePreview, setSecondaryHeroImagePreview] = useState(config.secondaryHero?.imageUrl);
+    const [secondaryHeroEnabled, setSecondaryHeroEnabled] = useState(config.secondaryHero?.enabled || false);
+
     const logoFileInputRef = useRef<HTMLInputElement>(null);
     const heroImageFileInputRef = useRef<HTMLInputElement>(null);
+    const secondaryHeroImageFileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         if (address) {
@@ -71,6 +77,22 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
         setHeroImagePreview(config.configuracionGeneral.heroImageUrl || '');
         if (heroImageFileInputRef.current) {
             heroImageFileInputRef.current.value = "";
+        }
+    };
+    
+     const handleSecondaryHeroImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files && event.target.files[0]) {
+            const file = event.target.files[0];
+            setSecondaryHeroImagePreview(URL.createObjectURL(file));
+        } else {
+             setSecondaryHeroImagePreview(config.secondaryHero?.imageUrl || '');
+        }
+    };
+
+    const handleRemoveSecondaryHeroImage = () => {
+        setSecondaryHeroImagePreview(config.secondaryHero?.imageUrl || '');
+        if (secondaryHeroImageFileInputRef.current) {
+            secondaryHeroImageFileInputRef.current.value = "";
         }
     };
 
@@ -136,35 +158,93 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
                 <AccordionItem value="homepage">
                     <AccordionTrigger className="text-xl font-semibold flex items-center gap-2"><PanelTop/> Contenido de la Página de Inicio</AccordionTrigger>
                     <AccordionContent className="space-y-4 pt-4">
-                         <div className="space-y-2">
-                            <Label htmlFor="tituloHomepageHero">Título Principal (Hero)</Label>
-                            <Input id="tituloHomepageHero" name="tituloHomepageHero" defaultValue={config.titulos.homepageHero || ''} />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="generalEslogan">Eslogan (debajo del título principal)</Label>
-                            <Input id="generalEslogan" name="generalEslogan" defaultValue={config.configuracionGeneral.eslogan || ''} />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="heroImage">Imagen de Fondo del Hero</Label>
-                            {heroImagePreview && (
-                                <div className="my-2 relative w-fit">
-                                    <Image src={heroImagePreview} alt="Hero image preview" width={200} height={100} className="rounded-md border p-2 object-cover" />
-                                    {heroImagePreview !== (config.configuracionGeneral.heroImageUrl || '') && (
-                                    <Button
-                                        type="button"
-                                        variant="destructive"
-                                        size="icon"
-                                        className="absolute top-1 right-1 h-6 w-6"
-                                        onClick={handleRemoveHeroImage}
-                                    >
-                                        <X className="h-4 w-4" />
-                                        <span className="sr-only">Eliminar imagen seleccionada</span>
-                                    </Button>
-                                    )}
+                        <div>
+                            <h4 className="font-medium text-lg mb-2">Sección Hero Principal</h4>
+                            <div className="space-y-4 p-4 border rounded-md">
+                                <div className="space-y-2">
+                                    <Label htmlFor="tituloHomepageHero">Título Principal (Hero)</Label>
+                                    <Input id="tituloHomepageHero" name="tituloHomepageHero" defaultValue={config.titulos.homepageHero || ''} />
                                 </div>
-                            )}
-                            <Input id="heroImage" name="heroImage" type="file" accept="image/*" onChange={handleHeroImageChange} ref={heroImageFileInputRef} />
+                                <div className="space-y-2">
+                                    <Label htmlFor="generalEslogan">Eslogan (debajo del título principal)</Label>
+                                    <Input id="generalEslogan" name="generalEslogan" defaultValue={config.configuracionGeneral.eslogan || ''} />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="heroImage">Imagen de Fondo del Hero</Label>
+                                    {heroImagePreview && (
+                                        <div className="my-2 relative w-fit">
+                                            <Image src={heroImagePreview} alt="Hero image preview" width={200} height={100} className="rounded-md border p-2 object-cover" />
+                                            {heroImagePreview !== (config.configuracionGeneral.heroImageUrl || '') && (
+                                            <Button
+                                                type="button"
+                                                variant="destructive"
+                                                size="icon"
+                                                className="absolute top-1 right-1 h-6 w-6"
+                                                onClick={handleRemoveHeroImage}
+                                            >
+                                                <X className="h-4 w-4" />
+                                                <span className="sr-only">Eliminar imagen seleccionada</span>
+                                            </Button>
+                                            )}
+                                        </div>
+                                    )}
+                                    <Input id="heroImage" name="heroImage" type="file" accept="image/*" onChange={handleHeroImageChange} ref={heroImageFileInputRef} />
+                                </div>
+                            </div>
                         </div>
+
+                        <Separator />
+
+                        <div>
+                            <h4 className="font-medium text-lg mb-2 flex items-center gap-2"><Sparkles className="text-amber-500" />Sección Hero Secundaria</h4>
+                             <div className="space-y-4 p-4 border rounded-md">
+                                <div className="flex items-center space-x-2">
+                                    <Switch id="secondaryHeroEnabled" name="secondaryHeroEnabled" checked={secondaryHeroEnabled} onCheckedChange={setSecondaryHeroEnabled} />
+                                    <Label htmlFor="secondaryHeroEnabled">Habilitar esta sección</Label>
+                                </div>
+
+                                {secondaryHeroEnabled && (
+                                <div className="space-y-4">
+                                     <div className="space-y-2">
+                                        <Label htmlFor="secondaryHeroTitle">Título</Label>
+                                        <Input id="secondaryHeroTitle" name="secondaryHeroTitle" defaultValue={config.secondaryHero?.title || ''} />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="secondaryHeroDescription">Descripción</Label>
+                                        <Textarea id="secondaryHeroDescription" name="secondaryHeroDescription" defaultValue={config.secondaryHero?.description || ''} />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="secondaryHeroImage">Imagen</Label>
+                                        {secondaryHeroImagePreview && (
+                                        <div className="my-2 relative w-fit">
+                                            <Image src={secondaryHeroImagePreview} alt="Secondary hero preview" width={200} height={100} className="rounded-md border p-2 object-cover" />
+                                            {secondaryHeroImagePreview !== (config.secondaryHero?.imageUrl || '') && (
+                                            <Button type="button" variant="destructive" size="icon" className="absolute top-1 right-1 h-6 w-6" onClick={handleRemoveSecondaryHeroImage} >
+                                                <X className="h-4 w-4" />
+                                                <span className="sr-only">Eliminar imagen</span>
+                                            </Button>
+                                            )}
+                                        </div>
+                                        )}
+                                        <Input id="secondaryHeroImage" name="secondaryHeroImage" type="file" accept="image/*" onChange={handleSecondaryHeroImageChange} ref={secondaryHeroImageFileInputRef} />
+                                    </div>
+                                    <div className="grid md:grid-cols-2 gap-4">
+                                        <div className="space-y-2">
+                                            <Label htmlFor="secondaryHeroCtaText">Texto del Botón (CTA)</Label>
+                                            <Input id="secondaryHeroCtaText" name="secondaryHeroCtaText" defaultValue={config.secondaryHero?.ctaText || ''} />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <Label htmlFor="secondaryHeroCtaLink">Enlace del Botón (CTA)</Label>
+                                            <Input id="secondaryHeroCtaLink" name="secondaryHeroCtaLink" defaultValue={config.secondaryHero?.ctaLink || ''} />
+                                        </div>
+                                    </div>
+                                </div>
+                                )}
+                            </div>
+                        </div>
+
+                         <Separator />
+
                          <div className="space-y-2">
                             <Label htmlFor="textoDescripcionHomepage">Descripción (Productos Destacados)</Label>
                             <Textarea id="textoDescripcionHomepage" name="textoDescripcionHomepage" defaultValue={config.textos.descripcionHomepage || ''} />

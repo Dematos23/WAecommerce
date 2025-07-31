@@ -3,8 +3,9 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ProductGrid } from "@/components/products/ProductGrid";
 import type { Product } from "@/types";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ShoppingBag } from "lucide-react";
 import { readProducts, readConfig } from "@/actions/aiActions";
+import Image from "next/image";
 
 export default async function Home() {
   const products = await readProducts();
@@ -37,6 +38,34 @@ export default async function Home() {
         </div>
       </section>
 
+      {config.secondaryHero?.enabled && (
+        <section className="bg-card">
+          <div className="container mx-auto px-4">
+            <div className="grid md:grid-cols-2 items-center">
+              <div className="py-12 md:py-24 pr-8">
+                 <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">{config.secondaryHero.title}</h2>
+                 <p className="text-muted-foreground text-lg mb-6">{config.secondaryHero.description}</p>
+              </div>
+              <div className="relative h-64 md:h-full min-h-[300px]">
+                 <Image 
+                    src={config.secondaryHero.imageUrl || "https://placehold.co/600x600.png"}
+                    alt={config.secondaryHero.title || "Hero image"}
+                    fill
+                    className="object-cover"
+                 />
+              </div>
+            </div>
+             <div className="relative -mt-8 mb-12 flex justify-center">
+                <Button asChild size="lg" className="shadow-lg">
+                    <Link href={config.secondaryHero.ctaLink || "#"}>
+                        <ShoppingBag className="mr-2" /> {config.secondaryHero.ctaText || "Comprar Ahora"}
+                    </Link>
+                </Button>
+            </div>
+          </div>
+        </section>
+      )}
+
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
@@ -53,7 +82,7 @@ export default async function Home() {
         <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl font-bold tracking-tight font-headline">{config.textos.mensajeBienvenida}</h2>
             <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">
-              Cada producto en nuestra tienda es seleccionado cuidadosamente para asegurar la mejor calidad y tu completa satisfacción.
+              Cada producto en nuestra tienda es seleccionado cuidadosamente para asegurar la mejor calidad y tu completa satisfaction.
             </p>
              <Button asChild variant="link" className="mt-4 text-lg">
                 <Link href="/about">

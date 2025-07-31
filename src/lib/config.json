@@ -26,24 +26,24 @@
   ],
   "titulos": {
     "homepageHero": "TiendaExpress: Tu tienda, a un clic.",
-    "catalogo": "Explora Nuestros Productos",
-    "carrito": "Tu Carrito de Compras",
-    "checkout": "Finaliza Tu Compra",
-    "sobreNosotros": "Conoce Sobre TiendaExpress",
-    "contacto": "Ponte en Contacto"
+    "catalogo": null,
+    "carrito": null,
+    "checkout": null,
+    "sobreNosotros": null,
+    "contacto": null
   },
   "textos": {
     "mensajeBienvenida": "¡Gracias por visitarnos!",
-    "instruccionesCheckout": "Revisa tu pedido y completa tus datos para enviarlo a través de WhatsApp.",
+    "instruccionesCheckout": null,
     "descripcionHomepage": "Rápido, fácil y a tu puerta.",
-    "descripcionSobreNosotros": "Somos tu tienda de confianza, comprometidos con ofrecerte productos de calidad con la mejor experiencia de compra.",
-    "infoContacto": "Estamos aquí para ayudarte. No dudes en contactarnos por cualquiera de nuestros canales."
+    "descripcionSobreNosotros": null,
+    "infoContacto": null
   },
   "contacto": {
-    "telefono": "+1 (234) 567-890",
-    "correo": "contacto@tiendaexpress.com",
-    "direccion": "Av. Siempreviva 742, Springfield",
-    "horarioAtencion": "Lunes a Viernes: 9:00 AM - 6:00 PM"
+    "telefono": null,
+    "correo": null,
+    "direccion": null,
+    "horarioAtencion": null
   },
   "configuracionGeneral": {
     "nombreTienda": "TiendaExpress",
@@ -52,7 +52,15 @@
     "eslogan": "Rápido, fácil y a tu puerta.",
     "mensajePedidoWhatsApp": "¡Gracias por tu compra! 😊",
     "displayMode": "both",
-    "heroImageUrl": ""
+    "heroImageUrl": "/images/hero-background.avif"
+  },
+  "secondaryHero": {
+    "enabled": true,
+    "title": "¡Oferta Especial de Verano!",
+    "description": "Descubre nuestra nueva colección con descuentos de hasta el 30%. No te pierdas la oportunidad de renovar tu estilo con las últimas tendencias.",
+    "imageUrl": "/images/secondary-hero.png",
+    "ctaText": "Explorar colección",
+    "ctaLink": "/products"
   },
   "productCard": {
     "nameAlign": "center",
@@ -63,8 +71,8 @@
     "imagePosition": "top"
   },
   "informacionLegal": {
-    "razonSocial": "TiendaExpress S.A.C.",
-    "ruc": "20123456789",
-    "direccionLegal": "Av. Principal 123, Of. 404, Ciudad"
+    "razonSocial": null,
+    "ruc": null,
+    "direccionLegal": null
   }
 }

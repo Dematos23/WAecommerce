@@ -337,6 +337,14 @@ export async function readConfig(): Promise<SiteConfig> {
         displayMode: 'both',
         heroImageUrl: '',
       },
+      secondaryHero: {
+        enabled: false,
+        title: "",
+        description: "",
+        imageUrl: "",
+        ctaText: "",
+        ctaLink: ""
+      },
       productCard: {
         nameAlign: 'left',
         descriptionAlign: 'left',
@@ -361,6 +369,7 @@ export async function readConfig(): Promise<SiteConfig> {
         textos: { ...defaultConfig.textos, ...config.textos },
         contacto: { ...defaultConfig.contacto, ...config.contacto },
         configuracionGeneral: { ...defaultConfig.configuracionGeneral, ...config.configuracionGeneral },
+        secondaryHero: { ...defaultConfig.secondaryHero, ...config.secondaryHero },
         productCard: { ...defaultConfig.productCard, ...config.productCard },
         informacionLegal: { ...defaultConfig.informacionLegal, ...config.informacionLegal },
     };
@@ -409,6 +418,14 @@ export async function readConfig(): Promise<SiteConfig> {
         mensajePedidoWhatsApp: "¡Gracias por tu compra! 😊",
         displayMode: "both",
         heroImageUrl: "",
+      },
+      secondaryHero: {
+        enabled: false,
+        title: "Título de prueba",
+        description: "Descripción de prueba",
+        imageUrl: "",
+        ctaText: "Ver más",
+        ctaLink: "/products"
       },
       productCard: {
         nameAlign: 'left',
@@ -512,6 +529,10 @@ export async function updateConfig(formData: FormData) {
   const heroImageFile = formData.get("heroImage") as File;
   let heroImageUrl = currentConfig.configuracionGeneral.heroImageUrl;
 
+  const secondaryHeroImageFile = formData.get("secondaryHeroImage") as File;
+  let secondaryHeroImageUrl = currentConfig.secondaryHero?.imageUrl || "";
+
+
   if (logoFile && logoFile.size > 0) {
     try {
       await fs.mkdir(publicImagesPath, { recursive: true });
@@ -537,6 +558,20 @@ export async function updateConfig(formData: FormData) {
       heroImageUrl = `/images/${heroImageName}`;
     } catch (error) {
       console.error("Error saving hero image:", error);
+    }
+  }
+
+  if (secondaryHeroImageFile && secondaryHeroImageFile.size > 0) {
+    try {
+      await fs.mkdir(publicImagesPath, { recursive: true });
+      const secondaryHeroImageExtension = secondaryHeroImageFile.name.split('.').pop();
+      const secondaryHeroImageName = `secondary-hero.${secondaryHeroImageExtension}`;
+      const secondaryHeroImagePath = path.join(publicImagesPath, secondaryHeroImageName);
+      const imageBuffer = Buffer.from(await secondaryHeroImageFile.arrayBuffer());
+      await fs.writeFile(secondaryHeroImagePath, imageBuffer);
+      secondaryHeroImageUrl = `/images/${secondaryHeroImageName}`;
+    } catch (error) {
+      console.error("Error saving secondary hero image:", error);
     }
   }
 
@@ -573,6 +608,14 @@ export async function updateConfig(formData: FormData) {
           numeroWhatsApp: formData.get('generalNumeroWhatsApp') as string,
           eslogan: formData.get('generalEslogan') as string,
           mensajePedidoWhatsApp: formData.get('generalMensajePedidoWhatsApp') as string,
+      },
+      secondaryHero: {
+        enabled: formData.get('secondaryHeroEnabled') === 'on',
+        title: formData.get('secondaryHeroTitle') as string,
+        description: formData.get('secondaryHeroDescription') as string,
+        imageUrl: secondaryHeroImageUrl,
+        ctaText: formData.get('secondaryHeroCtaText') as string,
+        ctaLink: formData.get('secondaryHeroCtaLink') as string,
       },
       informacionLegal: {
         razonSocial: formData.get('legalRazonSocial') as string,
