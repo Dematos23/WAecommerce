@@ -46,6 +46,29 @@ export async function login(prevState: { success: boolean; error?: string } | un
   return { success: false, error: 'Usuario o contraseña inválidos' };
 }
 
+export async function register(prevState: { success: boolean; error?: string } | undefined, formData: FormData) {
+    const name = formData.get('name') as string;
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+    const confirmPassword = formData.get('confirmPassword') as string;
+
+    if (password !== confirmPassword) {
+        return { success: false, error: 'Las contraseñas no coinciden.' };
+    }
+
+    // This is a placeholder for creating a user in the database.
+    // In a real app, you would hash the password and save the user.
+    console.log('Registering user:', { name, email });
+    
+    // For now, we will just log the user in with the new credentials.
+    // This is NOT secure and is for demonstration purposes only.
+    const expires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+    const session = await encrypt({ user: { name, email, tenantId: 'new-tenant' }, expires });
+
+    cookies().set('session', session, { expires, httpOnly: true });
+    redirect('/dashboard');
+}
+
 export async function logout() {
   cookies().set('session', '', { expires: new Date(0) });
   redirect('/login');

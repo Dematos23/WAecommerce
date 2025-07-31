@@ -10,44 +10,29 @@ declare module 'next-auth' {
   }
 }
 
-
-export interface Product {
-  id: string;
-  nombre: string;
-  descripcion: string | null;
-  precio: number;
-  categoria: string;
-  imagenes: string[];
-  destacado?: boolean;
-}
-
-export interface Reclamacion {
-    id: string;
-    fechaReclamo: string;
-    nombreCompleto: string;
-    domicilio?: string;
-    tipoDocumento: string;
-    numeroDocumento: string;
-    email: string;
-    telefono?: string;
-    nombreApoderado?: string;
-    tipoBien: string;
-    montoReclamado?: string;
-    descripcionBien?: string;
-    tipoReclamacion: string;
-    detalleReclamacion: string;
-    pedido?: string;
-    fechaRegistro: string;
-    estado: 'pendiente' | 'en-proceso' | 'resuelto';
-    observacionesVendedor?: string;
-}
-
 export interface MenuItem {
   titulo: string;
   enlace: string;
 }
 
 export interface SiteConfig {
+  variablesCss: {
+    colorPrimario: string;
+    colorSecundario: string;
+    colorFondo: string;
+    colorTexto: string;
+    colorAcento: string;
+    colorDecorativo: string;
+    fontFamily: string;
+    h1Size: string;
+    h2Size: string;
+    h3Size: string;
+    paragraphSize: string;
+    buttonFontSize: string;
+    marginBase: string;
+    paddingBase: string;
+    borderRadius: string;
+  };
   header: {
     menu: MenuItem[];
   };
