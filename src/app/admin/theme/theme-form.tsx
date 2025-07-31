@@ -300,10 +300,8 @@ function ProductCardPreview({ productCard }: { productCard: SiteConfig['productC
     const nameClasses = cn("h-4 w-3/4 rounded-sm bg-primary/80 mb-2", {
       "mx-auto": productCard.nameAlign === 'center'
     });
-    const descriptionClasses = cn("space-y-1", {
-        "text-center": productCard.descriptionAlign === 'center',
-    });
-     const priceClasses = cn("h-6 w-1/3 rounded-sm bg-primary mt-4", {
+    const descriptionClasses = cn("space-y-1");
+    const priceClasses = cn("h-6 w-1/3 rounded-sm bg-primary mt-4", {
         "mx-auto": productCard.priceAlign === 'center'
     });
 
@@ -314,7 +312,14 @@ function ProductCardPreview({ productCard }: { productCard: SiteConfig['productC
     );
 
     const NamePreview = () => <div className={cn("p-4", {"pt-0": productCard.imagePosition === 'afterName' })}><div className={nameClasses} /></div>
-    const DescPreview = () => <div className={cn("p-4 pt-0", {"pt-4": productCard.imagePosition === 'afterDescription'})}><div className={descriptionClasses}><div className="h-3 w-full rounded-sm bg-muted-foreground/50"/><div className="h-3 w-5/6 rounded-sm bg-muted-foreground/50"/></div></div>
+    const DescPreview = () => (
+        <div className={cn("p-4 pt-0", {"pt-4": productCard.imagePosition === 'afterDescription'})}>
+            <div className={descriptionClasses}>
+                <div className={cn("h-3 w-full rounded-sm bg-muted-foreground/50", { "mx-auto": productCard.descriptionAlign === 'center' })}/>
+                <div className={cn("h-3 w-5/6 rounded-sm bg-muted-foreground/50", { "mx-auto": productCard.descriptionAlign === 'center' })}/>
+            </div>
+        </div>
+    )
     const PricePreview = () => <div className={cn("p-4 pt-0", {"pt-4": productCard.imagePosition === 'afterPrice'})}><div className={priceClasses} /></div>
 
     const renderOrder = () => {
