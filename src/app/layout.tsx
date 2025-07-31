@@ -1,7 +1,7 @@
 
 import type { Metadata } from 'next';
 import './globals.css';
-import { Inter } from 'next/font/google';
+import { Manrope } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 import { Header } from '@/components/layout/Header';
@@ -10,11 +10,11 @@ import { readConfig } from '@/actions/aiActions';
 import { Providers } from './providers';
 import { getSession } from '@/lib/auth';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+const manrope = Manrope({ subsets: ['latin'], variable: '--font-manrope' });
 
 export const metadata: Metadata = {
-  title: 'TiendaExpress',
-  description: 'Rápido, fácil y a tu puerta.',
+  title: 'Kima - Lanza tu Tienda Online en Minutos',
+  description: 'La plataforma todo-en-uno para crear y gestionar tu e-commerce.',
 };
 
 export default async function RootLayout({
@@ -28,19 +28,11 @@ export default async function RootLayout({
   ]);
   
   return (
-    <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html lang="es">
       <body
         className={cn(
           'min-h-screen bg-background font-body antialiased',
-          inter.variable
+          manrope.variable
         )}
       >
         <Providers>

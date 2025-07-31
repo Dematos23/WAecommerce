@@ -26,37 +26,43 @@ interface HeaderProps {
 export function Header({ config, session }: HeaderProps) {
   const pathname = usePathname();
   
-  const isPublicSaasPage = ['/', '/login', '/register'].includes(pathname);
+  const isPublicSaasPage = ['/', '/login', '/register', '/contact', '/pricing'].some(p => pathname === p);
   const isDashboardPage = pathname.startsWith('/dashboard');
 
   const renderCart = !isPublicSaasPage && !isDashboardPage;
 
+  const navLinks = [
+      { href: "/#features", label: "Características" },
+      { href: "/pricing", label: "Precios" },
+      { href: "/contact", label: "Contacto" },
+  ];
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 max-w-full items-center justify-between px-4">
+      <div className="container flex h-20 max-w-full items-center justify-between px-4">
         {/* Desktop Header */}
         <div className="hidden md:flex w-full items-center justify-between">
-          <div className="flex-1">
-            <Link href="/" className="flex items-center gap-2">
+          <div className="flex-1 flex items-center gap-2">
+            <Link href="/">
               <Logo config={config} />
             </Link>
           </div>
-          <nav className="flex flex-1 justify-center items-center gap-6 text-sm font-medium">
-            {config.menus.map((item) => (
-              <Link
-                key={item.enlace}
-                href={item.enlace}
-                className={cn(
-                  'transition-colors hover:text-foreground/80',
-                  pathname === item.enlace
-                    ? 'text-foreground'
-                    : 'text-foreground/60'
-                )}
-              >
-                {item.titulo}
-              </Link>
-            ))}
-          </nav>
+          {isPublicSaasPage && (
+            <nav className="flex flex-1 justify-center items-center gap-8 text-base font-medium">
+                {navLinks.map((link) => (
+                    <Link
+                        key={link.href}
+                        href={link.href}
+                        className={cn(
+                        'transition-colors text-foreground/80 hover:text-foreground',
+                        pathname === link.href && 'text-primary font-semibold'
+                        )}
+                    >
+                        {link.label}
+                    </Link>
+                ))}
+            </nav>
+          )}
           <div className="flex flex-1 justify-end items-center gap-4">
              {renderCart && <CartIcon config={config} />}
              <UserNav session={session} />
@@ -80,9 +86,22 @@ export function Header({ config, session }: HeaderProps) {
                   <div className="flex items-center space-x-2 mb-4">
                     <Logo config={config} />
                   </div>
-                  <nav className="grid gap-4">
-                    {config.menus.map((item) => (
+                   <nav className="grid gap-4">
+                    {isPublicSaasPage ? navLinks.map((item) => (
                       <Link
+                        key={item.href}
+                        href={item.href}
+                        className={cn(
+                          'text-lg font-medium transition-colors hover:text-foreground/80',
+                          pathname === item.href
+                            ? 'text-primary'
+                            : 'text-foreground/60'
+                        )}
+                      >
+                        {item.label}
+                      </Link>
+                    )) : config.menus.map((item) => (
+                       <Link
                         key={item.enlace}
                         href={item.enlace}
                         className={cn(
