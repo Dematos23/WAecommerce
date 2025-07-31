@@ -7,6 +7,7 @@ import { CartProvider } from '@/components/cart/CartProvider';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { readConfig } from '@/actions/aiActions';
+import { ThemeProvider } from '@/components/layout/ThemeProvider';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
@@ -38,14 +39,21 @@ export default async function RootLayout({
           inter.variable
         )}
       >
-        <CartProvider>
-          <div className="relative flex flex-col bg-background min-h-screen">
-            <Header config={config} />
-            <main className="flex-1">{children}</main>
-            <Footer config={config} />
-          </div>
-          <Toaster />
-        </CartProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <CartProvider>
+            <div className="relative flex flex-col bg-background min-h-screen">
+              <Header config={config} />
+              <main className="flex-1">{children}</main>
+              <Footer config={config} />
+            </div>
+            <Toaster />
+          </CartProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
