@@ -51,7 +51,6 @@ export interface SiteConfig {
     catalogo: string;
     carrito: string;
     checkout: string;
-there is something wrong with the app, whe i go to /reclamaciones it gives me an error
     sobreNosotros: string;
     contacto: string;
   };
