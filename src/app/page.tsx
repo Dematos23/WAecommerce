@@ -2,9 +2,8 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ProductGrid } from "@/components/products/ProductGrid";
-import type { Product } from "@/types";
-import { ArrowRight, ShoppingBag } from "lucide-react";
 import { readProducts, readConfig } from "@/actions/aiActions";
+import { ArrowRight, ShoppingBag } from "lucide-react";
 import Image from "next/image";
 
 export default async function Home() {
@@ -42,11 +41,11 @@ export default async function Home() {
         <section className="bg-card">
           <div className="container mx-auto px-4">
             <div className="grid md:grid-cols-2">
-              <div className="py-12 md:py-24 pr-8 flex flex-col justify-center">
+              <div className="flex flex-col justify-center py-12 md:py-24 pr-8">
                  <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">{config.secondaryHero.title}</h2>
                  <p className="text-muted-foreground text-lg mb-6">{config.secondaryHero.description}</p>
               </div>
-              <div className="relative h-64 md:h-auto min-h-[300px]">
+              <div className="relative min-h-[300px] md:min-h-full">
                  <Image 
                     src={config.secondaryHero.imageUrl || "https://placehold.co/600x600.png"}
                     alt={config.secondaryHero.title || "Hero image"}
