@@ -106,7 +106,6 @@ export function ProductForm({ product, categories = [] }: { product?: Product, c
                     name="categoria"
                     onValueChange={handleCategoryChange}
                     defaultValue={selectedCategory}
-                    required={!isCreatingNewCategory}
                     disabled={isCreatingNewCategory}
                 >
                     <SelectTrigger>
@@ -124,19 +123,15 @@ export function ProductForm({ product, categories = [] }: { product?: Product, c
                     </SelectContent>
                 </Select>
                  {isCreatingNewCategory && (
-                    <div className="flex gap-2 items-center mt-2">
+                    <div className="mt-2">
                         <Input
                             name="new_category"
                             placeholder="Nombre de la nueva categoría"
                             required
                         />
-                        <Button
-                            type="button"
-                            variant="outline"
-                            onClick={() => setIsCreatingNewCategory(false)}
-                        >
-                            Cancelar
-                        </Button>
+                         <p className="text-xs text-muted-foreground mt-1">
+                            Para cancelar, simplemente seleccione una categoría existente de la lista.
+                        </p>
                     </div>
                 )}
               </div>
