@@ -52,7 +52,7 @@ export function ProductCard({ product }: ProductCardProps) {
               className="object-cover"
               data-ai-hint={`${product.categoria} product`}
             />
-             <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+             <div className="absolute inset-0 bg-primary/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                 <Eye className="h-8 w-8 text-white" />
             </div>
           </Link>
