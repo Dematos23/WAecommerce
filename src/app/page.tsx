@@ -5,6 +5,7 @@ import { ProductGrid } from "@/components/products/ProductGrid";
 import { readProducts, readConfig } from "@/actions/aiActions";
 import { ArrowRight, ShoppingBag } from "lucide-react";
 import Image from "next/image";
+import type { SiteConfig } from "@/types";
 
 export default async function Home() {
   const products = await readProducts();
@@ -41,11 +42,11 @@ export default async function Home() {
         <section className="bg-card">
           <div className="container mx-auto px-4 relative">
             <div className="grid md:grid-cols-2">
-              <div className="py-12 md:py-24 pr-8 flex flex-col justify-center h-full">
+              <div className="flex flex-col justify-center py-12 md:py-24 pr-8">
                 <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">{config.secondaryHero.title}</h2>
                 <p className="text-muted-foreground text-lg mb-6">{config.secondaryHero.description}</p>
               </div>
-              <div className="relative h-64 md:h-auto min-h-[300px]">
+              <div className="relative min-h-[300px] md:h-auto">
                  <Image 
                     src={config.secondaryHero.imageUrl || "https://placehold.co/600x600.png"}
                     alt={config.secondaryHero.title || "Hero image"}
@@ -54,10 +55,10 @@ export default async function Home() {
                  />
               </div>
             </div>
-             <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-10">
-                <Button asChild size="lg" className="shadow-lg hover:scale-105 transition-transform">
+             <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-10 w-full flex justify-center">
+                <Button asChild size="lg" variant="ghost" className="text-xl font-bold text-white bg-black/30 hover:bg-black/50 hover:tracking-widest transition-all duration-300 ease-in-out">
                     <Link href={config.secondaryHero.ctaLink || "#"}>
-                        <ShoppingBag className="mr-2" /> {config.secondaryHero.ctaText || "Comprar Ahora"}
+                        {config.secondaryHero.ctaText || "Comprar Ahora"}
                     </Link>
                 </Button>
             </div>
@@ -73,7 +74,7 @@ export default async function Home() {
               {config.textos.descripcionHomepage}
             </p>
           </div>
-          <ProductGrid products={featuredProducts} />
+          <ProductGrid products={featuredProducts} config={config as SiteConfig} />
         </div>
       </section>
       
