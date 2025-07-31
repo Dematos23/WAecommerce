@@ -27,14 +27,26 @@ async function createUserInFirestore(user: FirebaseUser, name?: string) {
             photoURL: user.photoURL,
             providerId: user.providerData[0]?.providerId,
             createdAt: serverTimestamp(),
+            role: 'client', // Default role for new users
         });
     }
 }
 
+async function getUserRole(uid: string): Promise<string | null> {
+    const userRef = doc(db, 'users', uid);
+    const docSnap = await getDoc(userRef);
+    if (docSnap.exists()) {
+        return docSnap.data()?.role || 'client';
+    }
+    return null;
+}
+
+
 export async function login(email: string, password:  string) {
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    return { success: true, user: userCredential.user };
+    const role = await getUserRole(userCredential.user.uid);
+    return { success: true, user: userCredential.user, role };
   } catch (error: any) {
     return { success: false, error: error.message };
   }
@@ -45,7 +57,8 @@ export async function register(name: string, email: string, password:  string) {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         await updateProfile(userCredential.user, { displayName: name });
         await createUserInFirestore(userCredential.user, name);
-        return { success: true, user: userCredential.user };
+        const role = await getUserRole(userCredential.user.uid);
+        return { success: true, user: userCredential.user, role };
     } catch (error: any) {
         return { success: false, error: error.message };
     }
@@ -55,7 +68,8 @@ export async function signInWithGoogle() {
   try {
     const result = await signInWithPopup(auth, googleProvider);
     await createUserInFirestore(result.user);
-    return { success: true, user: result.user };
+    const role = await getUserRole(result.user.uid);
+    return { success: true, user: result.user, role };
   } catch (error: any) {
      return { success: false, error: error.message };
   }
