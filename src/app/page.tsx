@@ -41,12 +41,12 @@ export default async function Home() {
       {config.secondaryHero?.enabled && (
         <section className="bg-card">
           <div className="container mx-auto px-4">
-            <div className="grid md:grid-cols-2 items-center">
-              <div className="py-12 md:py-24 pr-8">
+            <div className="grid md:grid-cols-2">
+              <div className="py-12 md:py-24 pr-8 flex flex-col justify-center">
                  <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">{config.secondaryHero.title}</h2>
                  <p className="text-muted-foreground text-lg mb-6">{config.secondaryHero.description}</p>
               </div>
-              <div className="relative h-64 md:h-full min-h-[300px]">
+              <div className="relative h-64 md:h-auto min-h-[300px]">
                  <Image 
                     src={config.secondaryHero.imageUrl || "https://placehold.co/600x600.png"}
                     alt={config.secondaryHero.title || "Hero image"}
@@ -74,7 +74,7 @@ export default async function Home() {
               {config.textos.descripcionHomepage}
             </p>
           </div>
-          <ProductGrid products={featuredProducts} config={config} />
+          <ProductGrid products={featuredProducts} />
         </div>
       </section>
       

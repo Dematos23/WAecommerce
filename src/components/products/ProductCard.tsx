@@ -1,6 +1,7 @@
 
 "use client";
 
+import { useEffect, useState } from "react";
 import type { Product, SiteConfig } from "@/types";
 import Image from "next/image";
 import {
@@ -16,15 +17,20 @@ import { useToast } from "@/hooks/use-toast";
 import { ShoppingCart, Eye } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { getCachedConfig } from "@/lib/config";
 
 interface ProductCardProps {
   product: Product;
-  config: SiteConfig;
 }
 
-export function ProductCard({ product, config }: ProductCardProps) {
+export function ProductCard({ product }: ProductCardProps) {
   const { addToCart } = useCart();
   const { toast } = useToast();
+  const [config, setConfig] = useState<SiteConfig | null>(null);
+
+  useEffect(() => {
+    getCachedConfig().then(setConfig);
+  }, []);
 
   if (!config) {
     return null;
