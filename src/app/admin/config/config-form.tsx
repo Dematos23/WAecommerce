@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Save, Home, FileCog, Phone, Store, X } from "lucide-react";
+import { Save, PanelTop, FileCog, Phone, Settings2, X } from "lucide-react";
 import Image from "next/image";
 
 function SubmitButton() {
@@ -61,7 +61,7 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
             <Accordion type="multiple" defaultValue={['general', 'homepage']} className="w-full">
                 {/* General Settings */}
                 <AccordionItem value="general">
-                    <AccordionTrigger className="text-xl font-semibold flex items-center gap-2"><Store/> Configuración General</AccordionTrigger>
+                    <AccordionTrigger className="text-xl font-semibold flex items-center gap-2"><Settings2/> Configuración General</AccordionTrigger>
                     <AccordionContent className="space-y-4 pt-4">
                          <div className="grid md:grid-cols-2 gap-4">
                              <div className="space-y-2">
@@ -116,7 +116,7 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
                 
                 {/* Homepage Content */}
                 <AccordionItem value="homepage">
-                    <AccordionTrigger className="text-xl font-semibold flex items-center gap-2"><Home/> Contenido de la Página de Inicio</AccordionTrigger>
+                    <AccordionTrigger className="text-xl font-semibold flex items-center gap-2"><PanelTop/> Contenido de la Página de Inicio</AccordionTrigger>
                     <AccordionContent className="space-y-4 pt-4">
                          <div className="space-y-2">
                             <Label htmlFor="tituloHomepageHero">Título Principal (Hero)</Label>
@@ -201,7 +201,7 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
                                 <Input id="contactoCorreo" name="contactoCorreo" type="email" defaultValue={config.contacto.correo} />
                             </div>
                         </div>
-                       <div className="space-y-2">
+                         <div className="space-y-2">
                             <Label htmlFor="contactoHorarioAtencion">Horario de Atención</Label>
                             <Input id="contactoHorarioAtencion" name="contactoHorarioAtencion" defaultValue={config.contacto.horarioAtencion} />
                         </div>
