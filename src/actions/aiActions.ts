@@ -484,16 +484,6 @@ export async function updateConfig(formData: FormData) {
 
   const newConfig: SiteConfig = {
       ...currentConfig,
-      variablesCss: {
-        colorPrimario: formData.get('colorPrimario') as string,
-        colorSecundario: formData.get('colorSecundario') as string,
-        colorFondo: formData.get('colorFondo') as string,
-        colorTexto: formData.get('colorTexto') as string,
-        darkColorPrimario: formData.get('darkColorPrimario') as string,
-        darkColorSecundario: formData.get('darkColorSecundario') as string,
-        darkColorFondo: formData.get('darkColorFondo') as string,
-        darkColorTexto: formData.get('darkColorTexto') as string,
-      },
       titulos: {
           homepageHero: formData.get('tituloHomepageHero') as string,
           catalogo: formData.get('tituloCatalogo') as string,
@@ -524,10 +514,33 @@ export async function updateConfig(formData: FormData) {
   };
 
   await writeConfig(newConfig);
-  await updateCssVariables(newConfig);
 
   // Revalidate all paths to reflect changes immediately
   revalidatePath('/', 'layout');
 
   redirect('/admin/config');
+}
+
+export async function updateTheme(formData: FormData) {
+    const currentConfig = await readConfig();
+
+    const newConfig: SiteConfig = {
+        ...currentConfig,
+        variablesCss: {
+            colorPrimario: formData.get('colorPrimario') as string,
+            colorSecundario: formData.get('colorSecundario') as string,
+            colorFondo: formData.get('colorFondo') as string,
+            colorTexto: formData.get('colorTexto') as string,
+            darkColorPrimario: formData.get('darkColorPrimario') as string,
+            darkColorSecundario: formData.get('darkColorSecundario') as string,
+            darkColorFondo: formData.get('darkColorFondo') as string,
+            darkColorTexto: formData.get('darkColorTexto') as string,
+        },
+    };
+
+    await writeConfig(newConfig);
+    await updateCssVariables(newConfig);
+
+    revalidatePath('/', 'layout');
+    redirect('/admin/theme');
 }
