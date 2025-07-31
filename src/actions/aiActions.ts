@@ -12,6 +12,7 @@ const productsFilePath = path.join(process.cwd(), "src/data/products.json");
 const reclamacionesFilePath = path.join(process.cwd(), "src/data/reclamaciones.json");
 const configFilePath = path.join(process.cwd(), "src/lib/config.json");
 const publicImagesPath = path.join(process.cwd(), "public/images");
+const globalsCssPath = path.join(process.cwd(), "src/app/globals.css");
 
 // --- Product Functions ---
 
@@ -304,11 +305,94 @@ async function writeConfig(config: SiteConfig): Promise<void> {
   }
 }
 
+function hexToHsl(hex: string): string {
+    hex = hex.replace(/^#/, '');
+    const r = parseInt(hex.substring(0, 2), 16) / 255;
+    const g = parseInt(hex.substring(2, 4), 16) / 255;
+    const b = parseInt(hex.substring(4, 6), 16) / 255;
+
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    let h = 0, s = 0, l = (max + min) / 2;
+
+    if (max !== min) {
+        const d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch (max) {
+            case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+            case g: h = (b - r) / d + 2; break;
+            case b: h = (r - g) / d + 4; break;
+        }
+        h /= 6;
+    }
+    
+    h = Math.round(h * 360);
+    s = Math.round(s * 100);
+    l = Math.round(l * 100);
+
+    return `${h} ${s}% ${l}%`;
+}
+
+
+async function updateCssVariables(config: SiteConfig) {
+    try {
+        let cssContent = await fs.readFile(globalsCssPath, 'utf8');
+
+        const updateTheme = (themeSelector: string, themeColors: any) => {
+            const themeRegex = new RegExp(`(${themeSelector}\\s*{[\\s\\S]*?})`, 'g');
+            
+            return cssContent.replace(themeRegex, (match) => {
+                let updatedTheme = match;
+                for (const [key, value] of Object.entries(themeColors)) {
+                    if (value) {
+                       const hslValue = hexToHsl(value as string);
+                       const propRegex = new RegExp(`(--${key}:\\s*.*?);`);
+                       if (propRegex.test(updatedTheme)) {
+                          updatedTheme = updatedTheme.replace(propRegex, `--${key}: ${hslValue};`);
+                       }
+                    }
+                }
+                return updatedTheme;
+            });
+        };
+
+        cssContent = updateTheme(':root', {
+            'background': config.variablesCss.colorFondo,
+            'foreground': config.variablesCss.colorTexto,
+            'primary': config.variablesCss.colorPrimario,
+            'secondary': config.variablesCss.colorSecundario,
+        });
+        
+        cssContent = updateTheme('.dark', {
+            'background': config.variablesCss.darkColorFondo,
+            'foreground': config.variablesCss.darkColorTexto,
+            'primary': config.variablesCss.darkColorPrimario,
+            'secondary': config.variablesCss.darkColorSecundario,
+        });
+
+        await fs.writeFile(globalsCssPath, cssContent, 'utf8');
+
+    } catch (error) {
+        console.error("Error updating CSS variables:", error);
+    }
+}
+
+
 export async function updateConfig(formData: FormData) {
   const currentConfig = await readConfig();
 
   const newConfig: SiteConfig = {
       ...currentConfig,
+      variablesCss: {
+        colorPrimario: formData.get('colorPrimario') as string,
+        colorSecundario: formData.get('colorSecundario') as string,
+        colorFondo: formData.get('colorFondo') as string,
+        colorTexto: formData.get('colorTexto') as string,
+        darkColorPrimario: formData.get('darkColorPrimario') as string,
+        darkColorSecundario: formData.get('darkColorSecundario') as string,
+        darkColorFondo: formData.get('darkColorFondo') as string,
+        darkColorTexto: formData.get('darkColorTexto') as string,
+      },
       titulos: {
           homepageHero: formData.get('tituloHomepageHero') as string,
           catalogo: formData.get('tituloCatalogo') as string,
@@ -339,6 +423,7 @@ export async function updateConfig(formData: FormData) {
   };
 
   await writeConfig(newConfig);
+  await updateCssVariables(newConfig);
 
   // Revalidate all paths to reflect changes immediately
   revalidatePath('/', 'layout');

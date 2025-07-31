@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useFormStatus } from "react-dom";
@@ -8,13 +9,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Save } from "lucide-react";
+import { Save, Palette } from "lucide-react";
 
 export function ConfigForm({ config }: { config: SiteConfig }) {
 
     return (
         <form action={updateConfig} className="space-y-8">
-            <Accordion type="multiple" defaultValue={['general', 'titulos', 'textos', 'contacto']} className="w-full">
+            <Accordion type="multiple" defaultValue={['general']} className="w-full">
                 {/* General Settings */}
                 <AccordionItem value="general">
                     <AccordionTrigger className="text-xl font-semibold">Configuración General</AccordionTrigger>
@@ -26,6 +27,31 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
                         <div className="space-y-2">
                             <Label htmlFor="generalNumeroWhatsApp">Número de WhatsApp</Label>
                             <Input id="generalNumeroWhatsApp" name="generalNumeroWhatsApp" defaultValue={config.configuracionGeneral.numeroWhatsApp} />
+                        </div>
+                    </AccordionContent>
+                </AccordionItem>
+
+                 {/* Theme Customization */}
+                <AccordionItem value="theme">
+                    <AccordionTrigger className="text-xl font-semibold flex items-center gap-2"><Palette /> Personalización del Tema</AccordionTrigger>
+                    <AccordionContent className="space-y-6 pt-4">
+                        <div>
+                            <h4 className="font-medium text-lg mb-3">Tema Claro</h4>
+                            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                <ColorInput label="Primario" name="colorPrimario" defaultValue={config.variablesCss.colorPrimario} />
+                                <ColorInput label="Secundario" name="colorSecundario" defaultValue={config.variablesCss.colorSecundario} />
+                                <ColorInput label="Fondo" name="colorFondo" defaultValue={config.variablesCss.colorFondo} />
+                                <ColorInput label="Texto" name="colorTexto" defaultValue={config.variablesCss.colorTexto} />
+                            </div>
+                        </div>
+                         <div>
+                            <h4 className="font-medium text-lg mb-3">Tema Oscuro</h4>
+                            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                <ColorInput label="Primario (Oscuro)" name="darkColorPrimario" defaultValue={config.variablesCss.darkColorPrimario} />
+                                <ColorInput label="Secundario (Oscuro)" name="darkColorSecundario" defaultValue={config.variablesCss.darkColorSecundario} />
+                                <ColorInput label="Fondo (Oscuro)" name="darkColorFondo" defaultValue={config.variablesCss.darkColorFondo} />
+                                <ColorInput label="Texto (Oscuro)" name="darkColorTexto" defaultValue={config.variablesCss.darkColorTexto} />
+                            </div>
                         </div>
                     </AccordionContent>
                 </AccordionItem>
@@ -126,6 +152,24 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
         </form>
     )
 }
+
+function ColorInput({ label, name, defaultValue }: { label: string; name: string; defaultValue: string }) {
+    return (
+        <div className="space-y-2">
+            <Label htmlFor={name}>{label}</Label>
+            <div className="relative">
+                <Input
+                    id={name}
+                    name={name}
+                    type="color"
+                    defaultValue={defaultValue}
+                    className="w-full h-10 p-1 cursor-pointer"
+                />
+            </div>
+        </div>
+    )
+}
+
 
 function SubmitButton() {
     const { pending } = useFormStatus();

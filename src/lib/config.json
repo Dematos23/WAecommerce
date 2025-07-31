@@ -1,21 +1,32 @@
+
 {
   "variablesCss": {
-    "colorPrimario": "hsl(202, 70%, 83.7%)",
-    "colorSecundario": "hsl(259, 70%, 83.7%)",
-    "colorFondo": "hsl(210, 29%, 96.5%)",
-    "colorTexto": "hsl(215, 25%, 27%)",
-    "fontFamily": "'Inter', sans-serif",
-    "marginBase": "1rem",
-    "paddingBase": "1rem",
-    "borderRadius": "0.5rem",
-    "headingSize": "2.25rem",
-    "paragraphSize": "1rem"
+    "colorPrimario": "#6ab0f3",
+    "colorSecundario": "#a492e8",
+    "colorFondo": "#f3f5f6",
+    "colorTexto": "#3f4750",
+    "darkColorPrimario": "#7bbaf3",
+    "darkColorSecundario": "#b1a2e8",
+    "darkColorFondo": "#2b323c",
+    "darkColorTexto": "#f8f9fa"
   },
   "menus": [
-    { "titulo": "Inicio", "enlace": "/" },
-    { "titulo": "Catálogo", "enlace": "/products" },
-    { "titulo": "Sobre Nosotros", "enlace": "/about" },
-    { "titulo": "Contacto", "enlace": "/contact" }
+    {
+      "titulo": "Inicio",
+      "enlace": "/"
+    },
+    {
+      "titulo": "Catálogo",
+      "enlace": "/products"
+    },
+    {
+      "titulo": "Sobre Nosotros",
+      "enlace": "/about"
+    },
+    {
+      "titulo": "Contacto",
+      "enlace": "/contact"
+    }
   ],
   "titulos": {
     "homepageHero": "TiendaExpress: Tu tienda, a un clic.",
