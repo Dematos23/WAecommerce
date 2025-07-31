@@ -88,11 +88,6 @@ export default function AdminLayout({
         <div className="flex">
             <AdminSidebar />
             <SidebarInset>
-                <header className="flex items-center justify-between p-4 border-b">
-                    <SidebarTrigger />
-                    <h1 className="text-xl font-semibold">Admin Panel</h1>
-                    <div>{/* Right side of header, e.g. UserNav */}</div>
-                </header>
                 <main className="p-6 bg-secondary/20 flex-1">
                     {children}
                 </main>
