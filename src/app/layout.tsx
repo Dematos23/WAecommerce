@@ -50,6 +50,7 @@ export default function RootLayout({
   }, []);
 
   const isDashboard = pathname.startsWith('/dashboard');
+  const isAdmin = pathname.startsWith('/admin');
 
   if (loading) {
     return (
@@ -61,6 +62,8 @@ export default function RootLayout({
     );
   }
 
+  const showHeaderFooter = config && !isDashboard && !isAdmin;
+
   return (
     <html lang="es">
       <body
@@ -71,9 +74,9 @@ export default function RootLayout({
       >
         <Providers>
           <div className="relative flex flex-col bg-background min-h-screen">
-            {config && !isDashboard && <Header config={config} user={user} />}
+            {showHeaderFooter && <Header config={config} user={user} />}
             <main className="flex-1">{children}</main>
-            {config && !isDashboard && <Footer config={config} />}
+            {showHeaderFooter && <Footer config={config} />}
           </div>
           <Toaster />
         </Providers>
