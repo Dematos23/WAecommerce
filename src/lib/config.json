@@ -47,12 +47,13 @@
   "contacto": {
     "telefono": "094 092 034",
     "correo": "dematos23@gmail.com",
-    "direccion": "Alcanfores 111, Miraflores",
+    "direccion": "Alcanfores 111, miraflores",
     "horarioAtencion": "11am - 3pm"
   },
   "configuracionGeneral": {
+    "nombreTienda": "TiendaExpress",
     "numeroWhatsApp": "984092034",
-    "logoUrl": "/logo.svg",
+    "logoUrl": "/images/logo.png",
     "eslogan": "Rápido, fácil y a tu puerta.",
     "mensajePedidoWhatsApp": "¡Gracias por tu compra! 😊"
   }

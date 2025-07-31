@@ -27,7 +27,7 @@ export function Header({ config }: { config: SiteConfig }) {
         <div className="hidden md:flex w-full items-center justify-between">
           <div className="flex-1">
             <Link href="/" className="flex items-center gap-2">
-              <Logo />
+              <Logo config={config} />
             </Link>
           </div>
           <nav className="flex flex-1 justify-center items-center gap-6 text-sm font-medium">
@@ -67,7 +67,7 @@ export function Header({ config }: { config: SiteConfig }) {
                  <SheetTitle className="sr-only">Menú de Navegación</SheetTitle>
                 <div className="flex flex-col gap-4 py-8 px-6">
                   <div className="flex items-center space-x-2 mb-4">
-                    <Logo />
+                    <Logo config={config} />
                   </div>
                   <nav className="grid gap-4">
                     {config.menus.map((item) => (
@@ -92,7 +92,7 @@ export function Header({ config }: { config: SiteConfig }) {
           {/* Mobile Logo (Center) */}
           <div className="absolute left-1/2 -translate-x-1/2">
              <Link href="/">
-                <Logo />
+                <Logo config={config} />
             </Link>
           </div>
 

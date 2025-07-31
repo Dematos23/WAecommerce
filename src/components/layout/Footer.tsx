@@ -16,7 +16,7 @@ export function Footer({ config }: { config: SiteConfig }) {
           {/* Columna Izquierda: Logo y Descripción */}
           <div className="flex flex-col items-center md:items-start">
             <div className="flex items-center gap-2">
-              <Logo />
+              <Logo config={config} />
             </div>
             <p className="mt-4 text-muted-foreground max-w-xs">
               {config.configuracionGeneral.eslogan}
@@ -67,7 +67,7 @@ export function Footer({ config }: { config: SiteConfig }) {
         {/* Texto de Copyright */}
         <div className="border-t pt-8 text-center text-sm text-muted-foreground">
           <p>
-            {`© ${currentYear} TiendaExpress. Todos los derechos reservados.`}
+            {`© ${currentYear} ${config.configuracionGeneral.nombreTienda}. Todos los derechos reservados.`}
             <Link href="/terms" className="ml-4 hover:underline">
               Términos y Condiciones
             </Link>

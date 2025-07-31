@@ -10,24 +10,46 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Save, Home, FileCog, Phone } from "lucide-react";
+import { Save, Home, FileCog, Phone, Store } from "lucide-react";
+import Image from "next/image";
 
 export function ConfigForm({ config }: { config: SiteConfig }) {
     const [address, setAddress] = useState(config.contacto.direccion);
     const [mapUrl, setMapUrl] = useState("");
+    const [logoPreview, setLogoPreview] = useState(config.configuracionGeneral.logoUrl);
 
     useEffect(() => {
         const encodedAddress = encodeURIComponent(address);
         setMapUrl(`https://maps.google.com/maps?q=${encodedAddress}&output=embed`);
     }, [address]);
 
+    const handleLogoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files && event.target.files[0]) {
+            const file = event.target.files[0];
+            setLogoPreview(URL.createObjectURL(file));
+        }
+    };
+
     return (
-        <form action={updateConfig} className="space-y-8">
+        <form action={updateConfig} className="space-y-8" encType="multipart/form-data">
             <Accordion type="multiple" defaultValue={['general', 'homepage']} className="w-full">
                 {/* General Settings */}
                 <AccordionItem value="general">
-                    <AccordionTrigger className="text-xl font-semibold">Configuración General</AccordionTrigger>
+                    <AccordionTrigger className="text-xl font-semibold flex items-center gap-2"><Store/> Configuración General</AccordionTrigger>
                     <AccordionContent className="space-y-4 pt-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="generalNombreTienda">Nombre de la Tienda</Label>
+                            <Input id="generalNombreTienda" name="generalNombreTienda" defaultValue={config.configuracionGeneral.nombreTienda} />
+                        </div>
+                        <div className="space-y-2">
+                             <Label htmlFor="logo">Logo de la Tienda</Label>
+                             {logoPreview && (
+                                <div className="my-2">
+                                    <Image src={logoPreview} alt="Logo preview" width={100} height={100} className="rounded-md border p-2" />
+                                </div>
+                             )}
+                            <Input id="logo" name="logo" type="file" accept="image/*" onChange={handleLogoChange} />
+                        </div>
                         <div className="space-y-2">
                             <Label htmlFor="generalNumeroWhatsApp">Número de WhatsApp (para pedidos)</Label>
                             <Input id="generalNumeroWhatsApp" name="generalNumeroWhatsApp" defaultValue={config.configuracionGeneral.numeroWhatsApp} />

@@ -328,6 +328,7 @@ export async function readConfig(): Promise<SiteConfig> {
         horarioAtencion: "N/A"
       },
       configuracionGeneral: {
+        nombreTienda: "TiendaExpress",
         numeroWhatsApp: "",
         logoUrl: "/logo.svg",
         eslogan: "Rápido, fácil y a tu puerta.",
@@ -391,6 +392,7 @@ export async function readConfig(): Promise<SiteConfig> {
         horarioAtencion: "Lun-Vie: 9am - 6pm"
       },
       configuracionGeneral: {
+        nombreTienda: "TiendaExpress",
         numeroWhatsApp: "1234567890",
         logoUrl: "/logo.svg",
         eslogan: "Rápido, fácil y a tu puerta.",
@@ -490,6 +492,23 @@ async function updateCssVariables(config: SiteConfig) {
 export async function updateConfig(formData: FormData) {
   const currentConfig = await readConfig();
 
+  const logoFile = formData.get("logo") as File;
+  let logoUrl = currentConfig.configuracionGeneral.logoUrl;
+
+  if (logoFile && logoFile.size > 0) {
+    try {
+      await fs.mkdir(publicImagesPath, { recursive: true });
+      const logoExtension = logoFile.name.split('.').pop();
+      const logoName = `logo.${logoExtension}`;
+      const logoPath = path.join(publicImagesPath, logoName);
+      const imageBuffer = Buffer.from(await logoFile.arrayBuffer());
+      await fs.writeFile(logoPath, imageBuffer);
+      logoUrl = `/images/${logoName}`;
+    } catch (error) {
+      console.error("Error saving new logo:", error);
+    }
+  }
+
   const newConfig: SiteConfig = {
       ...currentConfig,
       titulos: {
@@ -516,6 +535,8 @@ export async function updateConfig(formData: FormData) {
       },
       configuracionGeneral: {
           ...currentConfig.configuracionGeneral,
+          nombreTienda: formData.get('generalNombreTienda') as string,
+          logoUrl: logoUrl,
           numeroWhatsApp: formData.get('generalNumeroWhatsApp') as string,
           eslogan: formData.get('generalEslogan') as string,
           mensajePedidoWhatsApp: formData.get('generalMensajePedidoWhatsApp') as string,

@@ -73,6 +73,7 @@ export interface SiteConfig {
     horarioAtencion: string;
   };
   configuracionGeneral: {
+    nombreTienda: string;
     numeroWhatsApp: string;
     logoUrl: string;
     eslogan: string;
