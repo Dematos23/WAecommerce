@@ -29,7 +29,7 @@ export default async function Home() {
           <p className="text-lg md:text-xl text-white/90 max-w-3xl mx-auto mb-8">
             {config.configuracionGeneral.eslogan}
           </p>
-          <Button asChild size="lg">
+          <Button asChild size="lg" className="shadow-lg hover:scale-105 transition-transform">
             <Link href="/products">
               Ver Catálogo <ArrowRight className="ml-2" />
             </Link>
@@ -41,7 +41,7 @@ export default async function Home() {
         <section className="bg-card">
           <div className="container mx-auto px-4 relative">
             <div className="grid md:grid-cols-2">
-              <div className="py-12 md:py-24 pr-8 flex flex-col justify-center">
+              <div className="py-12 md:py-24 pr-8 flex flex-col justify-center h-full">
                 <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">{config.secondaryHero.title}</h2>
                 <p className="text-muted-foreground text-lg mb-6">{config.secondaryHero.description}</p>
               </div>
