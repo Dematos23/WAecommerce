@@ -7,11 +7,12 @@ import { updateTheme } from "@/actions/aiActions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Save, Sun, Moon, Palette, ShoppingBag } from "lucide-react";
+import { Save, Sun, Moon, Palette, ShoppingBag, Eye } from "lucide-react";
 import { useState, useMemo } from "react";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 
 export function ThemeForm({ config }: { config: SiteConfig }) {
     const [colors, setColors] = useState(config.variablesCss);
@@ -93,44 +94,49 @@ export function ThemeForm({ config }: { config: SiteConfig }) {
                 <AccordionItem value="card-appearance">
                      <AccordionTrigger className="text-xl font-semibold flex items-center gap-2"><ShoppingBag /> Apariencia de la Tarjeta de Producto</AccordionTrigger>
                      <AccordionContent className="space-y-4 pt-4">
-                        <div className="grid md:grid-cols-3 gap-4">
-                             <div className="space-y-2">
-                                <Label htmlFor="productCardTextAlign">Alineación del Texto</Label>
-                                <Select name="productCardTextAlign" defaultValue={productCard.textAlign} onValueChange={(v) => setProductCard(p => ({...p, textAlign: v as any}))}>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Seleccione alineación..." />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="left">Izquierda</SelectItem>
-                                        <SelectItem value="center">Centro</SelectItem>
-                                    </SelectContent>
-                                </Select>
+                        <div className="grid lg:grid-cols-2 gap-8 items-center">
+                            <div className="space-y-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="productCardTextAlign">Alineación del Texto</Label>
+                                    <Select name="productCardTextAlign" defaultValue={productCard.textAlign} onValueChange={(v) => setProductCard(p => ({...p, textAlign: v as any}))}>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Seleccione alineación..." />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="left">Izquierda</SelectItem>
+                                            <SelectItem value="center">Centro</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="productCardButtonStyle">Estilo del Botón</Label>
+                                    <Select name="productCardButtonStyle" defaultValue={productCard.buttonStyle} onValueChange={(v) => setProductCard(p => ({...p, buttonStyle: v as any}))}>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Seleccione estilo..." />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="default">Sólido</SelectItem>
+                                            <SelectItem value="outline">Contorno</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="productCardShadow">Sombra de la Tarjeta</Label>
+                                    <Select name="productCardShadow" defaultValue={productCard.shadow} onValueChange={(v) => setProductCard(p => ({...p, shadow: v as any}))}>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Seleccione sombra..." />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="none">Ninguna</SelectItem>
+                                            <SelectItem value="sm">Pequeña</SelectItem>
+                                            <SelectItem value="md">Mediana</SelectItem>
+                                            <SelectItem value="lg">Grande</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
                             </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="productCardButtonStyle">Estilo del Botón</Label>
-                                <Select name="productCardButtonStyle" defaultValue={productCard.buttonStyle} onValueChange={(v) => setProductCard(p => ({...p, buttonStyle: v as any}))}>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Seleccione estilo..." />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="default">Sólido</SelectItem>
-                                        <SelectItem value="outline">Contorno</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                             <div className="space-y-2">
-                                <Label htmlFor="productCardShadow">Sombra de la Tarjeta</Label>
-                                <Select name="productCardShadow" defaultValue={productCard.shadow} onValueChange={(v) => setProductCard(p => ({...p, shadow: v as any}))}>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Seleccione sombra..." />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="none">Ninguna</SelectItem>
-                                        <SelectItem value="sm">Pequeña</SelectItem>
-                                        <SelectItem value="md">Mediana</SelectItem>
-                                        <SelectItem value="lg">Grande</SelectItem>
-                                    </SelectContent>
-                                </Select>
+                             <div className="flex items-center justify-center">
+                                <ProductCardPreview productCard={productCard} />
                             </div>
                         </div>
                      </AccordionContent>
@@ -235,4 +241,48 @@ function ThemePreview({ colors }: { colors: Record<string, string> }) {
       </div>
     </Card>
   )
+}
+
+function ProductCardPreview({ productCard }: { productCard: SiteConfig['productCard'] }) {
+    const cardClasses = cn(
+        "flex h-full w-full max-w-[280px] flex-col overflow-hidden transition-shadow duration-300 group rounded-lg border bg-card text-card-foreground",
+        {
+        'shadow-none': productCard.shadow === 'none',
+        'shadow-sm': productCard.shadow === 'sm',
+        'shadow-md': productCard.shadow === 'md',
+        'shadow-lg': productCard.shadow === 'lg',
+        'shadow-xl': productCard.shadow === 'xl',
+        }
+    );
+
+    const contentClasses = cn("flex-1 p-4", {
+        "text-center": productCard.textAlign === 'center',
+        "text-left": productCard.textAlign === 'left'
+    });
+
+    return (
+        <div className={cardClasses}>
+            <CardHeader className="p-0">
+                <div className="relative aspect-square w-full bg-muted flex items-center justify-center">
+                    <Eye className="h-8 w-8 text-muted-foreground" />
+                </div>
+            </CardHeader>
+            <CardContent className={contentClasses}>
+                <div className="h-4 w-3/4 rounded-sm bg-primary/80 mb-2" />
+                <div className="space-y-1">
+                    <div className="h-3 w-full rounded-sm bg-muted-foreground/50"/>
+                    <div className="h-3 w-5/6 rounded-sm bg-muted-foreground/50"/>
+                </div>
+                <div className={cn("h-6 w-1/3 rounded-sm bg-primary mt-4", {
+                    "mx-auto": productCard.textAlign === 'center'
+                })} />
+            </CardContent>
+            <CardFooter className="p-4 pt-0">
+                <Button className="w-full" variant={productCard.buttonStyle}>
+                    <ShoppingBag className="mr-2 h-4 w-4" />
+                    Add to Cart
+                </Button>
+            </CardFooter>
+        </div>
+    )
 }
