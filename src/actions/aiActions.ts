@@ -6,8 +6,9 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import type { Product, Reclamacion, SiteConfig, Tenant } from "@/types";
 import { sendReclamacionConfirmation, sendReclamacionNotification } from "@/lib/email";
-import { adminDb } from "@/lib/firebase-admin";
+import { db } from "@/lib/firebase";
 import { getTenant } from "@/lib/tenant";
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, orderBy } from 'firebase/firestore';
 
 // --- Product Functions ---
 
@@ -15,8 +16,8 @@ export async function readProducts(): Promise<Product[]> {
     const tenant = await getTenant();
     if (!tenant) return [];
 
-    const productsRef = adminDb.collection('tenants').doc(tenant.id).collection('products');
-    const snapshot = await productsRef.get();
+    const productsRef = collection(db, 'tenants', tenant.id, 'products');
+    const snapshot = await getDocs(productsRef);
     
     if (snapshot.empty) {
         return [];
@@ -69,8 +70,8 @@ export async function addProduct(formData: FormData) {
   }
 
   const { id, imagenes, ...productData } = validatedFields.data;
-  const productsRef = adminDb.collection('tenants').doc(tenant.id).collection('products');
-  const newDocRef = await productsRef.add({
+  const productsRef = collection(db, 'tenants', tenant.id, 'products');
+  const newDocRef = await addDoc(productsRef, {
     ...productData,
     imagenes: [], // Default empty, should be handled by a proper image upload service
   });
@@ -102,9 +103,9 @@ export async function updateProduct(formData: FormData) {
     }
 
     const { id, ...updatedData } = validatedFields.data;
-    const productRef = adminDb.collection('tenants').doc(tenant.id).collection('products').doc(id);
+    const productRef = doc(db, 'tenants', tenant.id, 'products', id);
     
-    await productRef.update({
+    await updateDoc(productRef, {
         ...updatedData
     });
 
@@ -120,8 +121,8 @@ export async function deleteProduct(productId: string) {
     const tenant = await getTenant();
     if (!tenant) throw new Error("Tenant not found");
 
-    const productRef = adminDb.collection('tenants').doc(tenant.id).collection('products').doc(productId);
-    await productRef.delete();
+    const productRef = doc(db, 'tenants', tenant.id, 'products', productId);
+    await deleteDoc(productRef);
     
     revalidatePath('/admin/products');
     revalidatePath('/products');
@@ -136,8 +137,8 @@ async function readReclamaciones(): Promise<Reclamacion[]> {
     const tenant = await getTenant();
     if (!tenant) return [];
     
-    const reclamacionesRef = adminDb.collection('tenants').doc(tenant.id).collection('reclamaciones');
-    const snapshot = await reclamacionesRef.orderBy('fechaRegistro', 'desc').get();
+    const reclamacionesRef = collection(db, 'tenants', tenant.id, 'reclamaciones');
+    const snapshot = await getDocs(query(reclamacionesRef, orderBy('fechaRegistro', 'desc')));
     
     if (snapshot.empty) {
         return [];
@@ -186,8 +187,8 @@ export async function addReclamacion(formData: FormData) {
         estado: 'pendiente'
     };
 
-    const reclamacionesRef = adminDb.collection('tenants').doc(tenant.id).collection('reclamaciones');
-    const newDocRef = await reclamacionesRef.add(newReclamacionData);
+    const reclamacionesRef = collection(db, 'tenants', tenant.id, 'reclamaciones');
+    const newDocRef = await addDoc(reclamacionesRef, newReclamacionData);
 
     const newReclamacion: Reclamacion = {
         id: newDocRef.id,
@@ -300,8 +301,8 @@ async function writeConfig(config: SiteConfig): Promise<void> {
   const tenant = await getTenant();
   if (!tenant) throw new Error("Tenant not found");
 
-  const tenantRef = adminDb.collection('tenants').doc(tenant.id);
-  await tenantRef.update({ config });
+  const tenantRef = doc(db, 'tenants', tenant.id);
+  await updateDoc(tenantRef, { config });
 }
 
 function hexToHsl(hex: string): string {
