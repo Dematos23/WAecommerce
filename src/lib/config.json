@@ -64,6 +64,6 @@
     "priceAlign": "center",
     "buttonStyle": "default",
     "shadow": "md",
-    "imagePosition": "afterPrice"
+    "imagePosition": "top"
   }
 }

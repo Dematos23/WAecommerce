@@ -108,18 +108,25 @@ export function ProductCard({ product }: ProductCardProps) {
   const DescriptionComponent = () => <div className={descriptionClasses}>{product.descripcion || `Descubre más sobre ${product.nombre}.`}</div>;
   const PriceComponent = () => <p className={priceClasses}>{formatCurrency(product.precio)}</p>;
   
+  const CardBody = () => (
+    <div className="flex-1">
+      {productCard.imagePosition !== 'afterName' && <NameComponent />}
+      {productCard.imagePosition === 'afterName' && <ImageComponent/>}
+      
+      {productCard.imagePosition !== 'afterDescription' && <DescriptionComponent />}
+      {productCard.imagePosition === 'afterDescription' && <ImageComponent/>}
+    </div>
+  );
+
   return (
     <Card className={cardClasses}>
         {productCard.imagePosition === 'top' && <ImageComponent />}
         <CardContent className="p-6 flex-1 flex flex-col">
-             {productCard.imagePosition !== 'afterName' && <NameComponent />}
-             {productCard.imagePosition === 'afterName' && <ImageComponent/>}
-             
-             {productCard.imagePosition !== 'afterDescription' && <DescriptionComponent />}
-             {productCard.imagePosition === 'afterDescription' && <ImageComponent/>}
-             
-             <PriceComponent />
-             {productCard.imagePosition === 'afterPrice' && <ImageComponent />}
+             <CardBody />
+             <div>
+                <PriceComponent />
+                {productCard.imagePosition === 'afterPrice' && <ImageComponent />}
+             </div>
         </CardContent>
         <CardFooter className="p-6 pt-0">
             <Button className="w-full" onClick={handleAddToCart} variant={productCard.buttonStyle}>
@@ -130,3 +137,4 @@ export function ProductCard({ product }: ProductCardProps) {
     </Card>
   );
 }
+
