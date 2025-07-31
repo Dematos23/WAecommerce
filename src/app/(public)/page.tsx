@@ -56,7 +56,7 @@ export default async function SaaSLandingPage() {
         </section>
 
         {/* Features Section */}
-        <section className="py-16 bg-background">
+        <section id="features" className="py-16 bg-background">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
                <span className="text-sm font-bold tracking-wider uppercase text-orange-500">POR QUÉ ELEGIR KIMA</span>
