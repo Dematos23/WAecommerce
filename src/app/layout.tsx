@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next';
 import './globals.css';
 import { Inter } from 'next/font/google';
@@ -7,6 +8,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { readConfig } from '@/actions/aiActions';
 import { Providers } from './providers';
+import { getSession } from '@/lib/auth';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
@@ -20,7 +22,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const config = await readConfig();
+  const [config, session] = await Promise.all([
+    readConfig(),
+    getSession()
+  ]);
   
   return (
     <html lang="en">
@@ -40,7 +45,7 @@ export default async function RootLayout({
       >
         <Providers>
           <div className="relative flex flex-col bg-background min-h-screen">
-            <Header config={config} />
+            <Header config={config} session={session} />
             <main className="flex-1">{children}</main>
             <Footer config={config} />
           </div>
