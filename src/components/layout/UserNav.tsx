@@ -38,7 +38,7 @@ export function UserNav({ user }: UserNavProps) {
   if (!user) {
     return (
       <Button asChild variant="accent" className="font-bold">
-        <Link href="/login">Login</Link>
+        <Link href="/login">Ingresar</Link>
       </Button>
     );
   }
