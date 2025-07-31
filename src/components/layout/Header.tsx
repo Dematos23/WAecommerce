@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Logo } from '@/components/ui/Logo';
-import { CartIcon } from '@/components/cart/CartIcon';
 import { Button } from '@/components/ui/button';
 import { Menu } from 'lucide-react';
 import {
@@ -26,16 +25,15 @@ interface HeaderProps {
 export function Header({ config, session }: HeaderProps) {
   const pathname = usePathname();
   
+  // These are the public-facing SaaS pages. The cart should not be shown here.
   const isPublicSaasPage = ['/', '/login', '/register', '/contact', '/pricing'].some(p => pathname === p);
+  
+  // Dashboard pages also shouldn't show a cart icon.
   const isDashboardPage = pathname.startsWith('/dashboard');
 
   const renderCart = !isPublicSaasPage && !isDashboardPage;
 
-  const navLinks = [
-      { href: "/#features", label: "Características" },
-      { href: "/pricing", label: "Precios" },
-      { href: "/contact", label: "Contacto" },
-  ];
+  const navLinks = config.menus || [];
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -47,24 +45,21 @@ export function Header({ config, session }: HeaderProps) {
               <Logo config={config} />
             </Link>
           </div>
-          {isPublicSaasPage && (
-            <nav className="flex flex-1 justify-center items-center gap-8 text-base font-medium">
-                {navLinks.map((link) => (
-                    <Link
-                        key={link.href}
-                        href={link.href}
-                        className={cn(
-                        'transition-colors text-foreground/80 hover:text-foreground',
-                        pathname === link.href && 'text-primary font-semibold'
-                        )}
-                    >
-                        {link.label}
-                    </Link>
-                ))}
-            </nav>
-          )}
+          <nav className="flex flex-1 justify-center items-center gap-8 text-base font-medium">
+              {navLinks.map((link) => (
+                  <Link
+                      key={link.enlace}
+                      href={link.enlace}
+                      className={cn(
+                      'transition-colors text-foreground/80 hover:text-foreground',
+                      pathname === link.enlace && 'text-primary font-semibold'
+                      )}
+                  >
+                      {link.titulo}
+                  </Link>
+              ))}
+          </nav>
           <div className="flex flex-1 justify-end items-center gap-4">
-             {renderCart && <CartIcon config={config} />}
              <UserNav session={session} />
           </div>
         </div>
@@ -87,27 +82,14 @@ export function Header({ config, session }: HeaderProps) {
                     <Logo config={config} />
                   </div>
                    <nav className="grid gap-4">
-                    {isPublicSaasPage ? navLinks.map((item) => (
+                    {navLinks.map((item) => (
                       <Link
-                        key={item.href}
-                        href={item.href}
-                        className={cn(
-                          'text-lg font-medium transition-colors hover:text-foreground/80',
-                          pathname === item.href
-                            ? 'text-primary'
-                            : 'text-foreground/60'
-                        )}
-                      >
-                        {item.label}
-                      </Link>
-                    )) : config.menus.map((item) => (
-                       <Link
                         key={item.enlace}
                         href={item.enlace}
                         className={cn(
                           'text-lg font-medium transition-colors hover:text-foreground/80',
                           pathname === item.enlace
-                            ? 'text-foreground'
+                            ? 'text-primary'
                             : 'text-foreground/60'
                         )}
                       >
@@ -128,7 +110,6 @@ export function Header({ config, session }: HeaderProps) {
 
            {/* Right Icons */}
             <div className="flex items-center gap-2">
-                {renderCart && <CartIcon config={config} />}
                 <UserNav session={session} />
             </div>
         </div>

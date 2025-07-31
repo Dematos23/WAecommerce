@@ -1,11 +1,14 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Check, Store, TrendingUp, Brush, ChevronRight } from "lucide-react";
+import { Store, TrendingUp, Brush, ChevronRight } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
+import { readConfig } from "@/actions/aiActions";
+import type { SiteConfig } from "@/types";
 
-export default function SaaSLandingPage() {
+export default async function SaaSLandingPage() {
+  const config: SiteConfig = await readConfig();
+
   const features = [
     {
       icon: <Store className="h-8 w-8 text-white" />,
@@ -31,10 +34,10 @@ export default function SaaSLandingPage() {
         <section className="bg-background py-20 md:py-32">
            <div className="container mx-auto px-4 text-center">
             <h1 className="text-5xl md:text-7xl font-semibold text-primary mb-4">
-              Lanza tu Tienda Online en Minutos, no en Meses.
+              {config.titulos.homepageHero}
             </h1>
             <p className="text-lg md:text-xl text-foreground max-w-3xl mx-auto mb-8">
-              Kima te da las herramientas para crear y gestionar tu e-commerce de forma rápida, fácil y sin comisiones por venta.
+              {config.textos.descripcionHomepage}
             </p>
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
               <Button asChild size="lg" variant="accent" className="font-bold text-lg">
@@ -44,8 +47,8 @@ export default function SaaSLandingPage() {
                 </Link>
               </Button>
               <Button asChild size="lg" variant="link" className="font-bold text-lg text-primary">
-                <Link href="/contact">
-                  Hablar con un experto
+                <Link href="/login">
+                  Login
                 </Link>
               </Button>
             </div>
@@ -83,20 +86,22 @@ export default function SaaSLandingPage() {
         </section>
 
         {/* Call to Action Section */}
-        <section className="bg-primary py-20">
-          <div className="container mx-auto px-4 text-center">
-            <h2 className="text-4xl font-semibold text-primary-foreground">¿Listo para empezar a vender?</h2>
-            <p className="text-primary-foreground/80 mt-4 max-w-2xl mx-auto text-lg">
-              Únete a cientos de emprendedores que ya confían en nuestra plataforma. Crea tu cuenta y lanza tu tienda hoy mismo.
-            </p>
-            <Button asChild size="lg" variant="accent" className="mt-8 font-bold text-lg">
-              <Link href="/register">
-                Crear mi Tienda Ahora
-                <ChevronRight className="ml-2 h-5 w-5"/>
-              </Link>
-            </Button>
-          </div>
-        </section>
+        {config.secondaryHero?.enabled && (
+            <section className="bg-primary py-20">
+            <div className="container mx-auto px-4 text-center">
+                <h2 className="text-4xl font-semibold text-primary-foreground">{config.secondaryHero.title}</h2>
+                <p className="text-primary-foreground/80 mt-4 max-w-2xl mx-auto text-lg">
+                {config.secondaryHero.description}
+                </p>
+                <Button asChild size="lg" variant="accent" className="mt-8 font-bold text-lg">
+                <Link href={config.secondaryHero.ctaLink || "#"}>
+                    {config.secondaryHero.ctaText}
+                    <ChevronRight className="ml-2 h-5 w-5"/>
+                </Link>
+                </Button>
+            </div>
+            </section>
+        )}
       </main>
     </div>
   );

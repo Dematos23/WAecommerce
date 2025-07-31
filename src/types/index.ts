@@ -21,10 +21,6 @@ export interface Product {
   destacado?: boolean;
 }
 
-export interface CartItem extends Product {
-  quantity: number;
-}
-
 export interface Reclamacion {
     id: string;
     fechaReclamo: string;
@@ -55,8 +51,8 @@ export interface SiteConfig {
     colorAcento: string;
   };
   menus: {
-    titulo: string;
-    enlace: string;
+    label: string;
+    href: string;
   }[];
   titulos: {
     homepageHero: string;

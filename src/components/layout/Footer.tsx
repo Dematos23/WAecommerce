@@ -22,6 +22,7 @@ const WhatsAppIcon = ({ className }: { className?: string }) => (
 
 export function Footer({ config }: { config: SiteConfig }) {
   const currentYear = new Date().getFullYear();
+  const navLinks = config.menus || [];
 
   return (
     <footer className="border-t bg-primary text-primary-foreground">
@@ -47,9 +48,9 @@ export function Footer({ config }: { config: SiteConfig }) {
            <div>
             <h3 className="text-lg font-semibold mb-4 text-white">Navegación</h3>
             <ul className="space-y-3 text-primary-foreground/80">
-              <li><Link href="/#features" className="hover:text-accent transition-colors">Características</Link></li>
-              <li><Link href="/pricing" className="hover:text-accent transition-colors">Precios</Link></li>
-              <li><Link href="/contact" className="hover:text-accent transition-colors">Contacto</Link></li>
+              {navLinks.map(link => (
+                <li key={link.enlace}><Link href={link.enlace} className="hover:text-accent transition-colors">{link.titulo}</Link></li>
+              ))}
             </ul>
           </div>
 

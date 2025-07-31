@@ -1,1 +1,65 @@
-{}
+{
+  "variablesCss": {
+    "colorPrimario": "#1D63FF",
+    "colorSecundario": "#F8F8F9",
+    "colorFondo": "#F8F8F9",
+    "colorTexto": "#111111",
+    "colorAcento": "#FFCE32"
+  },
+  "menus": [
+    { "titulo": "Características", "enlace": "/#features" },
+    { "titulo": "Precios", "enlace": "/pricing" },
+    { "titulo": "Contacto", "enlace": "/contact" }
+  ],
+  "titulos": {
+    "homepageHero": "Lanza tu Tienda Online en Minutos, no en Meses.",
+    "catalogo": "Nuestro Catálogo",
+    "carrito": "Tu Carrito",
+    "checkout": "Finalizar Compra",
+    "sobreNosotros": "Sobre Nosotros",
+    "contacto": "Contáctanos"
+  },
+  "textos": {
+    "mensajeBienvenida": "Gracias por visitarnos",
+    "instruccionesCheckout": "Completa tus datos para finalizar tu pedido.",
+    "descripcionHomepage": "Kima te da las herramientas para crear y gestionar tu e-commerce de forma rápida, fácil y sin comisiones por venta.",
+    "descripcionSobreNosotros": "Somos una tienda comprometida con la calidad.",
+    "infoContacto": "Estamos aquí para ayudarte."
+  },
+  "contacto": {
+    "telefono": "N/A",
+    "correo": "soporte@kima.com",
+    "direccion": "Lima, Perú",
+    "horarioAtencion": "Lunes a Viernes de 9am a 6pm"
+  },
+  "configuracionGeneral": {
+    "nombreTienda": "Kima",
+    "numeroWhatsApp": "",
+    "logoUrl": "/images/logo.png",
+    "eslogan": "Tu tienda, a tu manera.",
+    "mensajePedidoWhatsApp": "¡Gracias por tu compra! 😊",
+    "displayMode": "both",
+    "heroImageUrl": ""
+  },
+  "secondaryHero": {
+    "enabled": true,
+    "title": "¿Listo para empezar a vender?",
+    "description": "Únete a cientos de emprendedores que ya confían en nuestra plataforma. Crea tu cuenta y lanza tu tienda hoy mismo.",
+    "imageUrl": "https://placehold.co/600x400.png",
+    "ctaText": "Crear mi Tienda Ahora",
+    "ctaLink": "/register"
+  },
+  "productCard": {
+    "nameAlign": "left",
+    "descriptionAlign": "left",
+    "priceAlign": "left",
+    "buttonStyle": "default",
+    "shadow": "md",
+    "imagePosition": "top"
+  },
+  "informacionLegal": {
+    "razonSocial": "Kima S.A.C.",
+    "ruc": "20123456789",
+    "direccionLegal": "Av. Principal 123, Lima, Perú"
+  }
+}
