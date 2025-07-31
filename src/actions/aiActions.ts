@@ -336,6 +336,11 @@ export async function readConfig(): Promise<SiteConfig> {
         buttonStyle: 'default',
         shadow: 'md',
         imagePosition: 'top'
+      },
+      informacionLegal: {
+        razonSocial: "Tu Razón Social S.A.C.",
+        ruc: "12345678901",
+        direccionLegal: "Tu Dirección Fiscal, Ciudad, País"
       }
     };
 
@@ -349,6 +354,7 @@ export async function readConfig(): Promise<SiteConfig> {
         contacto: { ...defaultConfig.contacto, ...config.contacto },
         configuracionGeneral: { ...defaultConfig.configuracionGeneral, ...config.configuracionGeneral },
         productCard: { ...defaultConfig.productCard, ...config.productCard },
+        informacionLegal: { ...defaultConfig.informacionLegal, ...config.informacionLegal },
     };
   } catch (error) {
     console.error("Error reading config file, returning defaults:", error);
@@ -402,6 +408,11 @@ export async function readConfig(): Promise<SiteConfig> {
         buttonStyle: 'default',
         shadow: 'md',
         imagePosition: 'top',
+      },
+       informacionLegal: {
+        razonSocial: "Tu Razón Social S.A.C.",
+        ruc: "12345678901",
+        direccionLegal: "Tu Dirección Fiscal, Ciudad, País"
       }
     };
     return defaultConfig;
@@ -535,6 +546,11 @@ export async function updateConfig(formData: FormData) {
           numeroWhatsApp: formData.get('generalNumeroWhatsApp') as string,
           eslogan: formData.get('generalEslogan') as string,
           mensajePedidoWhatsApp: formData.get('generalMensajePedidoWhatsApp') as string,
+      },
+      informacionLegal: {
+        razonSocial: formData.get('legalRazonSocial') as string,
+        ruc: formData.get('legalRuc') as string,
+        direccionLegal: formData.get('legalDireccion') as string,
       }
   };
 

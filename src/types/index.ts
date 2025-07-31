@@ -83,4 +83,9 @@ export interface SiteConfig {
     shadow: 'none' | 'sm' | 'md' | 'lg';
     imagePosition: 'top' | 'afterName' | 'afterDescription' | 'afterPrice';
   };
+  informacionLegal: {
+    razonSocial: string;
+    ruc: string;
+    direccionLegal: string;
+  };
 }

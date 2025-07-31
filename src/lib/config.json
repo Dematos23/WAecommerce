@@ -60,5 +60,10 @@
     "buttonStyle": "default",
     "shadow": "md",
     "imagePosition": "top"
+  },
+  "informacionLegal": {
+    "razonSocial": "TiendaExpress S.A.C.",
+    "ruc": "20123456789",
+    "direccionLegal": "Av. Principal 123, Of. 404, Ciudad"
   }
 }

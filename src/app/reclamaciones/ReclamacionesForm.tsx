@@ -49,6 +49,8 @@ type ReclamacionFormValues = z.infer<typeof reclamacionSchema>;
 
 export function ReclamacionesForm({ config }: { config: SiteConfig }) {
   const [isClient, setIsClient] = useState(false);
+  const [fechaReclamo, setFechaReclamo] = useState<Date | undefined>(undefined);
+
 
   const form = useForm<ReclamacionFormValues>({
     resolver: zodResolver(reclamacionSchema),
@@ -70,8 +72,15 @@ export function ReclamacionesForm({ config }: { config: SiteConfig }) {
 
   useEffect(() => {
     setIsClient(true);
-    form.setValue('fechaReclamo', new Date());
+    const today = new Date();
+    setFechaReclamo(today);
+    form.setValue('fechaReclamo', today);
   }, [form]);
+  
+  const calendarDisabled = (date: Date) => {
+    return date > new Date() || date < new Date("1900-01-01")
+  }
+
 
   const onSubmit = async (data: ReclamacionFormValues) => {
     const formData = new FormData();
@@ -123,7 +132,7 @@ export function ReclamacionesForm({ config }: { config: SiteConfig }) {
                                 mode="single"
                                 selected={field.value}
                                 onSelect={field.onChange}
-                                disabled={isClient ? (date) => date > new Date() || date < new Date("1900-01-01") : undefined}
+                                disabled={isClient ? calendarDisabled : undefined}
                                 initialFocus
                             />
                             </PopoverContent>
@@ -140,15 +149,15 @@ export function ReclamacionesForm({ config }: { config: SiteConfig }) {
                 <div className="grid md:grid-cols-3 gap-4">
                     <div>
                         <Label>Razón Social</Label>
-                        <Input readOnly value="TiendaExpress S.A.C" className="bg-secondary/50" />
+                        <Input readOnly value={config.informacionLegal.razonSocial} className="bg-secondary/50" />
                     </div>
                     <div>
                         <Label>RUC</Label>
-                        <Input readOnly value="20123456789" className="bg-secondary/50" />
+                        <Input readOnly value={config.informacionLegal.ruc} className="bg-secondary/50" />
                     </div>
                     <div>
                         <Label>Dirección</Label>
-                        <Input readOnly value={config.contacto.direccion} className="bg-secondary/50" />
+                        <Input readOnly value={config.informacionLegal.direccionLegal} className="bg-secondary/50" />
                     </div>
                 </div>
             </div>

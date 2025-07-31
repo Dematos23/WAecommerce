@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Save, PanelTop, FileCog, Phone, Settings2, X } from "lucide-react";
+import { Save, PanelTop, FileCog, Phone, Settings2, X, Building } from "lucide-react";
 import Image from "next/image";
 
 function SubmitButton() {
@@ -206,7 +206,7 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
                             <Input id="contactoHorarioAtencion" name="contactoHorarioAtencion" defaultValue={config.contacto.horarioAtencion || ''} />
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="contactoDireccion">Dirección</Label>
+                            <Label htmlFor="contactoDireccion">Dirección (para mapa)</Label>
                             <Input 
                                 id="contactoDireccion" 
                                 name="contactoDireccion" 
@@ -233,6 +233,25 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
                                     <p className="text-muted-foreground">Escribe una dirección para ver el mapa.</p>
                                 )}
                             </div>
+                        </div>
+                    </AccordionContent>
+                </AccordionItem>
+                
+                {/* Legal Info */}
+                <AccordionItem value="legal">
+                    <AccordionTrigger className="text-xl font-semibold flex items-center gap-2"><Building/> Información Legal (Libro de Reclamaciones)</AccordionTrigger>
+                    <AccordionContent className="space-y-4 pt-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="legalRazonSocial">Razón Social</Label>
+                            <Input id="legalRazonSocial" name="legalRazonSocial" defaultValue={config.informacionLegal?.razonSocial || ''} />
+                        </div>
+                         <div className="space-y-2">
+                            <Label htmlFor="legalRuc">RUC</Label>
+                            <Input id="legalRuc" name="legalRuc" defaultValue={config.informacionLegal?.ruc || ''} />
+                        </div>
+                         <div className="space-y-2">
+                            <Label htmlFor="legalDireccion">Dirección Legal</Label>
+                            <Input id="legalDireccion" name="legalDireccion" defaultValue={config.informacionLegal?.direccionLegal || ''} />
                         </div>
                     </AccordionContent>
                 </AccordionItem>
