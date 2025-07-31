@@ -1,40 +1,125 @@
 {
-  "variablesCss": {
-    "colorPrimario": "#1D63FF",
-    "colorSecundario": "#F8F8F9",
-    "colorFondo": "#F8F8F9",
-    "colorTexto": "#111111",
-    "colorAcento": "#FFCE32"
+  "header": {
+    "menu": [
+      { "titulo": "Características", "enlace": "/#features" },
+      { "titulo": "Precios", "enlace": "/pricing" },
+      { "titulo": "Contacto", "enlace": "/contact" }
+    ]
   },
-  "menus": [
-    { "titulo": "Características", "enlace": "/#features" },
-    { "titulo": "Precios", "enlace": "/pricing" },
-    { "titulo": "Contacto", "enlace": "/contact" }
-  ],
-  "titulos": {
-    "homepageHero": "Lanza tu Tienda Online en Minutos, no en Meses.",
-    "contacto": "Contáctanos"
+  "footer": {
+    "eslogan": "Tu tienda, a tu manera.",
+    "socialLinks": [
+      { "name": "Instagram", "url": "#" },
+      { "name": "Facebook", "url": "#" },
+      { "name": "TikTok", "url": "#" },
+      { "name": "WhatsApp", "url": "#" }
+    ],
+    "navigation": [
+      { "titulo": "Características", "enlace": "/#features" },
+      { "titulo": "Precios", "enlace": "/pricing" },
+      { "titulo": "Contacto", "enlace": "/contact" }
+    ],
+    "legal": [
+      { "titulo": "Términos y Condiciones", "enlace": "/terms" },
+      { "titulo": "Política de Privacidad", "enlace": "/privacy" },
+      { "titulo": "Política de Cookies", "enlace": "/cookies" }
+    ],
+    "contacto": {
+      "telefono": "+51 987 654 321",
+      "correo": "contacto@kima.com",
+      "direccion": "Lima, Perú"
+    },
+    "copyright": "© {year} Kima. Todos los derechos reservados."
   },
-  "textos": {
-    "descripcionHomepage": "Kima te da las herramientas para crear y gestionar tu e-commerce de forma rápida, fácil y sin comisiones por venta."
+  "homepage": {
+    "hero": {
+      "title": "Lanza tu Tienda Online en Minutos, no en Meses.",
+      "description": "Kima te da las herramientas para crear y gestionar tu e-commerce de forma rápida, fácil y sin comisiones por venta.",
+      "ctaPrimary": { "text": "Empezar Gratis", "link": "/register" },
+      "ctaSecondary": { "text": "Login", "link": "/login" }
+    },
+    "features": {
+      "preTitle": "POR QUÉ ELEGIR KIMA",
+      "title": "Todo lo que necesitas para vender en línea",
+      "description": "Desde la configuración inicial hasta la gestión diaria, nuestra plataforma está diseñada para simplificar tu vida.",
+      "items": [
+        {
+          "icon": "Store",
+          "name": "Tu Propia Tienda",
+          "description": "Crea y personaliza tu tienda en línea con tu propia marca, logo y productos."
+        },
+        {
+          "icon": "TrendingUp",
+          "name": "Gestión Sencilla",
+          "description": "Un panel de control intuitivo para gestionar tus productos, pedidos y clientes sin complicaciones."
+        },
+        {
+          "icon": "Brush",
+          "name": "Diseño Personalizable",
+          "description": "Elige colores, fuentes y estilos para que tu tienda refleje la identidad de tu marca."
+        }
+      ]
+    },
+    "secondaryHero": {
+      "enabled": true,
+      "title": "¿Listo para empezar a vender?",
+      "description": "Únete a cientos de emprendedores que ya confían en nuestra plataforma. Crea tu cuenta y lanza tu tienda hoy mismo.",
+      "cta": { "text": "Crear mi Tienda Ahora", "link": "/register" }
+    }
   },
-  "contacto": {
-    "telefono": "+51 987 654 321",
-    "correo": "contacto@kima.com",
-    "direccion": "Lima, Perú"
+  "pricingPage": {
+    "title": "Planes y Precios",
+    "description": "Elige el plan que mejor se adapte a las necesidades de tu negocio.",
+    "plans": [
+       {
+        "name": "Básico",
+        "price": "$29",
+        "period": "/mes",
+        "description": "Ideal para pequeñas tiendas que recién empiezan.",
+        "features": [
+          "Hasta 100 productos",
+          "Funcionalidad de e-commerce completa",
+          "Soporte por correo electrónico"
+        ],
+        "cta": { "text": "Empezar Plan Básico", "link": "/register" }
+      },
+      {
+        "name": "Profesional",
+        "price": "$79",
+        "period": "/mes",
+        "description": "Perfecto para negocios en crecimiento con más volumen.",
+        "features": [
+          "Productos ilimitados",
+          "Dominios personalizados",
+          "Analíticas avanzadas",
+          "Soporte prioritario 24/7"
+        ],
+        "cta": { "text": "Empezar Plan Profesional", "link": "/register" },
+        "popular": true
+      },
+      {
+        "name": "Empresarial",
+        "price": "Custom",
+        "period": "",
+        "description": "Soluciones a medida para grandes empresas.",
+        "features": [
+          "Todo lo del plan Profesional",
+          "APIs para integraciones",
+          "Manager de cuenta dedicado",
+          "SLA personalizado"
+        ],
+        "cta": { "text": "Contactar Ventas", "link": "/contact" }
+      }
+    ]
+  },
+   "contactPage": {
+    "title": "Contáctanos",
+    "description": "Estamos aquí para ayudarte. Rellena el formulario o utiliza nuestros datos de contacto.",
+    "formTitle": "Envíanos un Mensaje"
   },
   "configuracionGeneral": {
     "nombreTienda": "Kima",
     "logoUrl": "/images/logo.png",
-    "eslogan": "Tu tienda, a tu manera.",
     "displayMode": "both"
-  },
-  "secondaryHero": {
-    "enabled": true,
-    "title": "¿Listo para empezar a vender?",
-    "description": "Únete a cientos de emprendedores que ya confían en nuestra plataforma. Crea tu cuenta y lanza tu tienda hoy mismo.",
-    "imageUrl": "https://placehold.co/600x400.png",
-    "ctaText": "Crear mi Tienda Ahora",
-    "ctaLink": "/register"
   }
 }

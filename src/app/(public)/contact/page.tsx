@@ -10,14 +10,15 @@ import type { SiteConfig } from "@/types";
 
 export default async function ContactPage() {
     const config: SiteConfig = await readConfig();
+    const { contactPage, footer } = config;
 
     return (
         <div className="bg-background text-foreground">
             <div className="container mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
                 <div className="text-center">
-                    <h1 className="text-5xl font-semibold text-primary">Contáctanos</h1>
+                    <h1 className="text-5xl font-semibold text-primary">{contactPage.title}</h1>
                     <p className="mt-4 text-xl text-muted-foreground">
-                        Estamos aquí para ayudarte. Rellena el formulario o utiliza nuestros datos de contacto.
+                        {contactPage.description}
                     </p>
                 </div>
 
@@ -25,7 +26,7 @@ export default async function ContactPage() {
                     {/* Contact Form */}
                     <Card>
                         <CardHeader>
-                            <CardTitle className="text-3xl">Envíanos un Mensaje</CardTitle>
+                            <CardTitle className="text-3xl">{contactPage.formTitle}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <form action="#" method="POST" className="space-y-6">
@@ -59,21 +60,21 @@ export default async function ContactPage() {
                                     <Phone className="h-7 w-7 text-primary" />
                                     <div>
                                         <h3 className="font-semibold">Teléfono</h3>
-                                        <a href={`tel:${config.contacto.telefono}`} className="text-muted-foreground hover:text-primary">{config.contacto.telefono}</a>
+                                        <a href={`tel:${footer.contacto.telefono}`} className="text-muted-foreground hover:text-primary">{footer.contacto.telefono}</a>
                                     </div>
                                 </div>
                                 <div className="flex items-start gap-4">
                                     <Mail className="h-7 w-7 text-primary" />
                                     <div>
                                         <h3 className="font-semibold">Correo Electrónico</h3>
-                                        <a href={`mailto:${config.contacto.correo}`} className="text-muted-foreground hover:text-primary">{config.contacto.correo}</a>
+                                        <a href={`mailto:${footer.contacto.correo}`} className="text-muted-foreground hover:text-primary">{footer.contacto.correo}</a>
                                     </div>
                                 </div>
                                 <div className="flex items-start gap-4">
                                     <MapPin className="h-7 w-7 text-primary" />
                                     <div>
                                         <h3 className="font-semibold">Dirección</h3>
-                                        <p className="text-muted-foreground">{config.contacto.direccion}</p>
+                                        <p className="text-muted-foreground">{footer.contacto.direccion}</p>
                                     </div>
                                 </div>
                             </CardContent>

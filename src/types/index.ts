@@ -42,70 +42,76 @@ export interface Reclamacion {
     observacionesVendedor?: string;
 }
 
+export interface MenuItem {
+  titulo: string;
+  enlace: string;
+}
+
 export interface SiteConfig {
-  variablesCss: {
-    colorPrimario: string;
-    colorSecundario: string;
-    colorFondo: string;
-    colorTexto: string;
-    colorAcento: string;
+  header: {
+    menu: MenuItem[];
   };
-  menus: {
-    label: string;
-    href: string;
-  }[];
-  titulos: {
-    homepageHero: string;
-    catalogo: string;
-    carrito: string;
-    checkout: string;
-    sobreNosotros: string;
-    contacto: string;
+  footer: {
+    eslogan: string;
+    socialLinks: { name: string; url: string }[];
+    navigation: MenuItem[];
+    legal: MenuItem[];
+    contacto: {
+      telefono: string;
+      correo: string;
+      direccion: string;
+    };
+    copyright: string;
   };
-  textos: {
-    mensajeBienvenida: string;
-    instruccionesCheckout: string;
-    descripcionHomepage: string;
-    descripcionSobreNosotros: string;
-    infoContacto: string;
+  homepage: {
+    hero: {
+      title: string;
+      description: string;
+      ctaPrimary: { text: string; link: string };
+      ctaSecondary: { text: string; link: string };
+    };
+    features: {
+      preTitle: string;
+      title: string;
+      description: string;
+      items: {
+        icon: string;
+        name: string;
+        description: string;
+      }[];
+    };
+    secondaryHero: {
+      enabled: boolean;
+      title: string;
+      description: string;
+      cta: { text: string; link: string };
+    };
   };
-  contacto: {
-    telefono: string;
-    correo: string;
-    direccion: string;
-    horarioAtencion: string;
+  pricingPage: {
+    title: string;
+    description: string;
+    plans: {
+      name: string;
+      price: string;
+      period: string;
+      description: string;
+      features: string[];
+      cta: { text: string; link: string };
+      popular?: boolean;
+    }[];
+  };
+  contactPage: {
+    title: string;
+    description: string;
+    formTitle: string;
   };
   configuracionGeneral: {
     nombreTienda: string;
-    numeroWhatsApp: string;
     logoUrl: string;
-    eslogan: string;
-    mensajePedidoWhatsApp?: string;
     displayMode?: 'logo' | 'name' | 'both';
-    heroImageUrl?: string;
-  };
-  secondaryHero?: {
-    enabled: boolean;
-    title: string;
-    description: string;
-    imageUrl: string;
-    ctaText: string;
-    ctaLink: string;
-  };
-  productCard: {
-    nameAlign: 'left' | 'center';
-    descriptionAlign: 'left' | 'center';
-    priceAlign: 'left' | 'center';
-    buttonStyle: 'default' | 'outline';
-    shadow: 'none' | 'sm' | 'md' | 'lg';
-    imagePosition: 'top' | 'afterName' | 'afterDescription' | 'afterPrice';
-  };
-  informacionLegal: {
-    razonSocial: string;
-    ruc: string;
-    direccionLegal: string;
   };
 }
+
 
 export interface Tenant {
     id: string;

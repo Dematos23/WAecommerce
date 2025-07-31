@@ -1,31 +1,20 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Store, TrendingUp, Brush, ChevronRight } from "lucide-react";
+import { Store, TrendingUp, Brush, ChevronRight, Icon } from "lucide-react";
 import Link from "next/link";
 import { readConfig } from "@/actions/aiActions";
 import type { SiteConfig } from "@/types";
 
+const icons: { [key: string]: React.ReactNode } = {
+  Store: <Store className="h-8 w-8 text-white" />,
+  TrendingUp: <TrendingUp className="h-8 w-8 text-white" />,
+  Brush: <Brush className="h-8 w-8 text-white" />,
+};
+
 export default async function SaaSLandingPage() {
   const config: SiteConfig = await readConfig();
-
-  const features = [
-    {
-      icon: <Store className="h-8 w-8 text-white" />,
-      name: "Tu Propia Tienda",
-      description: "Crea y personaliza tu tienda en línea con tu propia marca, logo y productos.",
-    },
-    {
-      icon: <TrendingUp className="h-8 w-8 text-white" />,
-      name: "Gestión Sencilla",
-      description: "Un panel de control intuitivo para gestionar tus productos, pedidos y clientes sin complicaciones.",
-    },
-    {
-      icon: <Brush className="h-8 w-8 text-white" />,
-      name: "Diseño Personalizable",
-      description: "Elige colores, fuentes y estilos para que tu tienda refleje la identidad de tu marca.",
-    },
-  ];
+  const { homepage } = config;
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
@@ -34,21 +23,21 @@ export default async function SaaSLandingPage() {
         <section className="bg-background py-20 md:py-32">
            <div className="container mx-auto px-4 text-center">
             <h1 className="text-5xl md:text-7xl font-semibold text-primary mb-4">
-              {config.titulos.homepageHero}
+              {homepage.hero.title}
             </h1>
             <p className="text-lg md:text-xl text-foreground max-w-3xl mx-auto mb-8">
-              {config.textos.descripcionHomepage}
+              {homepage.hero.description}
             </p>
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
               <Button asChild size="lg" variant="accent" className="font-bold text-lg">
-                <Link href="/register">
-                  Empezar Gratis
+                <Link href={homepage.hero.ctaPrimary.link}>
+                  {homepage.hero.ctaPrimary.text}
                   <ChevronRight className="ml-2 h-5 w-5"/>
                 </Link>
               </Button>
               <Button asChild size="lg" variant="link" className="font-bold text-lg text-primary">
-                <Link href="/login">
-                  Login
+                <Link href={homepage.hero.ctaSecondary.link}>
+                  {homepage.hero.ctaSecondary.text}
                 </Link>
               </Button>
             </div>
@@ -59,19 +48,19 @@ export default async function SaaSLandingPage() {
         <section id="features" className="py-16 bg-background">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
-               <span className="text-sm font-bold tracking-wider uppercase text-orange-500">POR QUÉ ELEGIR KIMA</span>
-              <h2 className="text-4xl font-semibold text-foreground mt-2">Todo lo que necesitas para vender en línea</h2>
+               <span className="text-sm font-bold tracking-wider uppercase text-orange-500">{homepage.features.preTitle}</span>
+              <h2 className="text-4xl font-semibold text-foreground mt-2">{homepage.features.title}</h2>
               <p className="text-muted-foreground mt-4 max-w-2xl mx-auto text-lg">
-                Desde la configuración inicial hasta la gestión diaria, nuestra plataforma está diseñada para simplificar tu vida.
+                {homepage.features.description}
               </p>
             </div>
             <div className="grid md:grid-cols-3 gap-8">
-              {features.map((feature, index) => (
+              {homepage.features.items.map((feature, index) => (
                 <Card key={index} className="text-center bg-transparent border-none shadow-none">
                   <CardHeader>
                     <div className="flex justify-center mb-4">
                         <div className="bg-primary rounded-full p-4">
-                         {feature.icon}
+                         {icons[feature.icon] || <Store className="h-8 w-8 text-white" />}
                         </div>
                     </div>
                     <CardTitle className="text-2xl font-semibold text-foreground">{feature.name}</CardTitle>
@@ -86,16 +75,16 @@ export default async function SaaSLandingPage() {
         </section>
 
         {/* Call to Action Section */}
-        {config.secondaryHero?.enabled && (
+        {homepage.secondaryHero?.enabled && (
             <section className="bg-primary py-20">
             <div className="container mx-auto px-4 text-center">
-                <h2 className="text-4xl font-semibold text-primary-foreground">{config.secondaryHero.title}</h2>
+                <h2 className="text-4xl font-semibold text-primary-foreground">{homepage.secondaryHero.title}</h2>
                 <p className="text-primary-foreground/80 mt-4 max-w-2xl mx-auto text-lg">
-                {config.secondaryHero.description}
+                {homepage.secondaryHero.description}
                 </p>
                 <Button asChild size="lg" variant="accent" className="mt-8 font-bold text-lg">
-                <Link href={config.secondaryHero.ctaLink || "#"}>
-                    {config.secondaryHero.ctaText}
+                <Link href={homepage.secondaryHero.cta.link}>
+                    {homepage.secondaryHero.cta.text}
                     <ChevronRight className="ml-2 h-5 w-5"/>
                 </Link>
                 </Button>

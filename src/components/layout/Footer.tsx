@@ -22,7 +22,14 @@ const WhatsAppIcon = ({ className }: { className?: string }) => (
 
 export function Footer({ config }: { config: SiteConfig }) {
   const currentYear = new Date().getFullYear();
-  const navLinks = config.menus || [];
+  const { footer } = config;
+  
+  const socialIcons: { [key: string]: React.ReactNode } = {
+    Instagram: <Instagram />,
+    Facebook: <Facebook />,
+    TikTok: <TikTokIcon />,
+    WhatsApp: <WhatsAppIcon />,
+  };
 
   return (
     <footer className="border-t bg-primary text-primary-foreground">
@@ -34,13 +41,16 @@ export function Footer({ config }: { config: SiteConfig }) {
                 <Logo config={config} />
             </div>
             <p className="mt-4 text-primary-foreground/80 max-w-xs">
-              {config.configuracionGeneral.eslogan || 'Tu tienda, a tu manera.'}
+              {footer.eslogan}
             </p>
             <div className="flex gap-2 mt-4">
-                <Button asChild variant="ghost" size="icon" className="text-accent hover:bg-accent/20 hover:text-accent rounded-full"><Link href="#"><Instagram /></Link></Button>
-                <Button asChild variant="ghost" size="icon" className="text-accent hover:bg-accent/20 hover:text-accent rounded-full"><Link href="#"><Facebook /></Link></Button>
-                <Button asChild variant="ghost" size="icon" className="text-accent hover:bg-accent/20 hover:text-accent rounded-full"><Link href="#"><TikTokIcon /></Link></Button>
-                <Button asChild variant="ghost" size="icon" className="text-accent hover:bg-accent/20 hover:text-accent rounded-full"><Link href="#"><WhatsAppIcon /></Link></Button>
+              {footer.socialLinks.map(social => (
+                <Button key={social.name} asChild variant="ghost" size="icon" className="text-accent hover:bg-accent/20 hover:text-accent rounded-full">
+                  <Link href={social.url} aria-label={social.name}>
+                    {socialIcons[social.name]}
+                  </Link>
+                </Button>
+              ))}
             </div>
           </div>
 
@@ -48,7 +58,7 @@ export function Footer({ config }: { config: SiteConfig }) {
            <div>
             <h3 className="text-lg font-semibold mb-4 text-white">Navegación</h3>
             <ul className="space-y-3 text-primary-foreground/80">
-              {navLinks.map(link => (
+              {footer.navigation.map(link => (
                 <li key={link.enlace}><Link href={link.enlace} className="hover:text-accent transition-colors">{link.titulo}</Link></li>
               ))}
             </ul>
@@ -59,9 +69,9 @@ export function Footer({ config }: { config: SiteConfig }) {
           <div>
             <h3 className="text-lg font-semibold mb-4 text-white">Legal</h3>
             <ul className="space-y-3 text-primary-foreground/80">
-               <li><Link href="/terms" className="hover:text-accent transition-colors">Términos y Condiciones</Link></li>
-               <li><Link href="/privacy" className="hover:text-accent transition-colors">Política de Privacidad</Link></li>
-               <li><Link href="/cookies" className="hover:text-accent transition-colors">Política de Cookies</Link></li>
+               {footer.legal.map(link => (
+                <li key={link.enlace}><Link href={link.enlace} className="hover:text-accent transition-colors">{link.titulo}</Link></li>
+              ))}
             </ul>
           </div>
 
@@ -72,15 +82,15 @@ export function Footer({ config }: { config: SiteConfig }) {
             <ul className="space-y-3 text-primary-foreground/80">
               <li className="flex items-center justify-center md:justify-start gap-3">
                 <Phone className="h-5 w-5 text-accent" />
-                <span>{config.contacto.telefono}</span>
+                <span>{footer.contacto.telefono}</span>
               </li>
               <li className="flex items-center justify-center md:justify-start gap-3">
                 <Mail className="h-5 w-5 text-accent" />
-                <span>{config.contacto.correo}</span>
+                <span>{footer.contacto.correo}</span>
               </li>
               <li className="flex items-center justify-center md:justify-start gap-3">
                 <MapPin className="h-5 w-5 text-accent" />
-                <span>{config.contacto.direccion}</span>
+                <span>{footer.contacto.direccion}</span>
               </li>
             </ul>
           </div>
@@ -92,7 +102,7 @@ export function Footer({ config }: { config: SiteConfig }) {
         {/* Texto de Copyright */}
         <div className="text-center text-sm text-primary-foreground/80">
           <p>
-            {`© ${currentYear} Kima. Todos los derechos reservados.`}
+            {footer.copyright.replace('{year}', currentYear.toString())}
           </p>
         </div>
       </div>
