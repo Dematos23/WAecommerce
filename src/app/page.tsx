@@ -69,12 +69,12 @@ export default async function Home() {
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold tracking-tight font-headline">{config.titulos.catalogo}</h2>
+            <h2 className="text-3xl font-bold tracking-tight font-headline">Productos Destacados</h2>
             <p className="text-muted-foreground mt-2 max-w-2xl mx-auto">
               {config.textos.descripcionHomepage}
             </p>
           </div>
-          <ProductGrid products={featuredProducts} />
+          <ProductGrid products={featuredProducts} config={config} />
         </div>
       </section>
       

@@ -16,28 +16,17 @@ import { useToast } from "@/hooks/use-toast";
 import { ShoppingCart, Eye } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { useEffect, useState } from "react";
-import { readConfig } from "@/actions/aiActions";
 
 interface ProductCardProps {
   product: Product;
+  config: SiteConfig;
 }
 
-export function ProductCard({ product }: ProductCardProps) {
-  const [config, setConfig] = useState<SiteConfig | null>(null);
+export function ProductCard({ product, config }: ProductCardProps) {
   const { addToCart } = useCart();
   const { toast } = useToast();
 
-  useEffect(() => {
-    const fetchConfig = async () => {
-      const configData = await readConfig();
-      setConfig(configData);
-    }
-    fetchConfig();
-  }, []);
-
   if (!config) {
-    // You can return a loading skeleton here
     return null;
   }
 

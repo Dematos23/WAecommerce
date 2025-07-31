@@ -116,7 +116,7 @@ export default function ProductsPage() {
               ))}
             </div>
           ) : sortedAndFilteredProducts.length > 0 ? (
-            <ProductGrid products={sortedAndFilteredProducts} />
+            <ProductGrid products={sortedAndFilteredProducts} config={config} />
           ) : (
              <div className="flex flex-col items-center justify-center text-center h-full py-16 bg-card rounded-lg">
                 <p className="text-lg font-semibold">No se encontraron productos</p>

@@ -58,7 +58,7 @@
     "enabled": true,
     "title": "¡Oferta Especial de Verano!",
     "description": "Descubre nuestra nueva colección con descuentos de hasta el 30%. No te pierdas la oportunidad de renovar tu estilo con las últimas tendencias.",
-    "imageUrl": "/images/secondary-hero.png",
+    "imageUrl": "/images/secondary-hero.webp",
     "ctaText": "Explorar colección",
     "ctaLink": "/products"
   },
