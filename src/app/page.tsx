@@ -39,7 +39,7 @@ export default async function Home() {
 
       {config.secondaryHero?.enabled && (
         <section className="bg-card">
-          <div className="container mx-auto px-4">
+          <div className="container mx-auto px-4 relative pb-12">
             <div className="grid md:grid-cols-2">
               <div className="flex flex-col justify-center py-12 md:py-24 pr-8">
                  <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">{config.secondaryHero.title}</h2>
@@ -54,7 +54,7 @@ export default async function Home() {
                  />
               </div>
             </div>
-             <div className="relative -mt-8 mb-12 flex justify-center">
+             <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10">
                 <Button asChild size="lg" className="shadow-lg">
                     <Link href={config.secondaryHero.ctaLink || "#"}>
                         <ShoppingBag className="mr-2" /> {config.secondaryHero.ctaText || "Comprar Ahora"}
