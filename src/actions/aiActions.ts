@@ -298,10 +298,12 @@ export async function readConfig(): Promise<SiteConfig> {
         colorSecundario: "#3eac68",
         colorFondo: "#f3f5f6",
         colorTexto: "#3f4750",
+        colorAcento: "#6d28d9",
         darkColorPrimario: "#7bbaf3",
         darkColorSecundario: "#b1a2e8",
         darkColorFondo: "#2b323c",
-        darkColorTexto: "#f8f9fa"
+        darkColorTexto: "#f8f9fa",
+        darkColorAcento: "#a78bfa",
       },
       menus: [],
       titulos: {
@@ -353,10 +355,12 @@ export async function readConfig(): Promise<SiteConfig> {
         colorSecundario: "#3eac68",
         colorFondo: "#f3f5f6",
         colorTexto: "#3f4750",
+        colorAcento: "#6d28d9",
         darkColorPrimario: "#7bbaf3",
         darkColorSecundario: "#b1a2e8",
         darkColorFondo: "#2b323c",
-        darkColorTexto: "#f8f9fa"
+        darkColorTexto: "#f8f9fa",
+        darkColorAcento: "#a78bfa",
       },
       menus: [
         { titulo: "Inicio", enlace: "/" },
@@ -462,6 +466,7 @@ async function updateCssVariables(config: SiteConfig) {
             'foreground': config.variablesCss.colorTexto,
             'primary': config.variablesCss.colorPrimario,
             'secondary': config.variablesCss.colorSecundario,
+            'accent': config.variablesCss.colorAcento,
         });
         
         cssContent = updateTheme('.dark', {
@@ -469,6 +474,7 @@ async function updateCssVariables(config: SiteConfig) {
             'foreground': config.variablesCss.darkColorTexto,
             'primary': config.variablesCss.darkColorPrimario,
             'secondary': config.variablesCss.darkColorSecundario,
+            'accent': config.variablesCss.darkColorAcento,
         });
 
         await fs.writeFile(globalsCssPath, cssContent, 'utf8');
@@ -527,14 +533,17 @@ export async function updateTheme(formData: FormData) {
     const newConfig: SiteConfig = {
         ...currentConfig,
         variablesCss: {
+            ...currentConfig.variablesCss,
             colorPrimario: formData.get('colorPrimario') as string,
             colorSecundario: formData.get('colorSecundario') as string,
             colorFondo: formData.get('colorFondo') as string,
             colorTexto: formData.get('colorTexto') as string,
+            colorAcento: formData.get('colorAcento') as string,
             darkColorPrimario: formData.get('darkColorPrimario') as string,
             darkColorSecundario: formData.get('darkColorSecundario') as string,
             darkColorFondo: formData.get('darkColorFondo') as string,
             darkColorTexto: formData.get('darkColorTexto') as string,
+            darkColorAcento: formData.get('darkColorAcento') as string,
         },
     };
 

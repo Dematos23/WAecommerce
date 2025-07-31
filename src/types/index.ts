@@ -40,10 +40,12 @@ export interface SiteConfig {
     colorSecundario: string;
     colorFondo: string;
     colorTexto: string;
+    colorAcento: string;
     darkColorPrimario: string;
     darkColorSecundario: string;
     darkColorFondo: string;
     darkColorTexto: string;
+    darkColorAcento: string;
   };
   menus: {
     titulo: string;
