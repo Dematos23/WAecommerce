@@ -12,9 +12,10 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { LogOut, User as UserIcon, Settings } from 'lucide-react';
-import { logout } from '@/lib/auth';
+import { logout, getUserType } from '@/lib/auth';
 import type { User } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 interface UserNavProps {
   user: User | null;
@@ -22,6 +23,17 @@ interface UserNavProps {
 
 export function UserNav({ user }: UserNavProps) {
   const router = useRouter();
+  const [userType, setUserType] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (user) {
+      const fetchUserType = async () => {
+        const type = await getUserType(user.uid);
+        setUserType(type);
+      };
+      fetchUserType();
+    }
+  }, [user]);
 
   if (!user) {
     return (
@@ -37,6 +49,7 @@ export function UserNav({ user }: UserNavProps) {
     router.refresh(); // Force a refresh to update the user state in the layout
   }
 
+  const dashboardPath = userType === 'admin' ? '/admin' : '/dashboard';
   const userName = user.displayName || user.email;
   const userImage = user.photoURL;
   const userInitials = userName?.charAt(0).toUpperCase() || '?';
@@ -61,12 +74,14 @@ export function UserNav({ user }: UserNavProps) {
           )}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
-           <Link href="/dashboard">
-              <Settings className="mr-2 h-4 w-4" />
-              <span>Dashboard</span>
-            </Link>
-        </DropdownMenuItem>
+        {userType && (
+          <DropdownMenuItem asChild>
+             <Link href={dashboardPath}>
+                <Settings className="mr-2 h-4 w-4" />
+                <span>Dashboard</span>
+              </Link>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuSeparator />
         <DropdownMenuItem onSelect={handleLogout}>
           <LogOut className="mr-2 h-4 w-4" />

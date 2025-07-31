@@ -32,7 +32,7 @@ async function createUserInFirestore(user: FirebaseUser, name?: string) {
     }
 }
 
-async function getUserType(uid: string): Promise<string | null> {
+export async function getUserType(uid: string): Promise<string | null> {
     const userRef = doc(db, 'users', uid);
     const docSnap = await getDoc(userRef);
     if (docSnap.exists()) {
