@@ -46,7 +46,7 @@ export function Footer({ config }: { config: SiteConfig }) {
 
           {/* Columna Derecha: Contacto */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Contacto</h3>
+            <h3 className="text-lg font-semibold mb-4">{config.titulos.contacto}</h3>
             <ul className="space-y-3 text-muted-foreground">
               <li className="flex items-center justify-center md:justify-start gap-3">
                 <Phone className="h-5 w-5 text-primary" />
