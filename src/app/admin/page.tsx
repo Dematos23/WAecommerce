@@ -10,9 +10,9 @@ import { Header } from "@/components/layout/Header";
 export default async function AdminPage() {
   const session = await getSession();
 
-  if (!session) {
-    redirect("/admin/login");
-  }
+  // if (!session) {
+  //   redirect("/admin/login");
+  // }
 
   return (
     <div className="min-h-screen bg-secondary/30">
