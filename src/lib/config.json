@@ -31,28 +31,28 @@
   ],
   "titulos": {
     "homepageHero": "TiendaExpress: Tu tienda, a un clic.",
-    "catalogo": null,
-    "carrito": null,
-    "checkout": null,
-    "sobreNosotros": null,
-    "contacto": null
+    "catalogo": "Explora Nuestros Productos",
+    "carrito": "Tu Carrito de Compras",
+    "checkout": "Finaliza Tu Compra",
+    "sobreNosotros": "Conoce Sobre TiendaExpress",
+    "contacto": "Ponte en Contacto"
   },
   "textos": {
-    "mensajeBienvenida": "Conócenos!",
-    "instruccionesCheckout": null,
+    "mensajeBienvenida": "¡Gracias por visitarnos!",
+    "instruccionesCheckout": "Revisa tu pedido y completa tus datos para enviarlo a través de WhatsApp.",
     "descripcionHomepage": "Rápido, fácil y a tu puerta.",
-    "descripcionSobreNosotros": null,
-    "infoContacto": null
+    "descripcionSobreNosotros": "Somos tu tienda de confianza, comprometidos con ofrecerte productos de calidad con la mejor experiencia de compra.",
+    "infoContacto": "Estamos aquí para ayudarte. No dudes en contactarnos por cualquiera de nuestros canales."
   },
   "contacto": {
-    "telefono": null,
-    "correo": null,
-    "direccion": null,
-    "horarioAtencion": null
+    "telefono": "+1 (234) 567-890",
+    "correo": "contacto@tiendaexpress.com",
+    "direccion": "Av. Siempreviva 742, Springfield",
+    "horarioAtencion": "Lunes a Viernes: 9:00 AM - 6:00 PM"
   },
   "configuracionGeneral": {
-    "nombreTienda": "Tienda Express",
-    "numeroWhatsApp": "984092034",
+    "nombreTienda": "TiendaExpress",
+    "numeroWhatsApp": "1234567890",
     "logoUrl": "/images/logo.png",
     "eslogan": "Rápido, fácil y a tu puerta.",
     "mensajePedidoWhatsApp": "¡Gracias por tu compra! 😊",

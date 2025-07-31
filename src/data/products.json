@@ -1,3 +1,4 @@
+
 [
   {
     "id": "prod_001",
@@ -46,7 +47,7 @@
   {
     "id": "prod_005",
     "nombre": "Teclado Mecánico RGB",
-    "descripcion": null,
+    "descripcion": "Switches mecánicos para una respuesta táctil superior. Iluminación RGB personalizable.",
     "precio": 120,
     "categoria": "Tecnología",
     "imagenes": [
@@ -68,15 +69,39 @@
     "destacado": false
   },
   {
-    "id": "prod_1753913204491",
-    "nombre": "Vedi",
-    "descripcion": "descripción",
-    "precio": 25.99,
-    "categoria": "Ropa",
-    "destacado": false,
-    "imagenes": [
-      "/images/prod_1753913204491/1753913872591_0.webp",
-      "/images/prod_1753913204491/1753913900445_0.webp"
-    ]
+    "id": "prod_007",
+    "nombre": "Smartwatch Fitness Tracker",
+    "descripcion": "Monitoriza tu actividad diaria, ritmo cardíaco y sueño. Resistente al agua y compatible con iOS/Android.",
+    "precio": 75.00,
+    "categoria": "Tecnología",
+    "imagenes": ["https://placehold.co/400x400.png"],
+    "destacado": true
+  },
+  {
+    "id": "prod_008",
+    "nombre": "Silla Ergonómica de Oficina",
+    "descripcion": "Soporte lumbar ajustable, reposabrazos y altura regulable para máximo confort durante tu jornada.",
+    "precio": 150.00,
+    "categoria": "Hogar",
+    "imagenes": ["https://placehold.co/400x400.png"],
+    "destacado": false
+  },
+  {
+    "id": "prod_009",
+    "nombre": "Gorra de Béisbol Clásica",
+    "descripcion": "Hecha 100% de algodón con cierre ajustable. Un accesorio versátil para cualquier ocasión.",
+    "precio": 15.99,
+    "categoria": "Accesorios",
+    "imagenes": ["https://placehold.co/400x400.png"],
+    "destacado": false
+  },
+  {
+    "id": "prod_010",
+    "nombre": "Mouse Inalámbrico",
+    "descripcion": "Diseño ambidiestro y conexión estable. Perfecto para trabajar o navegar con precisión.",
+    "precio": 22.50,
+    "categoria": "Tecnología",
+    "imagenes": ["https://placehold.co/400x400.png"],
+    "destacado": false
   }
 ]
