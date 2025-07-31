@@ -69,7 +69,9 @@ export function CheckoutForm({ config }: CheckoutFormProps) {
 
     message += `-------------------------\n`;
     message += `*SUBTOTAL: ${formatCurrency(subtotal)}*\n\n`;
-    message += `¡Gracias por tu compra! 😊`;
+    if(config.configuracionGeneral.mensajePedidoWhatsApp) {
+      message += `${config.configuracionGeneral.mensajePedidoWhatsApp}\n`;
+    }
 
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/${whatsAppNumber}?text=${encodedMessage}`;
@@ -187,3 +189,5 @@ export function CheckoutForm({ config }: CheckoutFormProps) {
     </div>
   );
 }
+
+    

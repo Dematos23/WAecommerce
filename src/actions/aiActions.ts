@@ -330,7 +330,8 @@ export async function readConfig(): Promise<SiteConfig> {
       configuracionGeneral: {
         numeroWhatsApp: "",
         logoUrl: "/logo.svg",
-        eslogan: "Rápido, fácil y a tu puerta."
+        eslogan: "Rápido, fácil y a tu puerta.",
+        mensajePedidoWhatsApp: "¡Gracias por tu compra! 😊"
       }
     };
 
@@ -392,7 +393,8 @@ export async function readConfig(): Promise<SiteConfig> {
       configuracionGeneral: {
         numeroWhatsApp: "1234567890",
         logoUrl: "/logo.svg",
-        eslogan: "Rápido, fácil y a tu puerta."
+        eslogan: "Rápido, fácil y a tu puerta.",
+        mensajePedidoWhatsApp: "¡Gracias por tu compra! 😊"
       }
     };
     return defaultConfig;
@@ -516,6 +518,7 @@ export async function updateConfig(formData: FormData) {
           ...currentConfig.configuracionGeneral,
           numeroWhatsApp: formData.get('generalNumeroWhatsApp') as string,
           eslogan: formData.get('generalEslogan') as string,
+          mensajePedidoWhatsApp: formData.get('generalMensajePedidoWhatsApp') as string,
       }
   };
 
@@ -553,3 +556,5 @@ export async function updateTheme(formData: FormData) {
     revalidatePath('/', 'layout');
     redirect('/admin/theme');
 }
+
+    

@@ -24,6 +24,10 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
                             <Label htmlFor="generalNumeroWhatsApp">Número de WhatsApp (para pedidos)</Label>
                             <Input id="generalNumeroWhatsApp" name="generalNumeroWhatsApp" defaultValue={config.configuracionGeneral.numeroWhatsApp} />
                         </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="generalMensajePedidoWhatsApp">Mensaje Personalizado para Pedido de WhatsApp</Label>
+                            <Textarea id="generalMensajePedidoWhatsApp" name="generalMensajePedidoWhatsApp" defaultValue={config.configuracionGeneral.mensajePedidoWhatsApp} />
+                        </div>
                     </AccordionContent>
                 </AccordionItem>
                 
@@ -143,3 +147,5 @@ function SubmitButton() {
         </Button>
     )
 }
+
+    
