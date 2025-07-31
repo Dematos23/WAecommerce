@@ -72,8 +72,8 @@ export function ProductCard({ product }: ProductCardProps) {
     }
   );
 
-  const nameClasses = cn("mb-2 text-lg font-semibold", {
-    "text-center": productCard.nameAlign === 'center',
+  const nameClasses = cn("mb-2 text-lg font-semibold h-14 flex items-start", {
+    "text-center justify-center": productCard.nameAlign === 'center',
     "text-left": productCard.nameAlign === 'left'
   });
   const descriptionClasses = cn("text-sm text-muted-foreground mb-4 h-10 overflow-hidden", {
@@ -104,17 +104,27 @@ export function ProductCard({ product }: ProductCardProps) {
     </CardHeader>
   );
 
-  const NameComponent = () => <CardTitle className={nameClasses}>{product.nombre}</CardTitle>;
+  const NameComponent = () => <CardTitle className={nameClasses}><span>{product.nombre}</span></CardTitle>;
   const DescriptionComponent = () => <div className={descriptionClasses}>{product.descripcion || `Descubre más sobre ${product.nombre}.`}</div>;
   const PriceComponent = () => <p className={priceClasses}>{formatCurrency(product.precio)}</p>;
   
   const CardBody = () => (
-    <div className="flex-1">
-      {productCard.imagePosition !== 'afterName' && <NameComponent />}
-      {productCard.imagePosition === 'afterName' && <ImageComponent/>}
-      
-      {productCard.imagePosition !== 'afterDescription' && <DescriptionComponent />}
-      {productCard.imagePosition === 'afterDescription' && <ImageComponent/>}
+    <div className="flex-1 flex flex-col">
+      <div className="flex-grow">
+        {productCard.imagePosition === 'afterName' && <NameComponent />}
+        {productCard.imagePosition !== 'afterName' && <NameComponent />}
+        {productCard.imagePosition === 'afterName' && <ImageComponent/>}
+        
+        {productCard.imagePosition !== 'afterDescription' && <DescriptionComponent />}
+        {productCard.imagePosition === 'afterDescription' && <DescriptionComponent />}
+        {productCard.imagePosition === 'afterDescription' && <ImageComponent/>}
+      </div>
+
+      <div>
+          {productCard.imagePosition === 'afterPrice' && <PriceComponent/>}
+          {productCard.imagePosition !== 'afterPrice' && <PriceComponent/>}
+          {productCard.imagePosition === 'afterPrice' && <div className="mt-4"><ImageComponent /></div>}
+      </div>
     </div>
   );
 
@@ -123,10 +133,6 @@ export function ProductCard({ product }: ProductCardProps) {
         {productCard.imagePosition === 'top' && <ImageComponent />}
         <CardContent className="p-6 flex-1 flex flex-col">
              <CardBody />
-             <div>
-                <PriceComponent />
-                {productCard.imagePosition === 'afterPrice' && <ImageComponent />}
-             </div>
         </CardContent>
         <CardFooter className="p-6 pt-0">
             <Button className="w-full" onClick={handleAddToCart} variant={productCard.buttonStyle}>
@@ -137,4 +143,3 @@ export function ProductCard({ product }: ProductCardProps) {
     </Card>
   );
 }
-
