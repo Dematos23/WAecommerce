@@ -1,6 +1,7 @@
 
 "use client";
 
+import { useState, useEffect } from "react";
 import { useFormStatus } from "react-dom";
 import type { SiteConfig } from "@/types";
 import { updateConfig } from "@/actions/aiActions";
@@ -12,6 +13,13 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Save, Home, FileCog, Phone } from "lucide-react";
 
 export function ConfigForm({ config }: { config: SiteConfig }) {
+    const [address, setAddress] = useState(config.contacto.direccion);
+    const [mapUrl, setMapUrl] = useState("");
+
+    useEffect(() => {
+        const encodedAddress = encodeURIComponent(address);
+        setMapUrl(`https://maps.google.com/maps?q=${encodedAddress}&output=embed`);
+    }, [address]);
 
     return (
         <form action={updateConfig} className="space-y-8">
@@ -119,12 +127,33 @@ export function ConfigForm({ config }: { config: SiteConfig }) {
                             </div>
                         </div>
                        <div className="space-y-2">
-                            <Label htmlFor="contactoDireccion">Dirección</Label>
-                            <Input id="contactoDireccion" name="contactoDireccion" defaultValue={config.contacto.direccion} />
-                        </div>
-                        <div className="space-y-2">
                             <Label htmlFor="contactoHorarioAtencion">Horario de Atención</Label>
                             <Input id="contactoHorarioAtencion" name="contactoHorarioAtencion" defaultValue={config.contacto.horarioAtencion} />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="contactoDireccion">Dirección</Label>
+                            <Input 
+                                id="contactoDireccion" 
+                                name="contactoDireccion" 
+                                value={address}
+                                onChange={(e) => setAddress(e.target.value)}
+                            />
+                        </div>
+                        <div>
+                             <Label>Vista Previa del Mapa</Label>
+                             <div className="mt-2 overflow-hidden rounded-lg h-64 w-full border">
+                                <iframe
+                                    key={mapUrl}
+                                    src={mapUrl}
+                                    width="100%"
+                                    height="100%"
+                                    style={{ border: 0 }}
+                                    allowFullScreen={false}
+                                    loading="lazy"
+                                    referrerPolicy="no-referrer-when-downgrade"
+                                    title="Vista previa del mapa"
+                                ></iframe>
+                            </div>
                         </div>
                     </AccordionContent>
                 </AccordionItem>
@@ -147,5 +176,3 @@ function SubmitButton() {
         </Button>
     )
 }
-
-    

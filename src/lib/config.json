@@ -35,24 +35,25 @@
     "carrito": null,
     "checkout": null,
     "sobreNosotros": null,
-    "contacto": null
+    "contacto": "Contáctanos cuando desees!"
   },
   "textos": {
     "mensajeBienvenida": "Conócenos!",
     "instruccionesCheckout": null,
     "descripcionHomepage": "Rápido, fácil y a tu puerta.",
     "descripcionSobreNosotros": null,
-    "infoContacto": null
+    "infoContacto": "Siempre eres bienvenido"
   },
   "contacto": {
-    "telefono": null,
-    "correo": null,
-    "direccion": null,
-    "horarioAtencion": null
+    "telefono": "094 092 034",
+    "correo": "dematos23@gmail.com",
+    "direccion": "Alcanfores 111, Miraflores",
+    "horarioAtencion": "11am - 3pm"
   },
   "configuracionGeneral": {
     "numeroWhatsApp": "984092034",
     "logoUrl": "/logo.svg",
-    "eslogan": "Rápido, fácil y a tu puerta."
+    "eslogan": "Rápido, fácil y a tu puerta.",
+    "mensajePedidoWhatsApp": "¡Gracias por tu compra! 😊"
   }
 }
