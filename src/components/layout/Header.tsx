@@ -2,7 +2,7 @@
 "use client";
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Logo } from '@/components/ui/Logo';
 import { Button } from '@/components/ui/button';
@@ -15,25 +15,29 @@ import {
 } from "@/components/ui/sheet"
 import type { SiteConfig } from '@/types';
 import { UserNav } from './UserNav';
-import type { Session } from 'next-auth';
+import type { User } from 'firebase/auth';
+import { useEffect, useState } from 'react';
 
 interface HeaderProps {
     config: SiteConfig;
-    session: Session | null;
+    user: User | null;
 }
 
-export function Header({ config, session }: HeaderProps) {
+export function Header({ config, user }: HeaderProps) {
   const pathname = usePathname();
+  const router = useRouter();
+  const [isSheetOpen, setSheetOpen] = useState(false);
   
-  // These are the public-facing SaaS pages. The cart should not be shown here.
-  const isPublicSaasPage = ['/', '/login', '/register', '/contact', '/pricing'].some(p => pathname === p);
-  
-  // Dashboard pages also shouldn't show a cart icon.
+  const isPublicSaasPage = ['/', '/login', '/register', '/contact', '/pricing', '/terms', '/privacy', '/cookies'].some(p => pathname === p);
   const isDashboardPage = pathname.startsWith('/dashboard');
 
   const renderCart = !isPublicSaasPage && !isDashboardPage;
 
   const navLinks = config.header.menu || [];
+  
+  useEffect(() => {
+    setSheetOpen(false); // Close mobile menu on route change
+  }, [pathname]);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -60,7 +64,7 @@ export function Header({ config, session }: HeaderProps) {
               ))}
           </nav>
           <div className="flex flex-1 justify-end items-center gap-4">
-             <UserNav session={session} />
+             <UserNav user={user} />
           </div>
         </div>
 
@@ -68,7 +72,7 @@ export function Header({ config, session }: HeaderProps) {
         {/* Mobile Header Layout */}
         <div className="flex md:hidden items-center justify-between w-full">
             {/* Mobile Menu (Left) */}
-             <Sheet>
+             <Sheet open={isSheetOpen} onOpenChange={setSheetOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon">
                   <Menu className="h-6 w-6" />
@@ -110,7 +114,7 @@ export function Header({ config, session }: HeaderProps) {
 
            {/* Right Icons */}
             <div className="flex items-center gap-2">
-                <UserNav session={session} />
+                <UserNav user={user} />
             </div>
         </div>
       </div>

@@ -1,18 +1,86 @@
 
-import { getSession, logout } from "@/lib/auth";
-import { redirect } from "next/navigation";
+'use client';
+
+import { logout } from "@/lib/auth";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Settings, ShoppingBag, LogOut, FileJson } from "lucide-react";
 import Link from "next/link";
-import { Header } from "@/components/layout/Header";
+import { useEffect, useState } from "react";
+import { onAuthStateChanged, User } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 
-export default async function AdminPage() {
-  const session = await getSession();
+function AdminHeader() {
+    const router = useRouter();
+    const handleLogout = async () => {
+        await logout();
+        router.push('/');
+    };
 
-  // if (!session) {
-  //   redirect("/login");
-  // }
+    return (
+        <header className="bg-card shadow-sm">
+            <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+                <h1 className="text-xl font-bold">Panel de Admin</h1>
+                <Button onClick={handleLogout} variant="ghost">
+                    Cerrar Sesión <LogOut className="ml-2 h-4 w-4" />
+                </Button>
+            </div>
+        </header>
+    )
+}
+
+interface ManagementCardProps {
+    title: string;
+    description: string;
+    icon: React.ReactNode;
+    link: string;
+}
+
+function ManagementCard({ title, description, icon, link }: ManagementCardProps) {
+    return (
+        <Link href={link}>
+            <Card className="hover:shadow-lg transition-shadow h-full">
+                <CardHeader className="flex flex-row items-center gap-4">
+                    {icon}
+                    <div>
+                        <CardTitle>{title}</CardTitle>
+                    </div>
+                </CardHeader>
+                <CardContent>
+                    <CardDescription>{description}</CardDescription>
+                </CardContent>
+            </Card>
+        </Link>
+    )
+}
+
+
+export default function AdminPage() {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+      } else {
+        router.push('/login');
+      }
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, [router]);
+
+  if (loading) {
+    return <div>Cargando...</div>;
+  }
+
+  if (!user) {
+    return null; // The redirect is handled in the effect
+  }
 
   return (
     <div className="min-h-screen bg-secondary/30">
@@ -42,48 +110,4 @@ export default async function AdminPage() {
         </main>
     </div>
   );
-}
-
-function AdminHeader() {
-    return (
-        <header className="bg-card shadow-sm">
-            <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-                <h1 className="text-xl font-bold">Panel de Admin</h1>
-                <form action={async () => {
-                    'use server';
-                    await logout();
-                    redirect('/');
-                }}>
-                    <Button type="submit" variant="ghost">
-                        Cerrar Sesión <LogOut className="ml-2 h-4 w-4" />
-                    </Button>
-                </form>
-            </div>
-        </header>
-    )
-}
-
-interface ManagementCardProps {
-    title: string;
-    description: string;
-    icon: React.ReactNode;
-    link: string;
-}
-
-function ManagementCard({ title, description, icon, link }: ManagementCardProps) {
-    return (
-        <Link href={link}>
-            <Card className="hover:shadow-lg transition-shadow h-full">
-                <CardHeader className="flex flex-row items-center gap-4">
-                    {icon}
-                    <div>
-                        <CardTitle>{title}</CardTitle>
-                    </div>
-                </CardHeader>
-                <CardContent>
-                    <CardDescription>{description}</CardDescription>
-                </CardContent>
-            </Card>
-        </Link>
-    )
 }

@@ -1,15 +1,4 @@
 
-import type { DefaultSession } from 'next-auth';
-
-declare module 'next-auth' {
-  interface Session {
-    user: {
-      id: string;
-      tenantId: string;
-    } & DefaultSession['user'];
-  }
-}
-
 export interface MenuItem {
   titulo: string;
   enlace: string;
@@ -98,11 +87,11 @@ export interface SiteConfig {
 }
 
 
-export interface Tenant {
-    id: string;
-    name: string;
-    slug: string;
-    ownerId: string;
+export interface User {
+    uid: string;
+    email: string | null;
+    displayName: string | null;
+    photoURL: string | null;
+    providerId: string | undefined;
     createdAt: any; // Firestore timestamp
-    config?: Partial<SiteConfig>;
 }

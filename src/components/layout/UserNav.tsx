@@ -13,15 +13,14 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { LogOut, User as UserIcon, Settings } from 'lucide-react';
 import { logout } from '@/lib/auth';
-import { Session } from 'next-auth';
+import type { User } from 'firebase/auth';
 
 interface UserNavProps {
-  session: Session | null;
+  user: User | null;
 }
 
-export function UserNav({ session }: UserNavProps) {
-
-  if (!session) {
+export function UserNav({ user }: UserNavProps) {
+  if (!user) {
     return (
       <Button asChild variant="accent" className="font-bold">
         <Link href="/login">Login</Link>
@@ -29,9 +28,8 @@ export function UserNav({ session }: UserNavProps) {
     );
   }
 
-  const user = session.user;
-  const userName = user?.name || user?.email;
-  const userImage = user?.image;
+  const userName = user.displayName || user.email;
+  const userImage = user.photoURL;
   const userInitials = userName?.charAt(0).toUpperCase() || '?';
 
   return (
@@ -47,9 +45,11 @@ export function UserNav({ session }: UserNavProps) {
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuItem className="flex-col items-start">
           <p className="text-sm font-medium leading-none">{userName}</p>
-          <p className="text-xs leading-none text-muted-foreground">
-            {user?.email}
-          </p>
+          {user.email && (
+            <p className="text-xs leading-none text-muted-foreground">
+              {user.email}
+            </p>
+          )}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
