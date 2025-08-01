@@ -2,7 +2,8 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ProductGrid } from "@/components/products/ProductGrid";
-import { readProducts, readConfig } from "@/actions/aiActions";
+import { readProducts } from "@/actions/productActions";
+import { readConfig } from "@/actions/siteActions";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import type { SiteConfig } from "@/types";
@@ -17,7 +18,7 @@ export default async function StoreHomePage({ params }: { params: { storeSlug: s
 
   const [products, config] = await Promise.all([
     readProducts(tenant.id),
-    readConfig(tenant.id),
+    readConfig(),
   ]);
 
   const featuredProducts = products.filter(p => p.destacado);
@@ -64,7 +65,6 @@ export default async function StoreHomePage({ params }: { params: { storeSlug: s
                     className="object-cover"
                  />
               </div>
-            </div>
              <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-10 w-full flex justify-center">
                 <Button asChild size="lg" variant="ghost" className="text-xl font-bold text-white bg-black/30 hover:bg-black/50 hover:tracking-widest transition-all duration-300 ease-in-out">
                     <Link href={config.secondaryHero.ctaLink || "#"}>

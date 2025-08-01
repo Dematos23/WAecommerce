@@ -6,12 +6,12 @@ import type { User } from 'firebase/auth';
 
 // TODO: Replace with your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAk43l3NBSKVQ23_FfYTkTFXcuXuVAl-6s",
-  authDomain: "kima-oicw0.firebaseapp.com",
-  projectId: "kima-oicw0",
-  storageBucket: "kima-oicw0.appspot.com",
-  messagingSenderId: "455412220645",
-  appId: "1:455412220645:web:058af08ab957082ec80a0c"
+  apiKey: process.env.FIREBASE_API_KEY,
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.FIREBASE_APP_ID
 };
 
 

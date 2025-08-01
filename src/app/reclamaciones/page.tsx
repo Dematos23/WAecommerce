@@ -1,5 +1,5 @@
 
-import { readConfig } from "@/actions/aiActions";
+import { readConfig } from "@/actions/siteActions";
 import { ReclamacionesForm } from "./ReclamacionesForm";
 
 export default async function ReclamacionesPage() {
