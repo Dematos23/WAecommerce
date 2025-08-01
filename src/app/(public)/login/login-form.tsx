@@ -29,7 +29,7 @@ export function LoginForm() {
   const { user, userProfile, loading } = useAuth();
 
   useEffect(() => {
-    // Redirect if user is logged in and we have their profile
+    // Redirect only when loading is false and we have a user with a profile
     if (!loading && user && userProfile) {
       if (userProfile.type === 'admin') {
         router.push('/admin');
@@ -65,7 +65,8 @@ export function LoginForm() {
     // Redirection is handled by the useEffect hook
   };
 
-  // Prevent flicker or showing form while redirecting
+  // Show a loading state while auth is being checked or if a user is found
+  // and we are waiting for the redirect.
   if (loading || user) {
     return <div>Cargando...</div>
   }

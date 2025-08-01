@@ -14,8 +14,6 @@ import { useEffect, useState } from 'react';
 import type { SiteConfig } from '@/types';
 import { useAuth } from '@/hooks/useAuth';
 import { usePathname } from 'next/navigation';
-import { onAuthStateChanged, User } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
 
 const manrope = Manrope({ subsets: ['latin'], variable: '--font-manrope' });
 
@@ -32,18 +30,21 @@ function AppContent({ children }: { children: React.ReactNode }) {
     fetchConfig();
   }, []);
 
+  const isAuthPage = pathname === '/login' || pathname === '/register';
   const isDashboard = pathname.startsWith('/dashboard');
   const isAdmin = pathname.startsWith('/admin');
   const showHeaderFooter = config && !isDashboard && !isAdmin;
 
-  if (loading || (!config && showHeaderFooter)) {
+  // Show a global loading indicator while auth state is resolving,
+  // or while the config for public pages is loading.
+  if (loading || (!config && !isDashboard && !isAdmin && !isAuthPage)) {
     return (
         <div className="flex items-center justify-center min-h-screen">
           <div>Loading...</div>
         </div>
     );
   }
-
+  
   return (
     <div className="relative flex flex-col bg-background min-h-screen">
       {showHeaderFooter && <Header config={config} user={user} />}
