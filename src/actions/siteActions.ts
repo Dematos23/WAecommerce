@@ -25,7 +25,9 @@ export async function readConfig(): Promise<SiteConfig> {
       return docSnap.data() as SiteConfig;
     } else {
       console.log("Config document not found, attempting to initialize from JSON.");
-      return initializeConfig();
+      // If no doc, fall back to the JSON file to prevent app crash, 
+      // and allow initialization.
+      return readConfigFromJson();
     }
   } catch (error) {
     console.error("Error reading config from Firestore, falling back to JSON for safety.", error);
@@ -65,11 +67,12 @@ export async function initializeConfig(): Promise<SiteConfig> {
         const docRef = doc(db, CONFIG_COLLECTION, CONFIG_DOC_ID);
         await setDoc(docRef, jsonConfig);
         console.log("Successfully initialized Firestore config.");
+        revalidatePath('/', 'layout');
         return jsonConfig;
     } catch (error) {
         console.error("Failed to initialize Firestore config:", error);
         // If initialization fails, we still return the JSON config to prevent the app from crashing.
-        return jsonConfig;
+        throw new Error("Failed to initialize Firestore config in the database.");
     }
 }
 
