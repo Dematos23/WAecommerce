@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Logo } from '@/components/ui/Logo';
 import { readConfig } from '@/actions/aiActions';
 import Link from 'next/link';
+import { HostnameDisplay } from '@/components/ui/HostnameDisplay';
 
 export default async function LoginPage() {
     const config = await readConfig();
@@ -27,6 +28,7 @@ export default async function LoginPage() {
             </p>
         </CardContent>
       </Card>
+      <HostnameDisplay />
     </div>
   );
 }
