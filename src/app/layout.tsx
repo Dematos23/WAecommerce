@@ -14,6 +14,7 @@ import { useEffect, useState } from 'react';
 import type { SiteConfig } from '@/types';
 import { useAuth } from '@/hooks/useAuth';
 import { usePathname } from 'next/navigation';
+import { AppLoader } from '@/components/ui/AppLoader';
 
 const manrope = Manrope({ subsets: ['latin'], variable: '--font-manrope' });
 
@@ -38,11 +39,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
   // Show a global loading indicator while auth state is resolving,
   // or while the config for public pages is loading.
   if (loading || (!config && !isDashboard && !isAdmin && !isAuthPage)) {
-    return (
-        <div className="flex items-center justify-center min-h-screen">
-          <div>Loading...</div>
-        </div>
-    );
+    return <AppLoader />
   }
   
   return (
