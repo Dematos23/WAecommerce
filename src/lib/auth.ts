@@ -16,7 +16,6 @@ import type { User as FirebaseUser } from 'firebase/auth';
 const googleProvider = new GoogleAuthProvider();
 
 // This function now only creates the user document if it doesn't exist.
-// It doesn't need to return the user type anymore.
 async function createUserInFirestore(user: FirebaseUser, name?: string) {
     const userRef = doc(db, "users", user.uid);
     const docSnap = await getDoc(userRef);
@@ -34,27 +33,8 @@ async function createUserInFirestore(user: FirebaseUser, name?: string) {
             });
         } catch (error) {
             console.error("Error creating user document:", error);
-            // We can re-throw or handle this error as needed
             throw error;
         }
-    }
-}
-
-// This function is kept for potential server-side use, but is no longer
-// called in the client-side login/register flow.
-export async function getUserType(uid: string): Promise<string | null> {
-    const userRef = doc(db, 'users', uid);
-    try {
-        const docSnap = await getDoc(userRef);
-        if (docSnap.exists()) {
-            return docSnap.data()?.type || 'client';
-        }
-        return null;
-    } catch (error) {
-        console.error("Error getting user type:", error);
-        // Avoid failing silently in case of network issues etc.
-        // The new AuthProvider handles this more gracefully.
-        return null; 
     }
 }
 
@@ -72,7 +52,6 @@ export async function register(name: string, email: string, password:  string) {
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         await updateProfile(userCredential.user, { displayName: name });
-        // Create the user document, but don't wait to fetch the type.
         await createUserInFirestore(userCredential.user, name);
         return { success: true, user: userCredential.user };
     } catch (error: any) {
