@@ -33,7 +33,7 @@ export function Footer({ config }: { config: SiteConfig }) {
                 <Logo config={config} />
             </div>
             <p className="mt-4 text-muted-foreground max-w-xs">
-              {footer.eslogan}
+              {footer.slogan}
             </p>
             <div className="flex gap-2 mt-4">
               {footer.socialLinks.map(social => (
@@ -51,7 +51,7 @@ export function Footer({ config }: { config: SiteConfig }) {
             <h3 className="text-lg font-semibold mb-4 text-foreground">Navegación</h3>
             <ul className="space-y-3 text-muted-foreground">
               {footer.navigation.map(link => (
-                <li key={link.enlace}><Link href={link.enlace} className="hover:text-primary transition-colors">{link.titulo}</Link></li>
+                <li key={link.link}><Link href={link.link} className="hover:text-primary transition-colors">{link.title}</Link></li>
               ))}
             </ul>
           </div>
@@ -62,7 +62,7 @@ export function Footer({ config }: { config: SiteConfig }) {
             <h3 className="text-lg font-semibold mb-4 text-foreground">Legal</h3>
             <ul className="space-y-3 text-muted-foreground">
                {footer.legal.map(link => (
-                <li key={link.enlace}><Link href={link.enlace} className="hover:text-primary transition-colors">{link.titulo}</Link></li>
+                <li key={link.link}><Link href={link.link} className="hover:text-primary transition-colors">{link.title}</Link></li>
               ))}
             </ul>
           </div>
@@ -74,15 +74,15 @@ export function Footer({ config }: { config: SiteConfig }) {
             <ul className="space-y-3 text-muted-foreground">
               <li className="flex items-center justify-center md:justify-start gap-3">
                 <Phone className="h-5 w-5 text-primary" />
-                <span>{footer.contacto.telefono}</span>
+                <span>{footer.contact.phone}</span>
               </li>
               <li className="flex items-center justify-center md:justify-start gap-3">
                 <Mail className="h-5 w-5 text-primary" />
-                <span>{footer.contacto.correo}</span>
+                <span>{footer.contact.email}</span>
               </li>
               <li className="flex items-center justify-center md:justify-start gap-3">
                 <MapPin className="h-5 w-5 text-primary" />
-                <span>{footer.contacto.direccion}</span>
+                <span>{footer.contact.address}</span>
               </li>
             </ul>
           </div>

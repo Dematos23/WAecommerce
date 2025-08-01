@@ -1,50 +1,50 @@
 
 {
-  "variablesCss": {
-    "colorPrimario": "#1D63FF",
-    "colorSecundario": "#F8F8F9",
-    "colorFondo": "#F8F8F9",
-    "colorTexto": "#111111",
-    "colorAcento": "#FFCE32",
-    "colorDecorativo": "#F95B03",
+  "cssVariables": {
+    "primaryColor": "#1D63FF",
+    "secondaryColor": "#F8F8F9",
+    "backgroundColor": "#F8F8F9",
+    "textColor": "#111111",
+    "accentColor": "#FFCE32",
+    "decorativeColor": "#F95B03",
     "fontFamily": "Manrope",
     "h1Size": "48px",
     "h2Size": "36px",
     "h3Size": "28px",
     "paragraphSize": "18px",
     "buttonFontSize": "16px",
-    "marginBase": "1rem",
-    "paddingBase": "1rem",
+    "baseMargin": "1rem",
+    "basePadding": "1rem",
     "borderRadius": "0.5rem"
   },
   "header": {
     "menu": [
-      { "titulo": "Características", "enlace": "/#features" },
-      { "titulo": "Precios", "enlace": "/pricing" },
-      { "titulo": "Contacto", "enlace": "/contact" }
+      { "title": "Características", "link": "/#features" },
+      { "title": "Precios", "link": "/pricing" },
+      { "title": "Contacto", "link": "/contact" }
     ]
   },
   "footer": {
-    "eslogan": "Tu tienda, a tu manera.",
+    "slogan": "Tu tienda, a tu manera.",
     "socialLinks": [
       { "name": "Instagram", "url": "#" },
       { "name": "Facebook", "url": "#" },
       { "name": "TikTok", "url": "#" }
     ],
     "navigation": [
-      { "titulo": "Características", "enlace": "/#features" },
-      { "titulo": "Precios", "enlace": "/pricing" },
-      { "titulo": "Contacto", "enlace": "/contact" }
+      { "title": "Características", "link": "/#features" },
+      { "title": "Precios", "link": "/pricing" },
+      { "title": "Contacto", "link": "/contact" }
     ],
     "legal": [
-      { "titulo": "Términos y Condiciones", "enlace": "/terms" },
-      { "titulo": "Política de Privacidad", "enlace": "/privacy" },
-      { "titulo": "Política de Cookies", "enlace": "/cookies" }
+      { "title": "Términos y Condiciones", "link": "/terms" },
+      { "title": "Política de Privacidad", "link": "/privacy" },
+      { "title": "Política de Cookies", "link": "/cookies" }
     ],
-    "contacto": {
-      "telefono": "+51 987 654 321",
-      "correo": "contacto@kima.com",
-      "direccion": "Lima, Perú"
+    "contact": {
+      "phone": "+51 987 654 321",
+      "email": "contacto@kima.com",
+      "address": "Lima, Perú"
     },
     "copyright": "© {year} Kima. Todos los derechos reservados."
   },
@@ -134,8 +134,8 @@
     "description": "Estamos aquí para ayudarte. Rellena el formulario o utiliza nuestros datos de contacto.",
     "formTitle": "Envíanos un Mensaje"
   },
-  "configuracionGeneral": {
-    "nombreTienda": "Kima",
+  "generalConfig": {
+    "storeName": "Kima",
     "logoUrl": "/images/logo.png",
     "displayMode": "both"
   }

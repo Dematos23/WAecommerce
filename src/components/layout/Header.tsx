@@ -46,14 +46,14 @@ export function Header({ config, user }: HeaderProps) {
           <nav className="flex flex-1 justify-center items-center gap-8 text-base font-medium">
               {navLinks.map((link) => (
                   <Link
-                      key={link.enlace}
-                      href={link.enlace}
+                      key={link.link}
+                      href={link.link}
                       className={cn(
                       'transition-colors text-foreground/80 hover:text-foreground',
-                      pathname === link.enlace && 'text-primary font-semibold'
+                      pathname === link.link && 'text-primary font-semibold'
                       )}
                   >
-                      {link.titulo}
+                      {link.title}
                   </Link>
               ))}
           </nav>
@@ -82,16 +82,16 @@ export function Header({ config, user }: HeaderProps) {
                    <nav className="grid gap-4">
                     {navLinks.map((item) => (
                       <Link
-                        key={item.enlace}
-                        href={item.enlace}
+                        key={item.link}
+                        href={item.link}
                         className={cn(
                           'text-lg font-medium transition-colors hover:text-foreground/80',
-                          pathname === item.enlace
+                          pathname === item.link
                             ? 'text-primary'
                             : 'text-foreground/60'
                         )}
                       >
-                        {item.titulo}
+                        {item.title}
                       </Link>
                     ))}
                   </nav>

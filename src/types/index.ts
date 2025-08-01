@@ -1,39 +1,39 @@
 
 export interface MenuItem {
-  titulo: string;
-  enlace: string;
+  title: string;
+  link: string;
 }
 
 export interface SiteConfig {
-  variablesCss: {
-    colorPrimario: string;
-    colorSecundario: string;
-    colorFondo: string;
-    colorTexto: string;
-    colorAcento: string;
-    colorDecorativo: string;
+  cssVariables: {
+    primaryColor: string;
+    secondaryColor: string;
+    backgroundColor: string;
+    textColor: string;
+    accentColor: string;
+    decorativeColor: string;
     fontFamily: string;
     h1Size: string;
     h2Size: string;
     h3Size: string;
     paragraphSize: string;
     buttonFontSize: string;
-    marginBase: string;
-    paddingBase: string;
+    baseMargin: string;
+    basePadding: string;
     borderRadius: string;
   };
   header: {
-    menu: MenuItem[];
+    menu: { title: string; link: string }[];
   };
   footer: {
-    eslogan: string;
+    slogan: string;
     socialLinks: { name: string; url: string }[];
-    navigation: MenuItem[];
-    legal: MenuItem[];
-    contacto: {
-      telefono: string;
-      correo: string;
-      direccion: string;
+    navigation: { title: string; link: string }[];
+    legal: { title: string; link: string }[];
+    contact: {
+      phone: string;
+      email: string;
+      address: string;
     };
     copyright: string;
   };
@@ -79,8 +79,8 @@ export interface SiteConfig {
     description: string;
     formTitle: string;
   };
-  configuracionGeneral: {
-    nombreTienda: string;
+  generalConfig: {
+    storeName: string;
     logoUrl: string;
     displayMode?: 'logo' | 'name' | 'both';
   };

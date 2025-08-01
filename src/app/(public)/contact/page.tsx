@@ -60,21 +60,21 @@ export default async function ContactPage() {
                                     <Phone className="h-7 w-7 text-primary" />
                                     <div>
                                         <h3 className="font-semibold text-lg">Teléfono</h3>
-                                        <a href={`tel:${footer.contacto.telefono}`} className="text-base text-muted-foreground hover:text-primary">{footer.contacto.telefono}</a>
+                                        <a href={`tel:${footer.contact.phone}`} className="text-base text-muted-foreground hover:text-primary">{footer.contact.phone}</a>
                                     </div>
                                 </div>
                                 <div className="flex items-start gap-4">
                                     <Mail className="h-7 w-7 text-primary" />
                                     <div>
                                         <h3 className="font-semibold text-lg">Correo Electrónico</h3>
-                                        <a href={`mailto:${footer.contacto.correo}`} className="text-base text-muted-foreground hover:text-primary">{footer.contacto.correo}</a>
+                                        <a href={`mailto:${footer.contact.email}`} className="text-base text-muted-foreground hover:text-primary">{footer.contact.email}</a>
                                     </div>
                                 </div>
                                 <div className="flex items-start gap-4">
                                     <MapPin className="h-7 w-7 text-primary" />
                                     <div>
                                         <h3 className="font-semibold text-lg">Dirección</h3>
-                                        <p className="text-base text-muted-foreground">{footer.contacto.direccion}</p>
+                                        <p className="text-base text-muted-foreground">{footer.contact.address}</p>
                                     </div>
                                 </div>
                             </CardContent>

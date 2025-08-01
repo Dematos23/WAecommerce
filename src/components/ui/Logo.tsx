@@ -1,3 +1,4 @@
+
 import type { SiteConfig } from '@/types';
 
 import Image from 'next/image';
@@ -8,7 +9,7 @@ const manrope = Manrope({ subsets: ['latin'], weight: ["700"] });
 
 
 export function Logo({ config, showName = true }: { config: SiteConfig, showName?: boolean }) {
-  const displayMode = config?.configuracionGeneral?.displayMode || 'both';
+  const displayMode = config?.generalConfig?.displayMode || 'both';
 
   const showIcon = (displayMode === 'logo' || displayMode === 'both');
   const renderName = showName && (displayMode === 'name' || displayMode === 'both');
