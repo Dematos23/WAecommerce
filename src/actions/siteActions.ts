@@ -12,9 +12,20 @@ const CONFIG_COLLECTION = 'siteConfig';
 const CONFIG_DOC_ID = 'main';
 
 /**
+ * Reads the site configuration from the local `config.json` file as a fallback.
+ */
+async function readConfigFromJson(): Promise<SiteConfig> {
+  const filePath = path.join(process.cwd(), 'src', 'lib', 'config.json');
+  const fileContent = await fs.readFile(filePath, 'utf-8');
+  const config = JSON.parse(fileContent);
+  return config as SiteConfig;
+}
+
+/**
  * Reads the site configuration from Firestore.
  * This is used for the main SaaS landing page and global elements.
  * It fetches the single document 'main' from the 'siteConfig' collection.
+ * If Firestore is unavailable, it gracefully falls back to the local config.json.
  */
 export async function readConfig(): Promise<SiteConfig> {
   try {
@@ -24,17 +35,13 @@ export async function readConfig(): Promise<SiteConfig> {
     if (docSnap.exists()) {
       return docSnap.data() as SiteConfig;
     } else {
-      console.log("Config document not found, attempting to initialize.");
-      // If no doc, fall back to the JSON file to prevent app crash, 
-      // and allow initialization.
-      return initializeConfig();
+      console.log("Config document not found in Firestore, falling back to local JSON.");
+      return await readConfigFromJson();
     }
   } catch (error) {
-    console.error("Error reading config from Firestore, returning empty config for safety.", error);
-    // A fallback for extreme cases, though ideally this would be handled differently
-    // For this example, we return a shell to prevent total app failure.
-    // In a real app, you might throw an error to a boundary.
-    throw new Error("Could not read site configuration.");
+    console.error("Error reading config from Firestore, falling back to local JSON.", error);
+    // Gracefully fall back to the JSON file if Firestore is unreachable.
+    return await readConfigFromJson();
   }
 }
 
@@ -47,7 +54,6 @@ export async function updateConfig(configData: SiteConfig): Promise<{ success: b
     const docRef = doc(db, CONFIG_COLLECTION, CONFIG_DOC_ID);
     await setDoc(docRef, configData, { merge: true }); // Use merge to avoid overwriting with partial data
     
-    // Revalidate paths to reflect changes immediately
     revalidatePath('/', 'layout');
     
     return { success: true };
