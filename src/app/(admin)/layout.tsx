@@ -5,7 +5,7 @@ import { SidebarProvider, Sidebar, SidebarTrigger, SidebarHeader, SidebarContent
 import { Home, Users, Settings, CreditCard } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { Logo } from "@/components/ui/Logo";
-import { readConfig } from "@/actions/aiActions";
+import { readConfig } from "@/actions/siteActions";
 import type { SiteConfig } from "@/types";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -69,7 +69,7 @@ function AdminSidebar() {
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarContent>
-             <div className="p-4">
+             <div className="p-4 mt-auto">
                 <Button variant="outline" className="w-full" onClick={handleLogout}>
                     Logout
                 </Button>
@@ -88,7 +88,7 @@ export default function AdminLayout({
         <div className="flex">
             <AdminSidebar />
             <SidebarInset>
-                <main className="p-6 bg-secondary/20 flex-1">
+                <main className="p-6 bg-secondary/20 flex-1 min-h-screen">
                     {children}
                 </main>
             </SidebarInset>

@@ -1,5 +1,5 @@
 
-import { readConfig } from "@/actions/aiActions";
+import { readConfig } from "@/actions/siteActions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";

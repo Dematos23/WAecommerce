@@ -1,6 +1,6 @@
 
 import type { SiteConfig } from "@/types";
-import { readConfig } from "@/actions/aiActions";
+import { readConfig } from "@/actions/siteActions";
 
 let configCache: SiteConfig | null = null;
 

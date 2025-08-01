@@ -2,7 +2,7 @@
 import { RegisterForm } from './register-form';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Logo } from '@/components/ui/Logo';
-import { readConfig } from '@/actions/aiActions';
+import { readConfig } from '@/actions/siteActions';
 import Link from 'next/link';
 
 export default async function RegisterPage() {

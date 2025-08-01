@@ -1,8 +1,9 @@
 import { LoginForm } from './login-form';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Logo } from '@/components/ui/Logo';
-import { readConfig } from '@/actions/aiActions';
+import { readConfig } from '@/actions/siteActions';
 import Link from 'next/link';
+import { HostnameDisplay } from '@/components/ui/HostnameDisplay';
 
 export default async function LoginPage() {
     const config = await readConfig();
@@ -27,6 +28,9 @@ export default async function LoginPage() {
             </p>
         </CardContent>
       </Card>
+       <div className="absolute bottom-4 right-4">
+        <HostnameDisplay />
+      </div>
     </div>
   );
 }

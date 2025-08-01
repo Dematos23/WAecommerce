@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import { readConfig } from '@/actions/aiActions';
+import { readConfig } from '@/actions/siteActions';
 import { Providers } from './providers';
 import { useEffect, useState } from 'react';
 import type { SiteConfig } from '@/types';
@@ -25,28 +25,35 @@ function AppContent({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const fetchConfig = async () => {
-      const siteConfig = await readConfig();
-      setConfig(siteConfig);
+      // No need to fetch config client-side anymore for public pages
+      // as they get it from server components.
+      // But we might need it for client components like the sidebar.
+      if (pathname.startsWith('/admin') || !config) {
+        const siteConfig = await readConfig();
+        setConfig(siteConfig);
+      }
     };
     fetchConfig();
-  }, []);
+  }, [pathname, config]);
 
   const isAuthPage = pathname === '/login' || pathname === '/register';
-  const isDashboard = pathname.startsWith('/dashboard');
   const isAdmin = pathname.startsWith('/admin');
-  const showHeaderFooter = config && !isDashboard && !isAdmin;
+  
+  // Decide whether to show the main header and footer
+  // We don't show them on auth pages or admin pages
+  const showHeaderFooter = !isAuthPage && !isAdmin;
 
   // Show a global loading indicator while auth state is resolving,
   // or while the config for public pages is loading.
-  if (loading || (!config && !isDashboard && !isAdmin && !isAuthPage)) {
+  if (loading) {
     return <AppLoader />
   }
   
   return (
     <div className="relative flex flex-col bg-background min-h-screen">
-      {showHeaderFooter && <Header config={config} user={user} />}
+      {showHeaderFooter && config && <Header config={config} user={user} />}
       <main className="flex-1">{children}</main>
-      {showHeaderFooter && <Footer config={config} />}
+      {showHeaderFooter && config && <Footer config={config} />}
     </div>
   );
 }

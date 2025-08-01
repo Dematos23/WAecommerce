@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check } from "lucide-react";
 import Link from "next/link";
-import { readConfig } from "@/actions/aiActions";
+import { readConfig } from "@/actions/siteActions";
 import type { SiteConfig } from "@/types";
 
 export default async function PricingPage() {

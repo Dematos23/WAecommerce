@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react';
 import { Logo } from '@/components/ui/Logo';
 import type { SiteConfig } from '@/types';
-import { readConfig } from '@/actions/aiActions';
+import { readConfig } from '@/actions/siteActions';
 import { Skeleton } from './skeleton';
 
 export function AppLoader() {

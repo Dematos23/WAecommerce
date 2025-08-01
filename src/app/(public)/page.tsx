@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Store, TrendingUp, Brush, ChevronRight, Icon } from "lucide-react";
 import Link from "next/link";
-import { readConfig } from "@/actions/aiActions";
+import { readConfig } from "@/actions/siteActions";
 import type { SiteConfig } from "@/types";
 
 const icons: { [key: string]: React.ReactNode } = {
