@@ -12,30 +12,19 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { LogOut, User as UserIcon, Settings } from 'lucide-react';
-import { logout, getUserType } from '@/lib/auth';
-import type { User } from 'firebase/auth';
+import { logout } from '@/lib/auth';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 
-interface UserNavProps {
-  user: User | null;
-}
-
-export function UserNav({ user }: UserNavProps) {
+export function UserNav() {
   const router = useRouter();
-  const [userType, setUserType] = useState<string | null>(null);
+  const { user, userProfile, loading } = useAuth();
+  
+  if (loading) {
+    return <Button variant="accent" className="font-bold" disabled>Cargando...</Button>;
+  }
 
-  useEffect(() => {
-    if (user) {
-      const fetchUserType = async () => {
-        const type = await getUserType(user.uid);
-        setUserType(type);
-      };
-      fetchUserType();
-    }
-  }, [user]);
-
-  if (!user) {
+  if (!user || !userProfile) {
     return (
       <Button asChild variant="accent" className="font-bold">
         <Link href="/login">Ingresar</Link>
@@ -46,10 +35,10 @@ export function UserNav({ user }: UserNavProps) {
   const handleLogout = async () => {
     await logout();
     router.push('/');
-    router.refresh(); // Force a refresh to update the user state in the layout
+    router.refresh(); 
   }
 
-  const dashboardPath = userType === 'admin' ? '/admin' : '/dashboard';
+  const dashboardPath = userProfile.type === 'admin' ? '/admin' : '/dashboard';
   const userName = user.displayName || user.email;
   const userImage = user.photoURL;
   const userInitials = userName?.charAt(0).toUpperCase() || '?';
@@ -74,14 +63,12 @@ export function UserNav({ user }: UserNavProps) {
           )}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        {userType && (
-          <DropdownMenuItem asChild>
-             <Link href={dashboardPath}>
-                <Settings className="mr-2 h-4 w-4" />
-                <span>Dashboard</span>
-              </Link>
-          </DropdownMenuItem>
-        )}
+        <DropdownMenuItem asChild>
+            <Link href={dashboardPath}>
+            <Settings className="mr-2 h-4 w-4" />
+            <span>Dashboard</span>
+            </Link>
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onSelect={handleLogout}>
           <LogOut className="mr-2 h-4 w-4" />

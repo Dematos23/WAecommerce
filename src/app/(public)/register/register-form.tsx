@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -10,6 +10,7 @@ import { AlertCircle, UserPlus } from 'lucide-react';
 import { register, signInWithGoogle } from '@/lib/auth';
 import { Separator } from '@/components/ui/separator';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/hooks/useAuth';
 
 const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="24px" height="24px" {...props}>
@@ -25,18 +26,26 @@ export function RegisterForm() {
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
   const router = useRouter();
+  const { user, userProfile, loading } = useAuth();
 
-  const handleGoogleSignIn = async () => {
-    const result = await signInWithGoogle();
-    if (result.success) {
-      if (result.type === 'admin') {
+  useEffect(() => {
+    // Redirect if user is logged in and we have their profile
+    if (!loading && user && userProfile) {
+      if (userProfile.type === 'admin') {
         router.push('/admin');
       } else {
         router.push('/dashboard');
       }
-    } else {
+    }
+  }, [user, userProfile, loading, router]);
+
+
+  const handleGoogleSignIn = async () => {
+    const result = await signInWithGoogle();
+    if (!result.success) {
       setError(result.error || 'Ocurrió un error inesperado.');
     }
+    // Redirection is handled by the useEffect hook
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -58,18 +67,17 @@ export function RegisterForm() {
 
     const result = await register(name, email, password);
 
-    if (result.success) {
-       if (result.type === 'admin') {
-        router.push('/admin');
-      } else {
-        router.push('/dashboard');
-      }
-    } else {
+    if (!result.success) {
       setError(result.error || 'No se pudo crear la cuenta.');
       setPending(false);
     }
+    // Redirection is handled by the useEffect hook
   };
 
+  // Prevent flicker or showing form while redirecting
+  if (loading || user) {
+    return <div>Cargando...</div>
+  }
 
   return (
     <div className="space-y-4">

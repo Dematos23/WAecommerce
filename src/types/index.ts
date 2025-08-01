@@ -87,11 +87,12 @@ export interface SiteConfig {
 }
 
 
-export interface User {
+export interface UserProfile {
     uid: string;
     email: string | null;
     displayName: string | null;
     photoURL: string | null;
     providerId: string | undefined;
     createdAt: any; // Firestore timestamp
+    type: 'admin' | 'client';
 }

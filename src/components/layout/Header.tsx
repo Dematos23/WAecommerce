@@ -20,19 +20,13 @@ import { useEffect, useState } from 'react';
 
 interface HeaderProps {
     config: SiteConfig;
-    user: User | null;
+    user: User | null; // This prop is now passed from the layout
 }
 
 export function Header({ config, user }: HeaderProps) {
   const pathname = usePathname();
-  const router = useRouter();
   const [isSheetOpen, setSheetOpen] = useState(false);
   
-  const isPublicSaasPage = ['/', '/login', '/register', '/contact', '/pricing', '/terms', '/privacy', '/cookies'].some(p => pathname === p);
-  const isDashboardPage = pathname.startsWith('/dashboard');
-
-  const renderCart = !isPublicSaasPage && !isDashboardPage;
-
   const navLinks = config.header.menu || [];
   
   useEffect(() => {
@@ -64,7 +58,7 @@ export function Header({ config, user }: HeaderProps) {
               ))}
           </nav>
           <div className="flex flex-1 justify-end items-center gap-4">
-             <UserNav user={user} />
+             <UserNav />
           </div>
         </div>
 
@@ -114,7 +108,7 @@ export function Header({ config, user }: HeaderProps) {
 
            {/* Right Icons */}
             <div className="flex items-center gap-2">
-                <UserNav user={user} />
+                <UserNav />
             </div>
         </div>
       </div>

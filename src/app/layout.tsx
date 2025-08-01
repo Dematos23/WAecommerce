@@ -12,58 +12,53 @@ import { readConfig } from '@/actions/aiActions';
 import { Providers } from './providers';
 import { useEffect, useState } from 'react';
 import type { SiteConfig } from '@/types';
-import { auth } from '@/lib/firebase';
-import { onAuthStateChanged, User } from 'firebase/auth';
+import { useAuth } from '@/hooks/useAuth';
 import { usePathname } from 'next/navigation';
+import { onAuthStateChanged, User } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
 
 const manrope = Manrope({ subsets: ['latin'], variable: '--font-manrope' });
 
-// Metadata can't be dynamic on a client component, so we define it statically.
-// export const metadata: Metadata = {
-//   title: 'Kima - Lanza tu Tienda Online en Minutos',
-//   description: 'La plataforma todo-en-uno para crear y gestionar tu e-commerce.',
-// };
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+function AppContent({ children }: { children: React.ReactNode }) {
+  const { user, loading } = useAuth();
   const [config, setConfig] = useState<SiteConfig | null>(null);
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
   const pathname = usePathname();
-  
+
   useEffect(() => {
     const fetchConfig = async () => {
       const siteConfig = await readConfig();
       setConfig(siteConfig);
     };
     fetchConfig();
-    
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      setLoading(false);
-    });
-    
-    return () => unsubscribe();
   }, []);
 
   const isDashboard = pathname.startsWith('/dashboard');
   const isAdmin = pathname.startsWith('/admin');
+  const showHeaderFooter = config && !isDashboard && !isAdmin;
 
-  if (loading) {
+  if (loading || (!config && showHeaderFooter)) {
     return (
-      <html lang="es">
-        <body className={cn('min-h-screen bg-background font-body antialiased', manrope.variable)}>
+        <div className="flex items-center justify-center min-h-screen">
           <div>Loading...</div>
-        </body>
-      </html>
+        </div>
     );
   }
 
-  const showHeaderFooter = config && !isDashboard && !isAdmin;
+  return (
+    <div className="relative flex flex-col bg-background min-h-screen">
+      {showHeaderFooter && <Header config={config} user={user} />}
+      <main className="flex-1">{children}</main>
+      {showHeaderFooter && <Footer config={config} />}
+    </div>
+  );
+}
 
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <html lang="es">
       <body
@@ -73,12 +68,8 @@ export default function RootLayout({
         )}
       >
         <Providers>
-          <div className="relative flex flex-col bg-background min-h-screen">
-            {showHeaderFooter && <Header config={config} user={user} />}
-            <main className="flex-1">{children}</main>
-            {showHeaderFooter && <Footer config={config} />}
-          </div>
-          <Toaster />
+           <AppContent>{children}</AppContent>
+           <Toaster />
         </Providers>
       </body>
     </html>
