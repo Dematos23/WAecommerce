@@ -5,40 +5,35 @@ import { SidebarProvider, Sidebar, SidebarTrigger, SidebarHeader, SidebarContent
 import { Home, Users, Settings, CreditCard } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { Logo } from "@/components/ui/Logo";
-import { readConfig } from "@/actions/siteActions";
 import type { SiteConfig } from "@/types";
-import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { logout } from "@/lib/auth";
 import { useRouter } from "next/navigation";
 
+// Mock config for the logo until a proper server-side fetching strategy is implemented for this client layout.
+const mockConfig: SiteConfig = {
+  generalConfig: {
+    storeName: "Kima",
+    logoUrl: "/images/logo.png",
+    displayMode: "both"
+  }
+} as SiteConfig;
+
+
 function AdminSidebar() {
     const pathname = usePathname();
-    const [config, setConfig] = useState<SiteConfig | null>(null);
     const router = useRouter();
-
-    useEffect(() => {
-        const fetchConfig = async () => {
-            const siteConfig = await readConfig();
-            setConfig(siteConfig);
-        };
-        fetchConfig();
-    }, []);
 
     const handleLogout = async () => {
         await logout();
         router.push('/');
     };
-
-    if (!config) {
-        return null; // Or a loading skeleton
-    }
     
     return (
         <Sidebar>
             <SidebarHeader>
                 <div className="flex items-center gap-2">
-                    <Logo config={config} />
+                    <Logo config={mockConfig} />
                 </div>
             </SidebarHeader>
             <SidebarContent>

@@ -20,7 +20,7 @@ import { useEffect, useState } from 'react';
 
 interface HeaderProps {
     config: SiteConfig;
-    user: User | null; // This prop is now passed from the layout
+    user?: User | null; 
 }
 
 export function Header({ config, user }: HeaderProps) {
