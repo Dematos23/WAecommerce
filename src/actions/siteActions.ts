@@ -5,8 +5,9 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import type { SiteConfig } from "@/types";
 import { db } from '@/lib/firebase';
-import { doc, getDoc, setDoc, collection, addDoc, getDocs } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { revalidatePath } from 'next/cache';
+import jsonConfig from '@/lib/config.json'; // Direct import
 
 const CONFIG_COLLECTION = 'siteConfig';
 const CONFIG_DOC_ID = 'main';
@@ -27,12 +28,12 @@ export async function readConfig(): Promise<SiteConfig> {
       console.log("Config document not found, attempting to initialize from JSON.");
       // If no doc, fall back to the JSON file to prevent app crash, 
       // and allow initialization.
-      return readConfigFromJson();
+      return jsonConfig as SiteConfig;
     }
   } catch (error) {
     console.error("Error reading config from Firestore, falling back to JSON for safety.", error);
     // Fallback to local JSON if Firestore fails
-    return readConfigFromJson();
+    return jsonConfig as SiteConfig;
   }
 }
 
@@ -62,25 +63,16 @@ export async function updateConfig(configData: SiteConfig): Promise<{ success: b
  */
 export async function initializeConfig(): Promise<SiteConfig> {
     console.log("Initializing Firestore config from local JSON file...");
-    const jsonConfig = await readConfigFromJson();
     try {
         const docRef = doc(db, CONFIG_COLLECTION, CONFIG_DOC_ID);
+        // Use the directly imported JSON object
         await setDoc(docRef, jsonConfig);
         console.log("Successfully initialized Firestore config.");
         revalidatePath('/', 'layout');
-        return jsonConfig;
+        return jsonConfig as SiteConfig;
     } catch (error) {
         console.error("Failed to initialize Firestore config:", error);
         // If initialization fails, we still return the JSON config to prevent the app from crashing.
         throw new Error("Failed to initialize Firestore config in the database.");
     }
-}
-
-
-// --- Helper function to read from the local JSON file ---
-async function readConfigFromJson(): Promise<SiteConfig> {
-    const filePath = path.join(process.cwd(), 'src', 'lib', 'config.json');
-    const fileContent = await fs.readFile(filePath, 'utf-8');
-    const config = JSON.parse(fileContent);
-    return config as SiteConfig;
 }
