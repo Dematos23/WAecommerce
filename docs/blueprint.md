@@ -1,4 +1,4 @@
-# **App Name**: TiendaExpress
+# **App Name**: Kima
 
 ## Core Features:
 
